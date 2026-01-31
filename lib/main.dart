@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:ansicolor/ansicolor.dart';
 import 'package:flutter/material.dart';
 import 'package:talktomylawyer/app/core/services/app_service.dart';
-import 'package:talktomylawyer/find_my_lawyer.dart';
+import 'package:talktomylawyer/talk_to_my_lawyer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -13,7 +13,7 @@ void main() async {
 
   HttpOverrides.global = MyHttpOverrides();
 
-  runApp(const FindMyLawyer());
+  runApp(const TalkToMyLawyer());
 }
 
 class MyHttpOverrides extends HttpOverrides {

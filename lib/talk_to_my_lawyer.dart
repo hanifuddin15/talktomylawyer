@@ -5,8 +5,8 @@ import 'package:get/get.dart';
 
 import 'app/routes/app_pages.dart';
 
-class FindMyLawyer extends StatelessWidget {
-  const FindMyLawyer({super.key});
+class TalkToMyLawyer extends StatelessWidget {
+  const TalkToMyLawyer({super.key});
 
   @override
   Widget build(BuildContext context) {
