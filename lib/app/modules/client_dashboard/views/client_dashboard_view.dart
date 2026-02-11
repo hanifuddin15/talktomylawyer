@@ -29,7 +29,7 @@ class ClientDashboardView extends GetView<ClientDashboardController> {
       bottomNavigationBar: Obx(
         () => BottomNavigationBar(
           unselectedItemColor: Colors.grey,
-          selectedItemColor: const Color(0xFF1A237E),
+          selectedItemColor: Theme.of(context).primaryColor,
           onTap: controller.changeTabIndex,
           currentIndex: controller.tabIndex.value,
           showSelectedLabels: true,

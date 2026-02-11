@@ -34,7 +34,10 @@ class ClientSearchView extends GetView<ClientSearchController> {
                 hintStyle: GoogleFonts.inter(color: Colors.grey),
                 prefixIcon: const Icon(Icons.search, color: Colors.grey),
                 suffixIcon: IconButton(
-                  icon: const Icon(Icons.filter_list, color: Color(0xFF1A237E)),
+                  icon: Icon(
+                    Icons.filter_list,
+                    color: Theme.of(context).primaryColor,
+                  ),
                   onPressed: () {},
                 ),
                 filled: true,

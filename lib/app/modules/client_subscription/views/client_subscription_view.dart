@@ -57,12 +57,15 @@ class ClientSubscriptionView extends GetView<ClientSubscriptionController> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  _buildFeatureItem('Unlock all lawyer contact details'),
-                  _buildFeatureItem('Direct messaging with lawyers'),
-                  _buildFeatureItem('Priority support'),
-                  _buildFeatureItem('Save favorite lawyers'),
-                  _buildFeatureItem('Advanced search filters'),
-                  _buildFeatureItem('Unlimited profile views'),
+                  _buildFeatureItem(
+                    context,
+                    'Unlock all lawyer contact details',
+                  ),
+                  _buildFeatureItem(context, 'Direct messaging with lawyers'),
+                  _buildFeatureItem(context, 'Priority support'),
+                  _buildFeatureItem(context, 'Save favorite lawyers'),
+                  _buildFeatureItem(context, 'Advanced search filters'),
+                  _buildFeatureItem(context, 'Unlimited profile views'),
                 ],
               ),
             ),
@@ -85,10 +88,13 @@ class ClientSubscriptionView extends GetView<ClientSubscriptionController> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: const Color(0xFF1A237E), width: 2),
+                border: Border.all(
+                  color: Theme.of(context).primaryColor,
+                  width: 2,
+                ),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF1A237E).withOpacity(0.1),
+                    color: Theme.of(context).primaryColor.withOpacity(0.1),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
@@ -100,7 +106,7 @@ class ClientSubscriptionView extends GetView<ClientSubscriptionController> {
                     value: true,
                     groupValue: true,
                     onChanged: (val) {},
-                    activeColor: const Color(0xFF1A237E),
+                    activeColor: Theme.of(context).primaryColor,
                   ),
                   const SizedBox(width: 8),
                   Expanded(
@@ -134,14 +140,14 @@ class ClientSubscriptionView extends GetView<ClientSubscriptionController> {
     );
   }
 
-  Widget _buildFeatureItem(String text) {
+  Widget _buildFeatureItem(BuildContext context, String text) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          const Icon(
+          Icon(
             Icons.check_circle_outline,
-            color: Color(0xFF1A237E),
+            color: Theme.of(context).primaryColor,
             size: 20,
           ),
           const SizedBox(width: 12),

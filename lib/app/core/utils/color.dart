@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
 
 const Color primarySwatch = Colors.indigo;
-const Color primaryColor = Color(0xff192D6B);
+const Color primaryColor = Color(0xFF1A237E); // Deep Blue
+const Color secondaryColor = Color(0xFF0D47A1); // Darker Blue
+const Color accentColor = Color(0xFF42A5F5); // Light Blue
+const Color surfaceColor = Color(0xFFF5F7FA); // Light Grey/White
+const Color onPrimary = Colors.white;
+
 const Color primaryLightColor = Color(0xffC5CAE9);
 const Color indigo50 = Color(0xffE8EAF6);
 const Color backgroundColor = Color(0xffECF0F1);
@@ -19,27 +24,3 @@ const Color presentColor = Color(0xff338915);
 const Color leaveColor = Color(0xff11415C);
 const Color absentColor = Color(0xffBB1A1A);
 const Color holidayColor = Color(0xff1A9F97);
-
-Color getColorAsRequisition({required String reqDocName}) {
-  final Color color;
-  switch (reqDocName) {
-    case 'Leave Application':
-      color = Colors.red.shade300;
-      break;
-    case 'General Product Store Requisition':
-      color = Colors.purple.shade300;
-      break;
-    case 'ICT Product Store Requisition':
-      color = Colors.green.shade300;
-      break;
-    case 'ICT Service Requisition':
-      color = Colors.blue.shade400;
-      break;
-    default:
-      color = Colors.blue.shade400;
-      break;
-  }
-  return color;
-}
-
-

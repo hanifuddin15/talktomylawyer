@@ -29,7 +29,7 @@ class LoginView extends GetView<LoginController> {
                       Icon(
                         Icons.balance, // Placeholder for Scales of Justice
                         size: 64,
-                        color: const Color(0xFF1A237E),
+                        color: Theme.of(context).primaryColor,
                       ),
                       const SizedBox(height: 24),
                       Text(

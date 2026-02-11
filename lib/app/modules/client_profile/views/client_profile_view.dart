@@ -22,7 +22,7 @@ class ClientProfileView extends GetView<ClientProfileController> {
                 left: 24,
                 right: 24,
               ),
-              decoration: const BoxDecoration(color: Color(0xFF1A237E)),
+              decoration: BoxDecoration(color: Theme.of(context).primaryColor),
               child: Column(
                 children: [
                   Row(
@@ -44,7 +44,7 @@ class ClientProfileView extends GetView<ClientProfileController> {
                     width: 100,
                     height: 100,
                     decoration: BoxDecoration(
-                      color: const Color(0xFF283593),
+                      color: Theme.of(context).colorScheme.secondary,
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.white, width: 2),
                     ),
@@ -76,6 +76,7 @@ class ClientProfileView extends GetView<ClientProfileController> {
               child: Column(
                 children: [
                   _buildInfoCard(
+                    context,
                     icon: Icons.person_outline,
                     label: 'Full Name',
                     value: controller.user['firstName'] ?? '',
@@ -83,6 +84,7 @@ class ClientProfileView extends GetView<ClientProfileController> {
                   ),
                   const SizedBox(height: 16),
                   _buildInfoCard(
+                    context,
                     icon: Icons.email_outlined,
                     label: 'Email',
                     value: controller.user['email'] ?? '',
@@ -91,6 +93,7 @@ class ClientProfileView extends GetView<ClientProfileController> {
                   ),
                   const SizedBox(height: 16),
                   _buildInfoCard(
+                    context,
                     icon: Icons.phone_outlined,
                     label: 'Phone Number',
                     value: controller.user['phone'] ?? '',
@@ -105,7 +108,8 @@ class ClientProfileView extends GetView<ClientProfileController> {
     );
   }
 
-  Widget _buildInfoCard({
+  Widget _buildInfoCard(
+    BuildContext context, {
     required IconData icon,
     required String label,
     required String value,
@@ -124,7 +128,7 @@ class ClientProfileView extends GetView<ClientProfileController> {
         children: [
           Row(
             children: [
-              Icon(icon, color: const Color(0xFF1A237E), size: 20),
+              Icon(icon, color: Theme.of(context).primaryColor, size: 20),
               const SizedBox(width: 8),
               Text(
                 label,
