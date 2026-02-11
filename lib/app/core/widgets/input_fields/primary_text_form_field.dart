@@ -104,28 +104,28 @@ class PrimaryTextFormField extends StatelessWidget {
             children: [
               isRequired
                   ? RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: labelText,
-                          style: context.themeData.textTheme.labelLarge,
-                        ),
-                        TextSpan(
-                          text: ' ',
-                          style: context.themeData.textTheme.labelLarge,
-                        ),
-                        TextSpan(
-                          text: '*',
-                          style: context.themeData.textTheme.labelLarge
-                              ?.copyWith(color: Colors.red),
-                        ),
-                      ],
-                    ),
-                  )
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: labelText,
+                            style: context.themeData.textTheme.labelLarge,
+                          ),
+                          TextSpan(
+                            text: ' ',
+                            style: context.themeData.textTheme.labelLarge,
+                          ),
+                          TextSpan(
+                            text: '*',
+                            style: context.themeData.textTheme.labelLarge
+                                ?.copyWith(color: Colors.red),
+                          ),
+                        ],
+                      ),
+                    )
                   : CustomText(
-                    text: labelText,
-                    textStyle: context.themeData.textTheme.labelLarge,
-                  ),
+                      text: labelText,
+                      textStyle: context.themeData.textTheme.labelLarge,
+                    ),
               const Gap(12),
             ],
           ),
@@ -240,27 +240,48 @@ class _AuthTextFormFieldState extends State<AuthTextFormField> {
           initialValue: widget.initialValue,
           focusNode: widget.focusNode,
           keyboardType: widget.inputType,
+
           obscureText: widget.isPassword ? _obscureText : false,
           validator: widget.validator,
           decoration: InputDecoration(
+            hintStyle: context.themeData.textTheme.labelLarge?.copyWith(
+              color: Colors.grey.withValues(alpha: 0.5),
+            ),
+            filled: true,
+            fillColor: Colors.white,
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.white),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.white),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.white),
+            ),
+            errorBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(12),
+              borderSide: BorderSide(color: Colors.white),
+            ),
             labelText: widget.isTopLabel ? null : widget.labelText,
             hintText: widget.hintText,
-            prefixIcon:
-                widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
-            suffixIcon:
-                widget.isPassword
-                    ? IconButton(
-                      onPressed: () {
-                        setState(() {
-                          _obscureText = !_obscureText;
-                        });
-                      },
-                      icon:
-                          _obscureText
-                              ? const Icon(Icons.visibility_off, size: 20)
-                              : const Icon(Icons.visibility, size: 20),
-                    )
-                    : null,
+            prefixIcon: widget.prefixIcon != null
+                ? Icon(widget.prefixIcon)
+                : null,
+            suffixIcon: widget.isPassword
+                ? IconButton(
+                    onPressed: () {
+                      setState(() {
+                        _obscureText = !_obscureText;
+                      });
+                    },
+                    icon: _obscureText
+                        ? const Icon(Icons.visibility_off, size: 20)
+                        : const Icon(Icons.visibility, size: 20),
+                  )
+                : null,
           ),
         ),
       ],
