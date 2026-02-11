@@ -1,3 +1,5 @@
+import 'package:get/get_utils/src/extensions/context_extensions.dart';
+
 import '../gap/gap.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +40,9 @@ class PrimaryButton extends StatelessWidget {
         style: ElevatedButton.styleFrom(
           backgroundColor:
               backgroundColor ?? Theme.of(context).colorScheme.primary,
+          // foregroundColor: context.theme.primaryColor,
           shape: RoundedRectangleBorder(
+            side: BorderSide(color: context.theme.primaryColor),
             borderRadius: BorderRadius.circular(borderRadius),
           ),
         ),
@@ -51,7 +55,13 @@ class PrimaryButton extends StatelessWidget {
               Icon(icon, size: iconSize, color: textColor ?? Colors.white),
               const Gap(8), // gap between icon and text
             ],
-            Text(text, style: TextStyle(color: textColor ?? Colors.white)),
+            Text(
+              text,
+              style: TextStyle(
+                color: textColor ?? Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ],
         ),
       ),

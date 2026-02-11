@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:talktomylawyer/app/core/widgets/buttons/primary_button.dart';
+import 'package:talktomylawyer/app/modules/client_subscription/widgets/subscription_card.dart';
 
 import '../controllers/client_subscription_controller.dart';
 
@@ -8,43 +10,81 @@ class ClientSubscriptionView extends GetView<ClientSubscriptionController> {
   const ClientSubscriptionView({super.key});
   @override
   Widget build(BuildContext context) {
+    final isSelected = true;
     return Scaffold(
       backgroundColor: Colors.white,
+      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        title: Text(
-          'Subscription',
-          style: GoogleFonts.outfit(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: false,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(24.0),
+        // padding: const EdgeInsets.all(24.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Header
-            Text(
-              'Unlock full access to all lawyers',
-              style: GoogleFonts.outfit(
-                fontSize: 16,
-                color: Colors.grey.shade600,
+            Container(
+              width: double.infinity,
+              height: 160,
+              padding: const EdgeInsets.only(top: 48, left: 24, right: 24),
+              decoration: const BoxDecoration(
+                color: Color(0xFF1A237E),
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(24),
+                  bottomRight: Radius.circular(24),
+                ),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Subscription',
+                    style: GoogleFonts.outfit(
+                      fontSize: 32,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Unlock full access to all lawyers',
+                    style: GoogleFonts.inter(
+                      fontSize: 16,
+                      color: Colors.white.withValues(alpha: .6),
+                    ),
+                  ),
+                ],
               ),
             ),
+
             const SizedBox(height: 32),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'No More Subscription',
+                    style: GoogleFonts.outfit(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: const Color(0xFF1A1A1A),
+                    ),
+                  ),
+                  Text(
+                    'Subscribe to unlock full access to all lawyers profile and contact information',
+                    style: GoogleFonts.outfit(fontSize: 16, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 32),
+                ],
+              ),
+            ),
 
             // Native Subscription Banner (Placeholder for system UI if needed, but using custom UI here)
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: const Color(0xFFF5F7FA),
-                borderRadius: BorderRadius.circular(12),
-              ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -72,67 +112,32 @@ class ClientSubscriptionView extends GetView<ClientSubscriptionController> {
             const SizedBox(height: 32),
 
             // Plan Selection
-            Text(
-              'Choose Your Plan',
-              style: GoogleFonts.outfit(
-                fontSize: 20,
-                fontWeight: FontWeight.bold,
-                color: const Color(0xFF1A1A1A),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Text(
+                'Choose Your Plan',
+                style: GoogleFonts.outfit(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF1A1A1A),
+                ),
               ),
             ),
             const SizedBox(height: 16),
 
             // Monthly Plan Card
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(
-                  color: Theme.of(context).primaryColor,
-                  width: 2,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Theme.of(context).primaryColor.withValues(alpha: .1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
-                  ),
-                ],
-              ),
-              child: Row(
-                children: [
-                  Radio(
-                    value: true,
-                    groupValue: true,
-                    onChanged: (val) {},
-                    activeColor: Theme.of(context).primaryColor,
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Monthly Plan',
-                          style: GoogleFonts.inter(
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                            color: const Color(0xFF1A1A1A),
-                          ),
-                        ),
-                        Text(
-                          '\$29.99 / month',
-                          style: GoogleFonts.inter(
-                            fontSize: 14,
-                            color: Colors.grey.shade600,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
+            SubscriptionCard(
+              isSelected: true,
+              planName: 'Monthly Plan',
+              price: '29.99',
+              subText: 'Best for short-term legal needs',
+            ),
+            const SizedBox(height: 16),
+            SubscriptionCard(
+              isSelected: false,
+              planName: 'Annual Plan',
+              price: '249',
+              subText: 'Best for short-term legal needs',
             ),
           ],
         ),
@@ -145,10 +150,17 @@ class ClientSubscriptionView extends GetView<ClientSubscriptionController> {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Icon(
-            Icons.check_circle_outline,
-            color: Theme.of(context).primaryColor,
-            size: 20,
+          Container(
+            padding: const EdgeInsets.all(4),
+            decoration: BoxDecoration(
+              color: Theme.of(context).primaryColor.withValues(alpha: .2),
+              shape: BoxShape.circle,
+            ),
+            child: Icon(
+              Icons.check,
+              color: Theme.of(context).primaryColor,
+              size: 16,
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
