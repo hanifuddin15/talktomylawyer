@@ -5,13 +5,17 @@ class OnboardingPage extends StatelessWidget {
   final String title;
   final String description;
   final List<String> tags;
+  final List<Color>? gradientColors;
+  final IconData? iconData;
 
   const OnboardingPage({
-    Key? key,
+    super.key,
     required this.title,
     required this.description,
     required this.tags,
-  }) : super(key: key);
+    this.gradientColors,
+    this.iconData,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,18 +29,20 @@ class OnboardingPage extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(32),
             decoration: BoxDecoration(
-              gradient: const LinearGradient(
-                colors: [
-                  Color(0xFF1A237E),
-                  Color(0xFF283593),
-                ], // Deep Blue Gradient
+              gradient: LinearGradient(
+                colors:
+                    gradientColors ??
+                    [
+                      Color.fromARGB(255, 9, 13, 58),
+                      Color.fromARGB(255, 14, 36, 206),
+                    ], // Deep Blue Gradient
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: BorderRadius.circular(32),
               boxShadow: [
                 BoxShadow(
-                  color: const Color(0xFF1A237E).withOpacity(0.3),
+                  color: const Color(0xFF1A237E).withValues(alpha: .3),
                   blurRadius: 20,
                   offset: const Offset(0, 10),
                 ),
@@ -46,34 +52,43 @@ class OnboardingPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 6,
-                  ),
-                  decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.auto_awesome,
-                        color: Colors.white,
-                        size: 16,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 6,
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        'New',
-                        style: GoogleFonts.inter(
-                          color: Colors.white,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w500,
-                        ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: .1),
+                        borderRadius: BorderRadius.circular(20),
                       ),
-                    ],
-                  ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(
+                            Icons.auto_awesome,
+                            color: Colors.white,
+                            size: 16,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            'New',
+                            style: GoogleFonts.inter(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Icon(
+                      iconData ?? Icons.messenger_outline,
+                      color: Colors.white,
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 24),
                 Text(
@@ -90,7 +105,7 @@ class OnboardingPage extends StatelessWidget {
                   description,
                   style: GoogleFonts.inter(
                     fontSize: 16,
-                    color: Colors.white.withOpacity(0.8),
+                    color: Colors.white.withValues(alpha: .8),
                     height: 1.5,
                   ),
                 ),
@@ -112,9 +127,9 @@ class OnboardingPage extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.15),
+        color: Colors.white.withValues(alpha: .15),
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.white.withOpacity(0.1)),
+        border: Border.all(color: Colors.white.withValues(alpha: .1)),
       ),
       child: Text(
         text,

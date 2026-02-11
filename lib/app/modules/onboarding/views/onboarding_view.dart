@@ -25,6 +25,12 @@ class OnboardingView extends GetView<OnboardingController> {
                 // TODO: Add image/animation
               ),
               OnboardingPage(
+                iconData: Icons.gpp_good_outlined,
+                gradientColors: [
+                  Color.fromARGB(255, 4, 6, 31),
+                  Color.fromARGB(255, 4, 6, 31),
+                  Color.fromARGB(255, 3, 205, 227),
+                ],
                 title: 'Verified Experts',
                 description:
                     'Licensed lawyers with domain expertise you can trust',
@@ -36,6 +42,12 @@ class OnboardingView extends GetView<OnboardingController> {
                 // TODO: Add image/animation
               ),
               OnboardingPage(
+                iconData: Icons.access_time,
+                gradientColors: [
+                  Color.fromARGB(255, 10, 22, 18),
+                  Color.fromARGB(255, 11, 61, 39),
+                  Color.fromARGB(255, 32, 202, 137),
+                ],
                 title: 'Pick your role',
                 description: 'We customize the flow based on who you are',
                 tags: [
