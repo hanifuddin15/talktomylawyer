@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 import '../controllers/client_dashboard_controller.dart';
 import '../../client_home/views/client_home_view.dart';
+import '../../client_search/views/client_search_view.dart';
+import '../../client_subscription/views/client_subscription_view.dart';
 
 class ClientDashboardView extends GetView<ClientDashboardController> {
   const ClientDashboardView({Key? key}) : super(key: key);
@@ -17,8 +19,8 @@ class ClientDashboardView extends GetView<ClientDashboardController> {
           index: controller.tabIndex.value,
           children: [
             const ClientHomeView(),
-            _buildPlaceholder('Search'),
-            _buildPlaceholder('Subscription'),
+            const ClientSearchView(),
+            ClientSubscriptionView(), // Not const because of potential controller usage
             _buildPlaceholder('Profile'),
           ],
         ),
