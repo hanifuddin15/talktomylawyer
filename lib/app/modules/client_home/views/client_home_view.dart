@@ -97,12 +97,16 @@ class ClientHomeView extends GetView<ClientHomeController> {
                   ),
                   const SizedBox(height: 24),
                   Container(
+                    margin: const EdgeInsets.symmetric(
+                      horizontal: 20,
+                      // vertical: 24,
+                    ),
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
                       vertical: 24,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.white,
+                      color: const Color.fromARGB(255, 210, 226, 245),
                       borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20),
@@ -122,7 +126,7 @@ class ClientHomeView extends GetView<ClientHomeController> {
                           'Browse lawyer categories by their area of expertise',
                           style: GoogleFonts.inter(
                             fontSize: 14,
-                            color: Colors.black,
+                            color: Colors.grey,
                           ),
                         ),
                         Text(
@@ -130,10 +134,10 @@ class ClientHomeView extends GetView<ClientHomeController> {
                           textAlign: TextAlign.center,
                           style: GoogleFonts.inter(
                             fontSize: 14,
-                            color: Colors.black,
+                            color: Colors.grey,
                           ),
                         ),
-                        const SizedBox(height: 24),
+                        const SizedBox(height: 12),
                       ],
                     ),
                   ),
