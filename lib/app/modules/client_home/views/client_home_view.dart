@@ -111,6 +111,15 @@ class ClientHomeView extends GetView<ClientHomeController> {
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20),
                       ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Theme.of(
+                            context,
+                          ).primaryColor.withValues(alpha: .3),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
                     child: Column(
                       children: [
