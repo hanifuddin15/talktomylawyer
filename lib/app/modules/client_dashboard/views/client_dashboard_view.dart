@@ -6,6 +6,7 @@ import '../controllers/client_dashboard_controller.dart';
 import '../../client_home/views/client_home_view.dart';
 import '../../client_search/views/client_search_view.dart';
 import '../../client_subscription/views/client_subscription_view.dart';
+import '../../client_profile/views/client_profile_view.dart';
 
 class ClientDashboardView extends GetView<ClientDashboardController> {
   const ClientDashboardView({Key? key}) : super(key: key);
@@ -21,7 +22,7 @@ class ClientDashboardView extends GetView<ClientDashboardController> {
             const ClientHomeView(),
             const ClientSearchView(),
             ClientSubscriptionView(), // Not const because of potential controller usage
-            _buildPlaceholder('Profile'),
+            const ClientProfileView(),
           ],
         ),
       ),
@@ -68,15 +69,6 @@ class ClientDashboardView extends GetView<ClientDashboardController> {
       icon: Icon(icon),
       activeIcon: Icon(activeIcon),
       label: label,
-    );
-  }
-
-  Widget _buildPlaceholder(String title) {
-    return Center(
-      child: Text(
-        '$title Screen',
-        style: GoogleFonts.outfit(fontSize: 24, color: Colors.grey),
-      ),
     );
   }
 }
