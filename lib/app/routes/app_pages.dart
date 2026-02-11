@@ -19,7 +19,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const initial = Routes.onboarding;
+  static const initial = Routes.splash;
   // static const INITIAL = Routes.EXAMPLE_WIDGETS;
   // static const INITIAL = Routes.TEST_BOTTOMSHEET_THEME;
 

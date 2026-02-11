@@ -17,7 +17,7 @@ class OnboardingController extends GetxController {
         curve: Curves.easeIn,
       );
     } else {
-      Get.offAllNamed(Routes.roleSelection);
+      Get.offAllNamed(Routes.login);
     }
   }
 

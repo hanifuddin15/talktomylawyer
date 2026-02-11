@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-import '../../../../core/config/app_assets.dart';
 import '../controllers/splash_controller.dart';
 
 class SplashView extends GetView<SplashController> {
@@ -11,64 +11,32 @@ class SplashView extends GetView<SplashController> {
     controller.navigate();
     return Scaffold(
       backgroundColor: Colors.white,
-      body: SafeArea(
-        child: SizedBox(
-          height: double.maxFinite,
-          width: double.maxFinite,
-          child: Stack(
-            alignment: AlignmentDirectional.topCenter,
+      body: Center(
+        child: TweenAnimationBuilder<double>(
+          tween: Tween<double>(begin: 0.0, end: 1.0),
+          duration: const Duration(milliseconds: 1500),
+          curve: Curves.easeOutCubic,
+          builder: (context, value, child) {
+            return Opacity(
+              opacity: value,
+              child: Transform.scale(scale: 0.5 + (value * 0.5), child: child),
+            );
+          },
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Positioned(
-                top: Get.height / 5,
-                child: const Image(
-                  height: 192,
-                  image: AssetImage(AppAssets.loaderIcon),
-                ),
+              Icon(
+                Icons.balance, // Placeholder for Logo
+                size: 100,
+                color: const Color(0xFF1A237E),
               ),
-              Positioned(
-                top: Get.height / 1.8,
-                child: Stack(
-                  children: [
-                    Image.asset(
-                      AppAssets.loaderCircle,
-                      width: 100,
-                      height: 100,
-                      fit: BoxFit.fill,
-                    ),
-                    SizedBox(
-                      width: 100,
-                      height: 100,
-                      child: Center(
-                        child: Image.asset(
-                          AppAssets.loaderIcon,
-                          height: 40,
-                          width: 40,
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Positioned(
-                bottom: Get.height / 20,
-                child: Column(
-                  children: [
-                    Text(
-                      'Powered by',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Theme.of(context).primaryColor),
-                    ),
-                    Text(
-                      'Pakiza Software Limited',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ],
+              const SizedBox(height: 24),
+              Text(
+                'Talk to Lawyer',
+                style: GoogleFonts.outfit(
+                  fontSize: 32,
+                  fontWeight: FontWeight.bold,
+                  color: const Color(0xFF1A1A1A),
                 ),
               ),
             ],
