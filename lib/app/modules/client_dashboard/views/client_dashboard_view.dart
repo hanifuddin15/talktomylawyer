@@ -14,14 +14,14 @@ class ClientDashboardView extends GetView<ClientDashboardController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: Colors.grey[200],
       body: Obx(
         () => IndexedStack(
           index: controller.tabIndex.value,
           children: [
             const ClientHomeView(),
             const ClientSearchView(),
-            ClientSubscriptionView(), // Not const because of potential controller usage
+            ClientSubscriptionView(),
             const ClientProfileView(),
           ],
         ),

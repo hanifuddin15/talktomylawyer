@@ -17,5 +17,6 @@ class ClientHomeController extends GetxController {
     },
     {'icon': 'assets/icons/labor_law.svg', 'name': 'Labor Law'},
     {'icon': 'assets/icons/property_law.svg', 'name': 'Property Law'},
+    {'icon': 'assets/icons/tax_law.svg', 'name': 'Tax Law'},
   ];
 }
