@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:get/get.dart';
 
-import '../../../../repository/auth_repository.dart';
 import '../../../../routes/app_pages.dart';
 
 class SplashController extends GetxController {
@@ -13,7 +12,6 @@ class SplashController extends GetxController {
   }
 
   void navigate() async {
-    AuthRepository repository = AuthRepository();
     Timer(const Duration(seconds: 3), () {
       Get.offNamed(Routes.onboarding);
 
