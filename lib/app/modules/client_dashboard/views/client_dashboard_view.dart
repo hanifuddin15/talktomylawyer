@@ -9,7 +9,7 @@ import '../../client_subscription/views/client_subscription_view.dart';
 import '../../client_profile/views/client_profile_view.dart';
 
 class ClientDashboardView extends GetView<ClientDashboardController> {
-  const ClientDashboardView({Key? key}) : super(key: key);
+  const ClientDashboardView({super.key});
 
   @override
   Widget build(BuildContext context) {

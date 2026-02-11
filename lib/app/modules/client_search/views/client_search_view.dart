@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../controllers/client_search_controller.dart';
 
 class ClientSearchView extends GetView<ClientSearchController> {
-  const ClientSearchView({Key? key}) : super(key: key);
+  const ClientSearchView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

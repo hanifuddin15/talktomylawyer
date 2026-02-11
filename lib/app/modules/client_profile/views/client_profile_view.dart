@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../controllers/client_profile_controller.dart';
 
 class ClientProfileView extends GetView<ClientProfileController> {
-  const ClientProfileView({Key? key}) : super(key: key);
+  const ClientProfileView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(

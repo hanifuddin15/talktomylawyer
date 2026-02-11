@@ -81,7 +81,7 @@ class RoleSelectionView extends GetView<RoleSelectionController> {
               ? []
               : [
                   BoxShadow(
-                    color: const Color(0xFF1A237E).withOpacity(0.3),
+                    color: const Color(0xFF1A237E).withValues(alpha: .3),
                     blurRadius: 20,
                     offset: const Offset(0, 10),
                   ),
@@ -94,7 +94,7 @@ class RoleSelectionView extends GetView<RoleSelectionController> {
               decoration: BoxDecoration(
                 color: isSecondary
                     ? const Color(0xFFF5F7FA)
-                    : Colors.white.withOpacity(0.1),
+                    : Colors.white.withValues(alpha: .1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -125,7 +125,7 @@ class RoleSelectionView extends GetView<RoleSelectionController> {
                       fontSize: 13,
                       color: isSecondary
                           ? Colors.grey.shade600
-                          : Colors.white.withOpacity(0.7),
+                          : Colors.white.withValues(alpha: .7),
                     ),
                   ),
                 ],
@@ -135,7 +135,7 @@ class RoleSelectionView extends GetView<RoleSelectionController> {
               Icons.arrow_forward_ios,
               color: isSecondary
                   ? Colors.grey.shade400
-                  : Colors.white.withOpacity(0.5),
+                  : Colors.white.withValues(alpha: .5),
               size: 16,
             ),
           ],

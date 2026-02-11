@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../controllers/client_subscription_controller.dart';
 
 class ClientSubscriptionView extends GetView<ClientSubscriptionController> {
-  const ClientSubscriptionView({Key? key}) : super(key: key);
+  const ClientSubscriptionView({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -94,7 +94,7 @@ class ClientSubscriptionView extends GetView<ClientSubscriptionController> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: Theme.of(context).primaryColor.withOpacity(0.1),
+                    color: Theme.of(context).primaryColor.withValues(alpha: .1),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),

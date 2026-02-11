@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import '../controllers/client_home_controller.dart';
 
 class ClientHomeView extends GetView<ClientHomeController> {
-  const ClientHomeView({Key? key}) : super(key: key);
+  const ClientHomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -107,14 +107,14 @@ class ClientHomeView extends GetView<ClientHomeController> {
                     'Find the right lawyer for your needs',
                     style: GoogleFonts.inter(
                       fontSize: 14,
-                      color: Colors.white.withOpacity(0.8),
+                      color: Colors.white.withValues(alpha: .8),
                     ),
                   ),
                 ],
               ),
               CircleAvatar(
                 radius: 24,
-                backgroundColor: Colors.white.withOpacity(0.2),
+                backgroundColor: Colors.white.withValues(alpha: .2),
                 child: const Icon(Icons.person, color: Colors.white),
               ),
             ],
@@ -124,7 +124,7 @@ class ClientHomeView extends GetView<ClientHomeController> {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.15),
+              color: Colors.white.withValues(alpha: .15),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Row(

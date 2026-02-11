@@ -49,7 +49,7 @@ class SplashView extends GetView<SplashController> {
                         shape: BoxShape.circle,
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
+                            color: Colors.black.withValues(alpha: .2),
                             blurRadius: 20,
                             spreadRadius: 5,
                           ),
