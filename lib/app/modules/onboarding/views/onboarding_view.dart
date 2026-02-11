@@ -6,7 +6,7 @@ import '../controllers/onboarding_controller.dart';
 import 'widgets/onboarding_page.dart';
 
 class OnboardingView extends GetView<OnboardingController> {
-  const OnboardingView({Key? key}) : super(key: key);
+  const OnboardingView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +45,7 @@ class OnboardingView extends GetView<OnboardingController> {
                 iconData: Icons.access_time,
                 gradientColors: [
                   Color.fromARGB(255, 10, 22, 18),
-                  Color.fromARGB(255, 11, 61, 39),
+                  Color.fromARGB(255, 16, 43, 31),
                   Color.fromARGB(255, 32, 202, 137),
                 ],
                 title: 'Pick your role',

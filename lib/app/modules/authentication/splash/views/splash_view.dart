@@ -16,9 +16,9 @@ class SplashView extends GetView<SplashController> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF0D47A1), // Deep Blue
-              Color(0xFF1976D2), // Lighter Blue
-              Color(0xFF42A5F5), // Lightest Blue
+              Color.fromARGB(255, 1, 27, 65), // Deep Blue
+              Color.fromARGB(255, 1, 7, 37), // Lighter Blue
+              Color.fromARGB(255, 22, 13, 183), // Lightest Blue
             ],
           ),
         ),
