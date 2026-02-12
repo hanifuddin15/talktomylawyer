@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:talktomylawyer/app/modules/client_profile/widgets/profile_info_card.dart';
 
 import '../controllers/client_profile_controller.dart';
 
@@ -40,6 +41,15 @@ class ClientProfileView extends GetView<ClientProfileController> {
                     ],
                   ),
                   const SizedBox(height: 32),
+                ],
+              ),
+            ),
+
+            // Details Section
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Column(
+                children: [
                   Container(
                     width: 100,
                     height: 100,
@@ -47,6 +57,15 @@ class ClientProfileView extends GetView<ClientProfileController> {
                       color: Theme.of(context).colorScheme.secondary,
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.white, width: 2),
+                      boxShadow: [
+                        BoxShadow(
+                          color: context.theme.primaryColor.withValues(
+                            alpha: 0.3,
+                          ),
+                          offset: const Offset(0, 4),
+                          blurRadius: 4,
+                        ),
+                      ],
                     ),
                     child: Center(
                       child: Obx(
@@ -61,30 +80,23 @@ class ClientProfileView extends GetView<ClientProfileController> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
+                  const SizedBox(height: 12),
+                  Text(
                     'Client Account',
-                    style: TextStyle(color: Colors.white70, fontSize: 14),
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColor,
+                      fontSize: 14,
+                    ),
                   ),
-                ],
-              ),
-            ),
-
-            // Details Section
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                children: [
-                  _buildInfoCard(
-                    context,
+                  const SizedBox(height: 32),
+                  ProfileInfoCard(
                     icon: Icons.person_outline,
                     label: 'Full Name',
                     value: controller.user['firstName'] ?? '',
                     isEditable: false,
                   ),
                   const SizedBox(height: 16),
-                  _buildInfoCard(
-                    context,
+                  ProfileInfoCard(
                     icon: Icons.email_outlined,
                     label: 'Email',
                     value: controller.user['email'] ?? '',
@@ -92,8 +104,7 @@ class ClientProfileView extends GetView<ClientProfileController> {
                     isEditable: false,
                   ),
                   const SizedBox(height: 16),
-                  _buildInfoCard(
-                    context,
+                  ProfileInfoCard(
                     icon: Icons.phone_outlined,
                     label: 'Phone Number',
                     value: controller.user['phone'] ?? '',
@@ -104,62 +115,6 @@ class ClientProfileView extends GetView<ClientProfileController> {
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildInfoCard(
-    BuildContext context, {
-    required IconData icon,
-    required String label,
-    required String value,
-    String? helperText,
-    bool isEditable = true,
-  }) {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF5F7FA),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            children: [
-              Icon(icon, color: Theme.of(context).primaryColor, size: 20),
-              const SizedBox(width: 8),
-              Text(
-                label,
-                style: GoogleFonts.inter(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                  color: const Color(0xFF424242),
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Text(
-            value,
-            style: GoogleFonts.inter(
-              fontSize: 16,
-              color: const Color(0xFF1A1A1A),
-            ),
-          ),
-          if (helperText != null) ...[
-            const SizedBox(height: 8),
-            Text(
-              helperText,
-              style: GoogleFonts.inter(
-                fontSize: 12,
-                color: Colors.grey,
-                fontStyle: FontStyle.italic,
-              ),
-            ),
-          ],
-        ],
       ),
     );
   }

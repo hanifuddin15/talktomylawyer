@@ -139,6 +139,7 @@ class ClientSubscriptionView extends GetView<ClientSubscriptionController> {
               price: '249',
               subText: 'Best for short-term legal needs',
             ),
+            const SizedBox(height: 16),
           ],
         ),
       ),
