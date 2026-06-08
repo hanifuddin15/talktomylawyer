@@ -139,7 +139,7 @@ class SecondaryDropdownSearch<T> extends StatelessWidget {
 
 class PaginatedSearchableDropDown<T> extends StatelessWidget {
   final Future<List<SearchableDropdownMenuItem<T>>?> Function(int, String?)?
-  paginatedRequest;
+      paginatedRequest;
   final void Function(T?)? onChanged;
   final String? hintText;
 

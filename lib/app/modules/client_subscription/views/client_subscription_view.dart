@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:talktomylawyer/app/core/widgets/buttons/primary_button.dart';
 import 'package:talktomylawyer/app/modules/client_subscription/widgets/subscription_card.dart';
 
 import '../controllers/client_subscription_controller.dart';
@@ -10,7 +9,7 @@ class ClientSubscriptionView extends GetView<ClientSubscriptionController> {
   const ClientSubscriptionView({super.key});
   @override
   Widget build(BuildContext context) {
-    final isSelected = true;
+    // final isSelected = true;
     return Scaffold(
       backgroundColor: Colors.white,
       extendBodyBehindAppBar: true,

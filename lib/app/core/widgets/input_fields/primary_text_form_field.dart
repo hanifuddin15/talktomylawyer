@@ -240,7 +240,6 @@ class _AuthTextFormFieldState extends State<AuthTextFormField> {
           initialValue: widget.initialValue,
           focusNode: widget.focusNode,
           keyboardType: widget.inputType,
-
           obscureText: widget.isPassword ? _obscureText : false,
           validator: widget.validator,
           decoration: InputDecoration(
@@ -267,9 +266,8 @@ class _AuthTextFormFieldState extends State<AuthTextFormField> {
             ),
             labelText: widget.isTopLabel ? null : widget.labelText,
             hintText: widget.hintText,
-            prefixIcon: widget.prefixIcon != null
-                ? Icon(widget.prefixIcon)
-                : null,
+            prefixIcon:
+                widget.prefixIcon != null ? Icon(widget.prefixIcon) : null,
             suffixIcon: widget.isPassword
                 ? IconButton(
                     onPressed: () {

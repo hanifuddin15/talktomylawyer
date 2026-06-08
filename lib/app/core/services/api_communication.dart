@@ -73,8 +73,8 @@ class ApiCommunication {
   }
 
   Future<bool> isConnectedToInternet() async {
-    final List<ConnectivityResult> connectivityResult = await (Connectivity()
-        .checkConnectivity());
+    final List<ConnectivityResult> connectivityResult =
+        await (Connectivity().checkConnectivity());
 
     if (connectivityResult.contains(ConnectivityResult.mobile) ||
         connectivityResult.contains(ConnectivityResult.wifi)) {
@@ -126,8 +126,7 @@ class ApiCommunication {
               response.data; // Changed from Map<String, dynamic> to dynamic
           showSuccessMessage
               ? showSuccessSnackkbar(
-                  message:
-                      successMessage ??
+                  message: successMessage ??
                       (responseData is Map
                           ? responseData['message']
                           : 'Success'),

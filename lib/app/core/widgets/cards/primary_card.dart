@@ -29,13 +29,12 @@ class PrimaryCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: bgColor ?? context.colorScheme.onPrimary,
         borderRadius: BorderRadius.circular(radius),
-        border:
-            isBorder
-                ? Border.all(
-                  color: borderColor ?? context.colorScheme.outline,
-                  width: 2,
-                )
-                : null,
+        border: isBorder
+            ? Border.all(
+                color: borderColor ?? context.colorScheme.outline,
+                width: 2,
+              )
+            : null,
         boxShadow: shadow,
       ),
       child: child,

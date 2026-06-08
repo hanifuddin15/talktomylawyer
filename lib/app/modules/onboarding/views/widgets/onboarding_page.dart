@@ -30,8 +30,7 @@ class OnboardingPage extends StatelessWidget {
             padding: const EdgeInsets.all(32),
             decoration: BoxDecoration(
               gradient: LinearGradient(
-                colors:
-                    gradientColors ??
+                colors: gradientColors ??
                     [
                       Color.fromARGB(255, 9, 13, 58),
                       Color.fromARGB(255, 14, 36, 206),

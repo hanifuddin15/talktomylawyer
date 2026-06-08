@@ -124,12 +124,10 @@ class SubscriptionCard extends StatelessWidget {
                   width: double.infinity,
                   onPressed: () {},
                   text: 'Select Plan',
-                  textColor: isSelected
-                      ? context.theme.primaryColor
-                      : Colors.white,
-                  backgroundColor: isSelected
-                      ? Colors.white
-                      : context.theme.primaryColor,
+                  textColor:
+                      isSelected ? context.theme.primaryColor : Colors.white,
+                  backgroundColor:
+                      isSelected ? Colors.white : context.theme.primaryColor,
                 ),
               ],
             ),

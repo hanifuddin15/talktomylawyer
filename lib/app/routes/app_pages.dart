@@ -1,18 +1,32 @@
-import 'package:talktomylawyer/app/modules/authentication/login/bindings/login_binding.dart';
-import 'package:talktomylawyer/app/modules/authentication/login/views/login_view.dart';
-import 'package:talktomylawyer/app/modules/authentication/splash/bindings/splash_binding.dart';
-import 'package:talktomylawyer/app/modules/authentication/splash/views/splash_view.dart';
-import 'package:talktomylawyer/app/modules/home/bindings/home_binding.dart';
-import 'package:talktomylawyer/app/modules/home/views/home_view.dart';
-import 'package:talktomylawyer/app/modules/onboarding/bindings/onboarding_binding.dart';
-import 'package:talktomylawyer/app/modules/onboarding/views/onboarding_view.dart';
-import 'package:talktomylawyer/app/modules/role_selection/bindings/role_selection_binding.dart';
-import 'package:talktomylawyer/app/modules/role_selection/views/role_selection_view.dart';
-import 'package:talktomylawyer/app/modules/client_dashboard/bindings/client_dashboard_binding.dart';
-import 'package:talktomylawyer/app/modules/client_dashboard/views/client_dashboard_view.dart';
-import 'package:talktomylawyer/app/modules/client_home/bindings/client_home_binding.dart';
-import 'package:talktomylawyer/app/modules/client_home/views/client_home_view.dart';
 import 'package:get/get.dart';
+
+// Shared auth
+import '../modules/authentication/splash/bindings/splash_binding.dart';
+import '../modules/authentication/splash/views/splash_view.dart';
+import '../modules/onboarding/bindings/onboarding_binding.dart';
+import '../modules/onboarding/views/onboarding_view.dart';
+import '../modules/role_selection/bindings/role_selection_binding.dart';
+import '../modules/role_selection/views/role_selection_view.dart';
+
+// Client auth
+import '../modules/client_auth/client_login/bindings/client_login_binding.dart';
+import '../modules/client_auth/client_login/views/client_login_view.dart';
+import '../modules/client_auth/client_register/bindings/client_register_binding.dart';
+import '../modules/client_auth/client_register/views/client_register_view.dart';
+
+// Client dashboard
+import '../modules/client_dashboard/bindings/client_dashboard_binding.dart';
+import '../modules/client_dashboard/views/client_dashboard_view.dart';
+
+// Lawyer auth
+import '../modules/lawyer_auth/lawyer_login/bindings/lawyer_login_binding.dart';
+import '../modules/lawyer_auth/lawyer_login/views/lawyer_login_view.dart';
+import '../modules/lawyer_auth/lawyer_register/bindings/lawyer_register_binding.dart';
+import '../modules/lawyer_auth/lawyer_register/views/lawyer_register_view.dart';
+
+// Lawyer dashboard
+import '../modules/lawyer_dashboard/bindings/lawyer_dashboard_binding.dart';
+import '../modules/lawyer_dashboard/views/lawyer_dashboard_view.dart';
 
 part 'app_routes.dart';
 
@@ -20,24 +34,8 @@ class AppPages {
   AppPages._();
 
   static const initial = Routes.splash;
-  // static const INITIAL = Routes.EXAMPLE_WIDGETS;
-  // static const INITIAL = Routes.TEST_BOTTOMSHEET_THEME;
 
   static final routes = [
-    //Testing Theme
-    //Text Theme
-
-    //-------------------------------------END THEME SCREENS----------------------------//
-    GetPage(
-      name: _Paths.home,
-      page: () => const HomeView(),
-      binding: HomeBinding(),
-    ),
-    GetPage(
-      name: _Paths.login,
-      page: () => const LoginView(),
-      binding: LoginBinding(),
-    ),
     GetPage(
       name: _Paths.splash,
       page: () => const SplashView(),
@@ -53,15 +51,43 @@ class AppPages {
       page: () => const RoleSelectionView(),
       binding: RoleSelectionBinding(),
     ),
+
+    // Client Auth
+    GetPage(
+      name: _Paths.clientLogin,
+      page: () => const ClientLoginView(),
+      binding: ClientLoginBinding(),
+    ),
+    GetPage(
+      name: _Paths.clientRegister,
+      page: () => const ClientRegisterView(),
+      binding: ClientRegisterBinding(),
+    ),
+
+    // Client Dashboard
     GetPage(
       name: _Paths.clientDashboard,
       page: () => const ClientDashboardView(),
       binding: ClientDashboardBinding(),
     ),
+
+    // Lawyer Auth
     GetPage(
-      name: _Paths.clientHome,
-      page: () => const ClientHomeView(),
-      binding: ClientHomeBinding(),
+      name: _Paths.lawyerLogin,
+      page: () => const LawyerLoginView(),
+      binding: LawyerLoginBinding(),
+    ),
+    GetPage(
+      name: _Paths.lawyerRegister,
+      page: () => const LawyerRegisterView(),
+      binding: LawyerRegisterBinding(),
+    ),
+
+    // Lawyer Dashboard
+    GetPage(
+      name: _Paths.lawyerDashboard,
+      page: () => const LawyerDashboardView(),
+      binding: LawyerDashboardBinding(),
     ),
   ];
 }

@@ -14,21 +14,20 @@ class Camera {
   final int? jpegQuality;
   final bool isActive;
 
-
   Camera({
-     this.id,
-     this.name,
-     this.rtspUrl,
-     this.camId,
-     this.companyId,
-     this.createdAt,
-     this.updatedAt,
-     this.relayAgentId,
-     this.rtspUrlEnc,
-     this.sendFps,
-     this.sendWidth,
-     this.sendHeight,
-     this.jpegQuality,
+    this.id,
+    this.name,
+    this.rtspUrl,
+    this.camId,
+    this.companyId,
+    this.createdAt,
+    this.updatedAt,
+    this.relayAgentId,
+    this.rtspUrlEnc,
+    this.sendFps,
+    this.sendWidth,
+    this.sendHeight,
+    this.jpegQuality,
     this.isActive = false,
   });
 

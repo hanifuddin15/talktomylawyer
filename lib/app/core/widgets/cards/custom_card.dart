@@ -59,17 +59,16 @@ class CustomCard extends StatelessWidget {
           ),
         ],
       ),
-      child:
-          cardTitle != null
-              ? Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  CustomText(text: cardTitle.toString()),
-                  const SizedBox(height: 16),
-                  cardContext,
-                ],
-              )
-              : cardContext,
+      child: cardTitle != null
+          ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CustomText(text: cardTitle.toString()),
+                const SizedBox(height: 16),
+                cardContext,
+              ],
+            )
+          : cardContext,
     );
   }
 }

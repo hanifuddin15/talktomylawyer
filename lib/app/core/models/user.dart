@@ -1,11 +1,10 @@
 import 'dart:convert';
 
-
 class UserModel {
   String? id;
   String? name;
-  String?email;
-  String?role;
+  String? email;
+  String? role;
   bool? isActive;
   String? companyId;
   String? organizationId;
@@ -28,7 +27,6 @@ class UserModel {
       'isActive': isActive,
       'companyId': companyId,
       'organizationId': organizationId,
-     
     };
   }
 
@@ -39,9 +37,8 @@ class UserModel {
       name: map['name'],
       role: map['role'],
       isActive: map['isActive'],
-    companyId: map['companyId'],
+      companyId: map['companyId'],
       organizationId: map['organizationId'],
-   
     );
   }
 
@@ -67,9 +64,6 @@ class UserModel {
         other.isActive == isActive &&
         other.companyId == companyId &&
         other.organizationId == organizationId;
-        
-        
-        
   }
 
   @override
@@ -81,6 +75,5 @@ class UserModel {
         isActive.hashCode ^
         companyId.hashCode ^
         organizationId.hashCode;
-       
   }
 }

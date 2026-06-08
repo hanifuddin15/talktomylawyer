@@ -29,10 +29,9 @@ class ThemeService {
   }
 
   Future<void> toggleTheme() async {
-    currentMode.value =
-        (currentMode.value == ThemeMode.dark)
-            ? ThemeMode.light
-            : ThemeMode.dark;
+    currentMode.value = (currentMode.value == ThemeMode.dark)
+        ? ThemeMode.light
+        : ThemeMode.dark;
     // currentMode.refresh();
     await storage.write(_modeCacheKey, currentMode.value.name);
   }

@@ -1,92 +1,67 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:talktomylawyer/app/core/constants/app_colors.dart';
 import '../controllers/splash_controller.dart';
 
 class SplashView extends GetView<SplashController> {
   const SplashView({super.key});
+
   @override
   Widget build(BuildContext context) {
-    controller.navigate();
     return Scaffold(
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color.fromARGB(255, 1, 27, 65), // Deep Blue
-              Color.fromARGB(255, 1, 7, 37), // Lighter Blue
-              Color.fromARGB(255, 22, 13, 183), // Lightest Blue
-            ],
-          ),
-        ),
-        child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Spacer(),
-              TweenAnimationBuilder<double>(
-                tween: Tween<double>(begin: 0.0, end: 1.0),
-                duration: const Duration(milliseconds: 1200),
-                curve: Curves.easeOutBack,
-                builder: (context, value, child) {
-                  return Transform.scale(
-                    scale: value,
-                    child: Opacity(
-                      opacity: value.clamp(0.0, 1.0),
-                      child: child,
-                    ),
-                  );
-                },
-                child: Column(
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withValues(alpha: .2),
-                            blurRadius: 20,
-                            spreadRadius: 5,
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.balance,
-                        size: 64,
-                        color: Color(0xFF0D47A1),
-                      ),
-                    ),
-                    const SizedBox(height: 24),
-                    Text(
-                      'Talk to Lawyer',
-                      style: GoogleFonts.outfit(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 1.2,
-                      ),
-                    ),
-                  ],
+      backgroundColor: kDarkBg,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // App Icon
+            Container(
+              width: 110,
+              height: 110,
+              decoration: BoxDecoration(
+                color: kDarkCard,
+                borderRadius: BorderRadius.circular(28),
+                boxShadow: [
+                  BoxShadow(
+                    color: kPrimaryBlue.withValues(alpha: .3),
+                    blurRadius: 30,
+                    spreadRadius: 4,
+                  ),
+                ],
+              ),
+              child: Center(
+                child: Icon(
+                  Icons.verified_user_rounded,
+                  color: kAccentGold,
+                  size: 56,
                 ),
               ),
-              const Spacer(),
-              // Fantastic Loader
-              const SizedBox(
-                height: 50,
-                width: 50,
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  strokeWidth: 3,
-                ),
+            ),
+            const SizedBox(height: 28),
+            // App Name
+            Text(
+              'talk_to_my_lawyer'.tr.isNotEmpty
+                  ? 'app_name'.tr
+                  : 'Talk to My Lawyer',
+              style: GoogleFonts.outfit(
+                fontSize: 28,
+                fontWeight: FontWeight.w800,
+                color: kDarkTextPrimary,
+                letterSpacing: -0.5,
               ),
-              const SizedBox(height: 48),
-            ],
-          ),
+            ),
+            const SizedBox(height: 8),
+            // Tagline
+            Text(
+              'app_tagline'.tr,
+              style: GoogleFonts.outfit(
+                fontSize: 14,
+                fontWeight: FontWeight.w400,
+                color: kDarkTextSecondary,
+              ),
+            ),
+          ],
         ),
       ),
     );

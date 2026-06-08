@@ -45,42 +45,41 @@ class PrimaryImage extends StatelessWidget {
     if (_isSvg) {
       return isNetwork
           ? SvgPicture.network(
-            path,
-            width: width,
-            height: height,
-            fit: fit,
-            placeholderBuilder:
-                (context) =>
-                    placeholder ??
-                    const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.blue,
-                        strokeWidth: 2,
-                      ),
-                    ),
-          )
-          : SvgPicture.asset(path, width: width, height: height, fit: fit);
-    } else {
-      return isNetwork
-          ? Image.network(
-            path,
-            width: width,
-            height: height,
-            fit: fit,
-            loadingBuilder: (context, child, progress) {
-              if (progress == null) return child;
-              return placeholder ??
+              path,
+              width: width,
+              height: height,
+              fit: fit,
+              placeholderBuilder: (context) =>
+                  placeholder ??
                   const Center(
                     child: CircularProgressIndicator(
                       color: Colors.blue,
                       strokeWidth: 2,
                     ),
-                  );
-            },
-            errorBuilder: (context, error, stackTrace) {
-              return errorWidget ?? const Icon(Icons.error);
-            },
-          )
+                  ),
+            )
+          : SvgPicture.asset(path, width: width, height: height, fit: fit);
+    } else {
+      return isNetwork
+          ? Image.network(
+              path,
+              width: width,
+              height: height,
+              fit: fit,
+              loadingBuilder: (context, child, progress) {
+                if (progress == null) return child;
+                return placeholder ??
+                    const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.blue,
+                        strokeWidth: 2,
+                      ),
+                    );
+              },
+              errorBuilder: (context, error, stackTrace) {
+                return errorWidget ?? const Icon(Icons.error);
+              },
+            )
           : Image.asset(path, width: width, height: height, fit: fit);
     }
   }
@@ -105,7 +104,6 @@ class PrimaryNetworkImage extends StatelessWidget {
     return Container(
       height: 160,
       width: 160,
-
       decoration: BoxDecoration(border: Border.all(color: Colors.blueAccent)),
       child: Image(
         fit: BoxFit.cover,

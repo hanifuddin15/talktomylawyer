@@ -26,8 +26,7 @@ class IconTextInfoRow extends StatelessWidget {
             text,
             overflow: TextOverflow.ellipsis,
             maxLines: 3,
-            style:
-                textStyle ??
+            style: textStyle ??
                 context.textTheme.labelMedium?.copyWith(
                   color: context.colorScheme.primary,
                 ),

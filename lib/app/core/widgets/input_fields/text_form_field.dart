@@ -127,32 +127,28 @@ class PrimaryTextFormField extends StatelessWidget {
       readOnly: readOnly,
       style: textStyle,
       maxLength: maxLength,
-      decoration:
-          decoration ??
+      decoration: decoration ??
           InputDecoration(
             labelText: label ?? '',
             labelStyle: const TextStyle(fontSize: 13),
             hintText: hintText,
             contentPadding: contentPadding,
-            prefixIcon:
-                prefixIcon == null
-                    ? null
-                    : Icon(prefixIcon, color: prefixIconColor),
-            suffixIcon:
-                suffixIcon != null
-                    ? Icon(
-                      suffixIcon,
-                      color: suffixIconColor,
-                      size: suffixIconSize ?? 12,
-                    )
-                    : null,
+            prefixIcon: prefixIcon == null
+                ? null
+                : Icon(prefixIcon, color: prefixIconColor),
+            suffixIcon: suffixIcon != null
+                ? Icon(
+                    suffixIcon,
+                    color: suffixIconColor,
+                    size: suffixIconSize ?? 12,
+                  )
+                : null,
             enabledBorder: enabledBorder,
             focusedBorder: focusedBorder,
             errorBorder: errorBorder,
             focusedErrorBorder: focusedErrorBorder,
           ),
-      validator:
-          validator ??
+      validator: validator ??
           (value) {
             if (value!.isEmpty) {
               return validationText;
@@ -213,8 +209,7 @@ class SecondaryTextFormField extends StatelessWidget {
         errorBorder: errorBorder,
         focusedErrorBorder: focusedErrorBorder,
       ),
-      validator:
-          validator ??
+      validator: validator ??
           (value) {
             if (value!.isEmpty) {
               return validationText;

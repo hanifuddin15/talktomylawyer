@@ -1,125 +1,253 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
+import 'package:talktomylawyer/app/core/constants/app_colors.dart';
 import '../controllers/onboarding_controller.dart';
-import 'widgets/onboarding_page.dart';
 
 class OnboardingView extends GetView<OnboardingController> {
   const OnboardingView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final pageController = PageController();
+
+    final slides = [
+      _OnboardingSlide(
+        icon: Icons.balance_rounded,
+        iconBg: const Color(0xFF3B5BDB),
+        title: 'onboarding_title_1'.tr,
+        body: 'onboarding_body_1'.tr,
+      ),
+      _OnboardingSlide(
+        icon: Icons.flash_on_rounded,
+        iconBg: const Color(0xFFF59E0B),
+        title: 'onboarding_title_2'.tr,
+        body: 'onboarding_body_2'.tr,
+      ),
+      _OnboardingSlide(
+        icon: Icons.verified_user_rounded,
+        iconBg: const Color(0xFFC9A227),
+        title: 'onboarding_title_3'.tr,
+        body: 'onboarding_body_3'.tr,
+      ),
+    ];
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
+      backgroundColor: kDarkBg,
+      body: SafeArea(
+        child: Column(
+          children: [
+            // Skip button
+            Align(
+              alignment: Alignment.centerRight,
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(0, 16, 20, 0),
+                child: GestureDetector(
+                  onTap: controller.skip,
+                  child: Text(
+                    'skip'.tr,
+                    style: GoogleFonts.outfit(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                      color: kDarkTextSecondary,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            // PageView
+            Expanded(
+              child: Obx(() {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  if (pageController.hasClients) {
+                    pageController.animateToPage(
+                      controller.currentPage.value,
+                      duration: const Duration(milliseconds: 400),
+                      curve: Curves.easeInOut,
+                    );
+                  }
+                });
+                return PageView.builder(
+                  controller: pageController,
+                  onPageChanged: (i) => controller.currentPage.value = i,
+                  itemCount: slides.length,
+                  itemBuilder: (_, i) => slides[i],
+                );
+              }),
+            ),
+            // Dots + Button
+            Padding(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+              child: Column(
+                children: [
+                  // Dot Indicators
+                  Obx(
+                    () => Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(3, (i) {
+                        final isActive = i == controller.currentPage.value;
+                        return AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          margin: const EdgeInsets.symmetric(horizontal: 4),
+                          width: isActive ? 24 : 8,
+                          height: 8,
+                          decoration: BoxDecoration(
+                            color: isActive ? kPrimaryBlue : kDarkDivider,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        );
+                      }),
+                    ),
+                  ),
+                  const SizedBox(height: 28),
+                  // Button
+                  Obx(
+                    () => SizedBox(
+                      width: double.infinity,
+                      height: 56,
+                      child: ElevatedButton(
+                        onPressed: controller.nextPage,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: kPrimaryBlue,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          elevation: 0,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              controller.currentPage.value < 2
+                                  ? 'next'.tr
+                                  : 'get_started'.tr,
+                              style: GoogleFonts.outfit(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            const Icon(
+                              Icons.arrow_forward_rounded,
+                              color: Colors.white,
+                              size: 20,
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _OnboardingSlide extends StatelessWidget {
+  const _OnboardingSlide({
+    required this.icon,
+    required this.iconBg,
+    required this.title,
+    required this.body,
+  });
+
+  final IconData icon;
+  final Color iconBg;
+  final String title;
+  final String body;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20),
+      child: Column(
         children: [
-          PageView(
-            controller: controller.pageController,
-            onPageChanged: controller.onPageChanged,
-            children: const [
-              OnboardingPage(
-                title: 'Talk to Lawyer',
-                description: 'On-demand legal guidance tailored to you',
-                tags: ['Instant matching', 'Secure calls', 'Flat pricing'],
-                // TODO: Add image/animation
+          const SizedBox(height: 16),
+          // Illustration Card
+          Container(
+            width: double.infinity,
+            height: 280,
+            decoration: BoxDecoration(
+              color: kDarkCard,
+              borderRadius: BorderRadius.circular(24),
+            ),
+            child: Center(
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Big faint circle
+                  Container(
+                    width: 180,
+                    height: 180,
+                    decoration: BoxDecoration(
+                      color: iconBg.withValues(alpha: 0.08),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  // Medium circle
+                  Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: iconBg.withValues(alpha: 0.12),
+                      shape: BoxShape.circle,
+                    ),
+                  ),
+                  // Icon
+                  Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      color: iconBg,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(icon, color: Colors.white, size: 40),
+                  ),
+                  // Corner badge
+                  Positioned(
+                    bottom: 30,
+                    right: 30,
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        color: kDarkSurface,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(icon, color: iconBg, size: 22),
+                    ),
+                  ),
+                ],
               ),
-              OnboardingPage(
-                iconData: Icons.gpp_good_outlined,
-                gradientColors: [
-                  Color.fromARGB(255, 4, 6, 31),
-                  Color.fromARGB(255, 4, 6, 31),
-                  Color.fromARGB(255, 3, 205, 227),
-                ],
-                title: 'Verified Experts',
-                description:
-                    'Licensed lawyers with domain expertise you can trust',
-                tags: [
-                  'Identity verified',
-                  'Bar status checked',
-                  'Client ratings',
-                ],
-                // TODO: Add image/animation
-              ),
-              OnboardingPage(
-                iconData: Icons.access_time,
-                gradientColors: [
-                  Color.fromARGB(255, 10, 22, 18),
-                  Color.fromARGB(255, 16, 43, 31),
-                  Color.fromARGB(255, 32, 202, 137),
-                ],
-                title: 'Pick your role',
-                description: 'We customize the flow based on who you are',
-                tags: [
-                  'Personalized dashboard',
-                  'Smart intake',
-                  'Live support',
-                ],
-                // TODO: Add image/animation
-              ),
-            ],
+            ),
           ),
-          Positioned(
-            bottom: 40,
-            left: 20,
-            right: 20,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                // Page Indicator
-                Obx(
-                  () => Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      3,
-                      (index) => AnimatedContainer(
-                        duration: const Duration(milliseconds: 300),
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        height: 8,
-                        width: controller.currentIndex.value == index ? 24 : 8,
-                        decoration: BoxDecoration(
-                          color: controller.currentIndex.value == index
-                              ? const Color(0xFF1A237E) // Deep Blue
-                              : Colors.grey.shade300,
-                          borderRadius: BorderRadius.circular(4),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                // Next Button
-                ElevatedButton(
-                  onPressed: controller.next,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFF1A237E), // Deep Blue
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 32,
-                      vertical: 16,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Next',
-                        style: GoogleFonts.inter(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.white,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Icon(
-                        Icons.arrow_forward,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+          const SizedBox(height: 40),
+          // Title
+          Text(
+            title,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.outfit(
+              fontSize: 26,
+              fontWeight: FontWeight.w800,
+              color: kDarkTextPrimary,
+              height: 1.2,
+            ),
+          ),
+          const SizedBox(height: 14),
+          // Body
+          Text(
+            body,
+            textAlign: TextAlign.center,
+            style: GoogleFonts.outfit(
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+              color: kDarkTextSecondary,
+              height: 1.6,
             ),
           ),
         ],

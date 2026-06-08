@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-
 const snackbarDuration = Duration(seconds: 2);
 
 void showSnackkbar({required String title, required String message}) {

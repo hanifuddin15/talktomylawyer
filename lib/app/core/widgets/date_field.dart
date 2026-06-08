@@ -9,8 +9,6 @@ class PrimaryDateField extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(color: Colors.grey, border: Border.all()),
       child: const Text('13 JAN 2023'),
-
-
     );
   }
 }

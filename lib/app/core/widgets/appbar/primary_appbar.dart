@@ -40,13 +40,12 @@ class PrimaryAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       centerTitle: centerTitle,
       titleSpacing: titleSpacing,
-      leading:
-          leading ??
+      leading: leading ??
           (showBackButton
               ? IconButton(
-                icon: const Icon(Icons.arrow_back),
-                onPressed: () => Navigator.of(context).maybePop(),
-              )
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.of(context).maybePop(),
+                )
               : null),
       title: Text(title, style: titleTextStyle),
       actions: actions,

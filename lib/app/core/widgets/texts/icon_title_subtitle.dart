@@ -72,16 +72,14 @@ class IconTitleSubtitle extends StatelessWidget {
     final iconWidget = Container(
       padding: iconPadding,
       decoration: BoxDecoration(
-        color:
-            backgroundColor ??
+        color: backgroundColor ??
             context.theme.colorScheme.outline.withValues(alpha: 0.2),
         shape: shape,
         borderRadius: shape == BoxShape.rectangle
             ? borderRadius ?? BorderRadius.circular(12)
             : null,
         border: Border.all(
-          color:
-              borderColor ??
+          color: borderColor ??
               context.theme.colorScheme.outlineVariant.withValues(alpha: 0.2),
           width: borderWidth,
         ),
@@ -95,8 +93,7 @@ class IconTitleSubtitle extends StatelessWidget {
       children: [
         Text(
           title,
-          style:
-              titleStyle ??
+          style: titleStyle ??
               context.textTheme.titleMedium?.copyWith(
                 fontWeight: FontWeight.w700,
               ),
@@ -108,8 +105,7 @@ class IconTitleSubtitle extends StatelessWidget {
               subtitle!,
               overflow: TextOverflow.ellipsis,
               maxLines: subtitleMaxLines ?? 1,
-              style:
-                  subtitleStyle ??
+              style: subtitleStyle ??
                   context.textTheme.bodyMedium?.copyWith(
                     color: context.theme.colorScheme.outline,
                   ),

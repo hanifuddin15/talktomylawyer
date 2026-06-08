@@ -46,11 +46,11 @@ class ClientHomeView extends GetView<ClientHomeController> {
                     padding: const EdgeInsets.all(20),
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 2,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
-                          childAspectRatio: 1.1,
-                        ),
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                      childAspectRatio: 1.1,
+                    ),
                     itemCount: controller.categories.length,
                     itemBuilder: (context, index) {
                       final category = controller.categories[index];

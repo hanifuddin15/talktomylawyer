@@ -57,14 +57,13 @@ class TextFieldTitleWidget extends StatelessWidget {
                 : const SizedBox.shrink(),
             (label?.isNotEmpty ?? false)
                 ? RichText(
-                  text: TextSpan(
-                    text: label ?? '',
-                    style: context.textTheme.labelSmall?.copyWith(
-                      color: context.colorScheme.primary,
-                    ),
-                    children:
-                        isRequired
-                            ? [
+                    text: TextSpan(
+                      text: label ?? '',
+                      style: context.textTheme.labelSmall?.copyWith(
+                        color: context.colorScheme.primary,
+                      ),
+                      children: isRequired
+                          ? [
                               TextSpan(
                                 text: ' *',
                                 style: TextStyle(
@@ -73,9 +72,9 @@ class TextFieldTitleWidget extends StatelessWidget {
                                 ),
                               ),
                             ]
-                            : [],
-                  ),
-                )
+                          : [],
+                    ),
+                  )
                 : const SizedBox.shrink(),
           ],
         ),
@@ -92,7 +91,6 @@ class TextFieldTitleWidget extends StatelessWidget {
           decoration: InputDecoration(
             isDense: true,
             hintText: hint,
-
             filled: true,
             fillColor: context.colorScheme.outlineVariant,
             border: OutlineInputBorder(

@@ -70,7 +70,7 @@ class _PrimaryExpansionTileState extends State<PrimaryExpansionTile> {
                 color: _isExpanded
                     ? (widget.backgroundColor ?? context.colorScheme.onPrimary)
                     : (widget.collapsedBackgroundColor ??
-                          context.colorScheme.onPrimary),
+                        context.colorScheme.onPrimary),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               child: Row(
@@ -85,8 +85,7 @@ class _PrimaryExpansionTileState extends State<PrimaryExpansionTile> {
                   Expanded(
                     child: Text(
                       widget.label,
-                      style:
-                          widget.textStyle ??
+                      style: widget.textStyle ??
                           context.themeData.textTheme.labelLarge?.copyWith(
                             color: context.colorScheme.primary,
                           ),

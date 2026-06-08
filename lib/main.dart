@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:get_storage/get_storage.dart';
 import 'package:ansicolor/ansicolor.dart';
 import 'package:flutter/material.dart';
 import 'package:talktomylawyer/app/core/services/app_service.dart';
@@ -6,6 +7,7 @@ import 'package:talktomylawyer/talk_to_my_lawyer.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await GetStorage.init();
 
   await AppService.instance.initializeApp();
 
