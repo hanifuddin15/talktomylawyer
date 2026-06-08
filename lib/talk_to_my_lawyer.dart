@@ -19,7 +19,7 @@ class TalkToMyLawyer extends StatelessWidget {
       getPages: AppPages.routes,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
-      themeMode: ThemeMode.system, // Uses device settings
+      themeMode: ThemeMode.dark, // Uses device settings
       translations: AppTranslations(),
       locale: const Locale('en', 'US'), // Start with English by default
       fallbackLocale: const Locale('en', 'US'),

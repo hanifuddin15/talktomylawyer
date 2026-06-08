@@ -9,6 +9,7 @@ class SplashView extends GetView<SplashController> {
 
   @override
   Widget build(BuildContext context) {
+    controller.navigate();
     return Scaffold(
       backgroundColor: kDarkBg,
       body: Center(

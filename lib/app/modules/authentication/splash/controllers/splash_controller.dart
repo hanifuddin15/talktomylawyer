@@ -6,10 +6,10 @@ class SplashController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    _navigate();
+    navigate();
   }
 
-  Future<void> _navigate() async {
+  Future<void> navigate() async {
     await Future.delayed(const Duration(milliseconds: 2200));
     final box = GetStorage();
     final bool onboardingDone = box.read('onboarding_done') ?? false;

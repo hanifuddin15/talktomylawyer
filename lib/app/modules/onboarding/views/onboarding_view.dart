@@ -57,23 +57,12 @@ class OnboardingView extends GetView<OnboardingController> {
             ),
             // PageView
             Expanded(
-              child: Obx(() {
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  if (pageController.hasClients) {
-                    pageController.animateToPage(
-                      controller.currentPage.value,
-                      duration: const Duration(milliseconds: 400),
-                      curve: Curves.easeInOut,
-                    );
-                  }
-                });
-                return PageView.builder(
-                  controller: pageController,
-                  onPageChanged: (i) => controller.currentPage.value = i,
-                  itemCount: slides.length,
-                  itemBuilder: (_, i) => slides[i],
-                );
-              }),
+              child: PageView.builder(
+                controller: pageController,
+                onPageChanged: (i) => controller.currentPage.value = i,
+                itemCount: slides.length,
+                itemBuilder: (_, i) => slides[i],
+              ),
             ),
             // Dots + Button
             Padding(
