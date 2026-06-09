@@ -229,14 +229,17 @@ class _OnboardingSlide extends StatelessWidget {
           ),
           const SizedBox(height: 14),
           // Body
-          Text(
-            body,
-            textAlign: TextAlign.center,
-            style: GoogleFonts.outfit(
-              fontSize: 15,
-              fontWeight: FontWeight.w400,
-              color: kDarkTextSecondary,
-              height: 1.6,
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Text(
+              body,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.outfit(
+                fontSize: 18,
+                fontWeight: FontWeight.w400,
+                color: kDarkTextSecondary,
+                height: 1.6,
+              ),
             ),
           ),
         ],

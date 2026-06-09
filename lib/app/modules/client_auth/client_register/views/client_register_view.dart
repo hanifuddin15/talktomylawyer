@@ -29,7 +29,9 @@ class ClientRegisterView extends GetView<ClientRegisterController> {
               children: [
                 const SizedBox(height: 20),
                 // Header Row
-                Row(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 20,
                   children: [
                     GestureDetector(
                       onTap: controller.step.value > 0
@@ -50,14 +52,12 @@ class ClientRegisterView extends GetView<ClientRegisterController> {
                       ),
                     ),
                     const SizedBox(width: 12),
-                    Expanded(
-                      child: Text(
-                        'create_account'.tr,
-                        style: GoogleFonts.outfit(
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                          color: primaryText,
-                        ),
+                    Text(
+                      'create_account'.tr,
+                      style: GoogleFonts.outfit(
+                        fontSize: 25,
+                        fontWeight: FontWeight.w700,
+                        color: primaryText,
                       ),
                     ),
                   ],
@@ -71,16 +71,14 @@ class ClientRegisterView extends GetView<ClientRegisterController> {
                 ),
                 const SizedBox(height: 24),
                 // Step content
-                Expanded(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 300),
-                    child: _buildStep(
-                      context,
-                      controller.step.value,
-                      isDark,
-                      primaryText,
-                      secondaryText,
-                    ),
+                AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  child: _buildStep(
+                    context,
+                    controller.step.value,
+                    isDark,
+                    primaryText,
+                    secondaryText,
                   ),
                 ),
               ],
@@ -148,7 +146,7 @@ class _Step1PersonalInfo extends StatelessWidget {
           Text(
             'personal_information'.tr,
             style: GoogleFonts.outfit(
-              fontSize: 24,
+              fontSize: 16,
               fontWeight: FontWeight.w800,
               color: primaryText,
             ),
@@ -228,7 +226,7 @@ class _Step2Contact extends StatelessWidget {
           Text(
             'contact_details'.tr,
             style: GoogleFonts.outfit(
-              fontSize: 24,
+              fontSize: 16,
               fontWeight: FontWeight.w800,
               color: primaryText,
             ),
@@ -260,7 +258,7 @@ class _Step2Contact extends StatelessWidget {
             isPassword: true,
           ),
           const SizedBox(height: 32),
-          AppButton(label: 'next'.tr, onPressed: controller.nextStep),
+          AppButton(label: 'continue'.tr, onPressed: controller.nextStep),
           const SizedBox(height: 20),
         ],
       ),
@@ -291,33 +289,63 @@ class _Step3Verify extends StatelessWidget {
           Text(
             'verify_phone'.tr,
             style: GoogleFonts.outfit(
-              fontSize: 24,
+              fontSize: 16,
               fontWeight: FontWeight.w800,
               color: primaryText,
             ),
           ),
-          const SizedBox(height: 8),
-          RichText(
-            text: TextSpan(
-              style: GoogleFonts.outfit(fontSize: 14, color: secondaryText),
+          const SizedBox(height: 12),
+          Container(
+            height: 50,
+            decoration: BoxDecoration(
+              color: isDark ? kDarkCard : Colors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(
+                color: isDark ? kDarkDivider : kLightDivider,
+                width: 1,
+              ),
+            ),
+            padding: EdgeInsets.all(8),
+            child: Row(
               children: [
-                TextSpan(text: '${'otp_sent_to'.tr} '),
-                TextSpan(
-                  text: controller.phone.isNotEmpty
-                      ? controller.phone
-                      : '+880 XXXX-XXXXXX',
-                  style: GoogleFonts.outfit(
-                    fontWeight: FontWeight.w600,
-                    color: primaryText,
+                Icon(Icons.info_outlined, color: kPrimaryBlue),
+                const SizedBox(width: 8),
+                RichText(
+                  text: TextSpan(
+                    style: GoogleFonts.outfit(
+                      fontSize: 14,
+                      color: secondaryText,
+                    ),
+                    children: [
+                      TextSpan(text: '${'otp_sent_to'.tr} '),
+                      TextSpan(
+                        text: controller.phone.isNotEmpty
+                            ? controller.phone
+                            : '+880 XXXX-XXXXXX',
+                        style: GoogleFonts.outfit(
+                          // fontWeight: FontWeight.w600,
+                          color: secondaryText,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],
             ),
           ),
           const SizedBox(height: 32),
+          Text(
+            'otp_code'.tr,
+            style: GoogleFonts.outfit(
+              fontSize: 16,
+              fontWeight: FontWeight.w800,
+              color: primaryText,
+            ),
+          ),
+          const SizedBox(height: 12),
           // OTP Fields
           _OtpInputRow(onChanged: (v) => controller.otp = v, isDark: isDark),
-          const SizedBox(height: 20),
+          const SizedBox(height: 8),
           Center(
             child: TextButton(
               onPressed: () {},

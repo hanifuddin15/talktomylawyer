@@ -188,90 +188,100 @@ class _RoleCard extends StatelessWidget {
                 ]
               : [],
         ),
-        child: Row(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Column(
+              spacing: 16,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: kPrimaryBlue.withValues(alpha: .15),
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  child: Icon(icon, color: kPrimaryBlue, size: 26),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: kPrimaryBlue.withValues(alpha: .15),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Icon(icon, color: kPrimaryBlue, size: 26),
+                    ),
+                    // Radio indicator
+                    Container(
+                      width: 22,
+                      height: 22,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: isSelected
+                              ? kPrimaryBlue
+                              : (isDark ? kDarkTextHint : kLightTextHint),
+                          width: 2,
+                        ),
+                        color: isSelected ? kPrimaryBlue : Colors.transparent,
+                      ),
+                      child: isSelected
+                          ? const Icon(
+                              Icons.circle,
+                              color: Colors.white,
+                              size: 10,
+                            )
+                          : null,
+                    ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: GoogleFonts.outfit(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        color: isSelected ? kPrimaryBlue : primaryText,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      description,
+                      style: GoogleFonts.outfit(
+                        fontSize: 13,
+                        color: secondaryText,
+                        height: 1.5,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    ...features.map(
+                      (f) => Padding(
+                        padding: const EdgeInsets.only(bottom: 6),
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.check_circle_rounded,
+                              size: 16,
+                              color: isSelected
+                                  ? kPrimaryBlue
+                                  : (isDark ? kDarkTextHint : kLightTextHint),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              f,
+                              style: GoogleFonts.outfit(
+                                fontSize: 13,
+                                color: isSelected ? primaryText : secondaryText,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
             const SizedBox(width: 14),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: GoogleFonts.outfit(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: isSelected ? kPrimaryBlue : primaryText,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
-                  Text(
-                    description,
-                    style: GoogleFonts.outfit(
-                      fontSize: 13,
-                      color: secondaryText,
-                      height: 1.5,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  ...features.map(
-                    (f) => Padding(
-                      padding: const EdgeInsets.only(bottom: 6),
-                      child: Row(
-                        children: [
-                          Icon(
-                            Icons.check_circle_rounded,
-                            size: 16,
-                            color: isSelected
-                                ? kPrimaryBlue
-                                : (isDark ? kDarkTextHint : kLightTextHint),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            f,
-                            style: GoogleFonts.outfit(
-                              fontSize: 13,
-                              color: isSelected ? primaryText : secondaryText,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            // Radio indicator
-            Container(
-              width: 22,
-              height: 22,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: isSelected
-                      ? kPrimaryBlue
-                      : (isDark ? kDarkTextHint : kLightTextHint),
-                  width: 2,
-                ),
-                color: isSelected ? kPrimaryBlue : Colors.transparent,
-              ),
-              child: isSelected
-                  ? const Icon(Icons.circle, color: Colors.white, size: 10)
-                  : null,
-            ),
           ],
         ),
       ),

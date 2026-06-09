@@ -33,9 +33,40 @@ class AppStepIndicator extends StatelessWidget {
               ),
               if (!isLast)
                 Expanded(
-                  child: Container(
-                    height: 2,
-                    color: isCompleted ? kPrimaryBlue : kDarkDivider,
+                  child: Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 6.0),
+                        child: Text(
+                          stepLabels[i],
+                          style: GoogleFonts.outfit(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                            color: isActive ? kPrimaryBlue : kDarkTextHint,
+                          ),
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                      const SizedBox(width: 2),
+                      Expanded(
+                        child: Container(
+                          height: 2,
+                          color: isCompleted ? kPrimaryBlue : kDarkDivider,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              if (isLast)
+                Padding(
+                  padding: const EdgeInsets.only(left: 6.0),
+                  child: Text(
+                    stepLabels[i],
+                    style: GoogleFonts.outfit(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: isActive ? kPrimaryBlue : kDarkTextHint,
+                    ),
                   ),
                 ),
             ],
