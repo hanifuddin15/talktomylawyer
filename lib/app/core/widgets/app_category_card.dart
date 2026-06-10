@@ -37,7 +37,7 @@ class AppCategoryCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(16),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Container(
               width: 48,
@@ -60,10 +60,7 @@ class AppCategoryCard extends StatelessWidget {
             const SizedBox(height: 2),
             Text(
               '$lawyerCount lawyers',
-              style: GoogleFonts.outfit(
-                fontSize: 12,
-                color: secondaryText,
-              ),
+              style: GoogleFonts.outfit(fontSize: 12, color: secondaryText),
             ),
           ],
         ),

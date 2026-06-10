@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:talktomylawyer/app/core/widgets/input_fields/app_search_field.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_badge.dart';
 import '../../../../core/widgets/app_category_card.dart';
@@ -101,7 +102,7 @@ class ClientHomeTab extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            '${_greeting()}, User 👋',
+                            '${_greeting()},',
                             style: GoogleFonts.outfit(
                               fontSize: 14,
                               color: secondaryText,
@@ -109,7 +110,7 @@ class ClientHomeTab extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            'app_name'.tr,
+                            'Anik 👋'.tr,
                             style: GoogleFonts.outfit(
                               fontSize: 22,
                               fontWeight: FontWeight.w800,
@@ -122,16 +123,16 @@ class ClientHomeTab extends StatelessWidget {
                     AppBadge(
                       count: 3,
                       child: Container(
-                        width: 44,
-                        height: 44,
+                        width: 52,
+                        height: 52,
                         decoration: BoxDecoration(
                           color: cardColor,
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(32),
                         ),
                         child: Icon(
                           Icons.notifications_outlined,
                           color: primaryText,
-                          size: 22,
+                          size: 28,
                         ),
                       ),
                     ),
@@ -144,59 +145,36 @@ class ClientHomeTab extends StatelessWidget {
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                child: Container(
-                  height: 52,
-                  decoration: BoxDecoration(
-                    color: cardColor,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 14),
-                      Icon(Icons.search, color: secondaryText, size: 20),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: TextField(
-                          readOnly: true,
-                          onTap: () {},
-                          style: GoogleFonts.outfit(
-                            fontSize: 14,
-                            color: primaryText,
-                          ),
-                          decoration: InputDecoration(
-                            hintText: 'search_hint'.tr,
-                            hintStyle: GoogleFonts.outfit(
-                              fontSize: 14,
-                              color: secondaryText,
-                            ),
-                            border: InputBorder.none,
-                            isDense: true,
-                            contentPadding: EdgeInsets.zero,
-                          ),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: SizedBox(
+                        height: 52,
+                        child: AppSearchField(
+                          primaryText: primaryText,
+                          secondaryText: secondaryText,
+                          cardColor: cardColor,
                         ),
                       ),
-                      Container(
-                        margin: const EdgeInsets.only(right: 8),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 12,
-                          vertical: 8,
-                        ),
-                        decoration: BoxDecoration(
-                          color: kPrimaryBlue,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: const Icon(
-                          Icons.tune_rounded,
-                          color: Colors.white,
-                          size: 18,
-                        ),
+                    ),
+                    const SizedBox(width: 12),
+                    Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: kPrimaryBlue,
+                        borderRadius: BorderRadius.circular(14),
                       ),
-                    ],
-                  ),
+                      child: const Icon(
+                        Icons.tune_rounded,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
-
             // ── Premium Banner ──
             SliverToBoxAdapter(
               child: Padding(
@@ -274,33 +252,29 @@ class ClientHomeTab extends StatelessWidget {
                 ),
               ),
             ),
-            SliverToBoxAdapter(
-              child: SizedBox(
-                height: 150,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                  itemCount: _categories.length,
-                  itemBuilder: (ctx, i) {
-                    final cat = _categories[i];
-                    return Padding(
-                      padding: const EdgeInsets.only(right: 12),
-                      child: SizedBox(
-                        width: 130,
-                        child: AppCategoryCard(
-                          title: (cat['key'] as String).tr,
-                          lawyerCount: cat['count'] as int,
-                          icon: cat['icon'] as IconData,
-                          iconBg: Color(cat['bg'] as int),
-                          iconColor: Color(cat['ic'] as int),
-                        ),
-                      ),
-                    );
-                  },
+
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+              sliver: SliverGrid(
+                delegate: SliverChildBuilderDelegate((ctx, i) {
+                  final cat = _categories[i];
+
+                  return AppCategoryCard(
+                    title: (cat['key'] as String).tr,
+                    lawyerCount: cat['count'] as int,
+                    icon: cat['icon'] as IconData,
+                    iconBg: Color(cat['bg'] as int),
+                    iconColor: Color(cat['ic'] as int),
+                  );
+                }, childCount: 4),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 1.4,
                 ),
               ),
             ),
-
             // ── Featured Lawyers ──
             SliverToBoxAdapter(
               child: Padding(
@@ -312,47 +286,82 @@ class ClientHomeTab extends StatelessWidget {
                 ),
               ),
             ),
-            SliverPadding(
-              padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
-              sliver: SliverList(
-                delegate: SliverChildListDelegate([
-                  AppLawyerCard(
-                    name: 'Adv. Rahman Khan',
-                    title: '${'corporate_law'.tr} • 12 yr exp',
-                    tags: ['corporate_law'.tr, 'tax_law'.tr],
-                    rating: 4.9,
-                    reviewCount: 128,
-                    experience: 12,
-                    location: 'Dhaka',
-                    availability: 'available_today'.tr,
-                    rate: 2500,
-                    initials: 'RK',
-                  ),
-                  AppLawyerCard(
-                    name: 'Adv. Fatema Begum',
-                    title: '${'family_law'.tr} • 8 yr exp',
-                    tags: ['family_law'.tr, 'civil_law'.tr],
-                    rating: 4.7,
-                    reviewCount: 96,
-                    experience: 8,
-                    location: 'Chittagong',
-                    availability: 'available_tomorrow'.tr,
-                    rate: 2000,
-                    initials: 'FB',
-                  ),
-                  AppLawyerCard(
-                    name: 'Adv. Kamal Hossain',
-                    title: '${'criminal_law'.tr} • 15 yr exp',
-                    tags: ['criminal_law'.tr],
-                    rating: 4.8,
-                    reviewCount: 203,
-                    experience: 15,
-                    location: 'Dhaka',
-                    availability: 'available_today'.tr,
-                    rate: 3000,
-                    initials: 'KH',
-                  ),
-                ]),
+
+            SliverToBoxAdapter(
+              child: SizedBox(
+                height: 250,
+                child: ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: 5,
+                  separatorBuilder: (_, __) => const SizedBox(width: 16),
+                  itemBuilder: (context, index) {
+                    final lawyers = [
+                      AppLawyerCard(
+                        name: 'Adv. Rahman Khan',
+                        title: '${'corporate_law'.tr} • 12 yr exp',
+                        tags: ['corporate_law'.tr, 'tax_law'.tr],
+                        rating: 4.9,
+                        reviewCount: 128,
+                        experience: 12,
+                        location: 'Dhaka',
+                        availability: 'available_today'.tr,
+                        rate: 2500,
+                        initials: 'RK',
+                      ),
+                      AppLawyerCard(
+                        name: 'Adv. Fatema Begum',
+                        title: '${'family_law'.tr} • 8 yr exp',
+                        tags: ['family_law'.tr, 'civil_law'.tr],
+                        rating: 4.7,
+                        reviewCount: 96,
+                        experience: 8,
+                        location: 'Chittagong',
+                        availability: 'available_tomorrow'.tr,
+                        rate: 2000,
+                        initials: 'FB',
+                      ),
+                      AppLawyerCard(
+                        name: 'Adv. Kamal Hossain',
+                        title: '${'criminal_law'.tr} • 15 yr exp',
+                        tags: ['criminal_law'.tr],
+                        rating: 4.8,
+                        reviewCount: 203,
+                        experience: 15,
+                        location: 'Dhaka',
+                        availability: 'available_today'.tr,
+                        rate: 3000,
+                        initials: 'KH',
+                      ),
+                      AppLawyerCard(
+                        name: 'Adv. Imran Ahmed',
+                        title: '${'civil_law'.tr} • 10 yr exp',
+                        tags: ['civil_law'.tr],
+                        rating: 4.6,
+                        reviewCount: 85,
+                        experience: 10,
+                        location: 'Sylhet',
+                        availability: 'available_today'.tr,
+                        rate: 2200,
+                        initials: 'IA',
+                      ),
+                      AppLawyerCard(
+                        name: 'Adv. Nabila Islam',
+                        title: '${'property_law'.tr} • 9 yr exp',
+                        tags: ['property_law'.tr],
+                        rating: 4.9,
+                        reviewCount: 140,
+                        experience: 9,
+                        location: 'Khulna',
+                        availability: 'available_today'.tr,
+                        rate: 2800,
+                        initials: 'NI',
+                      ),
+                    ];
+
+                    return SizedBox(width: 320, child: lawyers[index]);
+                  },
+                ),
               ),
             ),
           ],

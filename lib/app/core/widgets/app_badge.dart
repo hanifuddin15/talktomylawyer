@@ -23,8 +23,8 @@ class AppBadge extends StatelessWidget {
       children: [
         child,
         Positioned(
-          right: -4,
-          top: -4,
+          right: 5,
+          top: 5,
           child: Container(
             constraints: showDot
                 ? const BoxConstraints(minWidth: 8, minHeight: 8)
