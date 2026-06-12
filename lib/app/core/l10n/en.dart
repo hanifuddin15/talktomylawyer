@@ -139,6 +139,9 @@ const Map<String, String> en = {
   'apply_filters': 'Apply Filters',
   'hr': '/hr',
   'yrs_exp': 'yr exp',
+  'practice_area': 'Practice Area',
+  'verified_lawyers_only': 'Verified Lawyers Only',
+  'other': 'Other',
 
   // Client Premium
   'go_premium': 'Go Premium',

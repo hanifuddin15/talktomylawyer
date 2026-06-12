@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:talktomylawyer/app/core/constants/app_colors.dart';
 import 'package:talktomylawyer/app/core/widgets/app_lawyer_card.dart';
 import 'package:talktomylawyer/app/core/widgets/app_tag_chip.dart';
+import 'package:talktomylawyer/app/core/widgets/input_fields/app_search_field.dart';
 
 class ClientSearchTab extends StatefulWidget {
   const ClientSearchTab({super.key});
@@ -26,8 +27,84 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
   ];
 
   // Filter state
-  int _selectedExperience = 0;
-  int _selectedConsultation = 0;
+  int? _selectedLocation;
+  int? _selectedPracticeArea;
+  int? _selectedExperience;
+  int? _selectedLanguage;
+  int? _selectedConsultation;
+  bool _verifiedOnly = false;
+
+  final List<String> _locations = const [
+    'Dhaka',
+    'Chittagong',
+    'Sylhet',
+    'Rajshahi',
+    'Khulna',
+  ];
+
+  final List<String> _practiceAreas = const [
+    'Criminal Law',
+    'Family Law',
+    'Corporate Law',
+    'Civil Law',
+    'Property Law',
+    'Labour Law',
+    'Immigration',
+    'Tax Law',
+  ];
+
+  final List<String> _experiences = const [
+    '0-5 yrs',
+    '5-10 yrs',
+    '10-15 yrs',
+    '15+ yrs',
+  ];
+
+  final List<String> _languages = const [
+    'Bangla',
+    'English',
+    'Arabic',
+    'French',
+    'Hindi',
+  ];
+
+  final List<String> _consultationTypes = const [
+    'Video Call',
+    'Phone',
+    'In-person',
+  ];
+
+  Widget _buildSectionTitle(String title, Color color) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 12),
+      child: Text(
+        title,
+        style: GoogleFonts.outfit(
+          fontSize: 15,
+          fontWeight: FontWeight.w700,
+          color: color,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChips(
+    List<String> items,
+    int? selectedIndex,
+    ValueChanged<int> onTap,
+  ) {
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      children: items.asMap().entries.map((e) {
+        return AppTagChip(
+          label: e.value,
+          isSelected: selectedIndex == e.key,
+          onTap: () => onTap(e.key),
+        );
+      }).toList(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,37 +137,20 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
               child: Row(
                 children: [
                   Expanded(
-                    child: Container(
-                      height: 52,
-                      decoration: BoxDecoration(
-                        color: cardColor,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: Row(
-                        children: [
-                          const SizedBox(width: 14),
-                          Icon(Icons.search, color: secondaryText, size: 20),
-                          const SizedBox(width: 10),
-                          Expanded(
-                            child: TextField(
-                              style: GoogleFonts.outfit(
-                                fontSize: 14,
-                                color: primaryText,
-                              ),
-                              decoration: InputDecoration(
-                                hintText: 'search_hint'.tr,
-                                hintStyle: GoogleFonts.outfit(
-                                  fontSize: 14,
-                                  color: secondaryText,
-                                ),
-                                border: InputBorder.none,
-                                isDense: true,
-                                contentPadding: EdgeInsets.zero,
-                              ),
+                    child: Row(
+                      children: [
+                        const SizedBox(width: 14),
+                        Expanded(
+                          child: SizedBox(
+                            height: 52,
+                            child: AppSearchField(
+                              primaryText: primaryText,
+                              secondaryText: secondaryText,
+                              cardColor: cardColor,
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -254,6 +314,14 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
   ) {
     final sheetBg = isDark ? kDarkSurface : kLightSurface;
 
+    // Temporary local state for bottom sheet selections
+    int? tempLocation = _selectedLocation;
+    int? tempPracticeArea = _selectedPracticeArea;
+    int? tempExperience = _selectedExperience;
+    int? tempLanguage = _selectedLanguage;
+    int? tempConsultation = _selectedConsultation;
+    bool tempVerifiedOnly = _verifiedOnly;
+
     showModalBottomSheet(
       context: context,
       backgroundColor: sheetBg,
@@ -262,115 +330,209 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
       ),
       isScrollControlled: true,
       builder: (_) => StatefulBuilder(
-        builder: (context, setSheetState) => Padding(
-          padding: const EdgeInsets.all(20),
+        builder: (context, setSheetState) => Container(
+          height: MediaQuery.of(context).size.height * 0.92,
+          padding: const EdgeInsets.only(top: 8),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'filters'.tr,
-                    style: GoogleFonts.outfit(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: primaryText,
+              // Header
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.pop(context),
+                      child: Icon(
+                        Icons.close,
+                        color: primaryText,
+                        size: 24,
+                      ),
                     ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      setSheetState(() {
-                        _selectedExperience = 0;
-                        _selectedConsultation = 0;
-                      });
-                    },
-                    child: Text(
-                      'reset'.tr,
+                    Text(
+                      'filters'.tr,
                       style: GoogleFonts.outfit(
-                        fontSize: 14,
-                        color: kError,
-                        fontWeight: FontWeight.w600,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: primaryText,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        setSheetState(() {
+                          tempLocation = null;
+                          tempPracticeArea = null;
+                          tempExperience = null;
+                          tempLanguage = null;
+                          tempConsultation = null;
+                          tempVerifiedOnly = false;
+                        });
+                      },
+                      child: Text(
+                        'reset'.tr,
+                        style: GoogleFonts.outfit(
+                          fontSize: 14,
+                          color: kPrimaryBlue,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Divider(
+                color: isDark ? kDarkDivider : kLightDivider,
+                height: 1,
+              ),
+              // Scrollable content
+              Expanded(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // 1. Location
+                      _buildSectionTitle('location'.tr, primaryText),
+                      _buildChips(
+                        _locations,
+                        tempLocation,
+                        (index) => setSheetState(() {
+                          tempLocation = (tempLocation == index) ? null : index;
+                        }),
+                      ),
+                      const SizedBox(height: 24),
+
+                      // 2. Practice Area
+                      _buildSectionTitle('practice_area'.tr, primaryText),
+                      _buildChips(
+                        _practiceAreas,
+                        tempPracticeArea,
+                        (index) => setSheetState(() {
+                          tempPracticeArea = (tempPracticeArea == index) ? null : index;
+                        }),
+                      ),
+                      const SizedBox(height: 24),
+
+                      // 3. Experience
+                      _buildSectionTitle('experience'.tr, primaryText),
+                      _buildChips(
+                        _experiences,
+                        tempExperience,
+                        (index) => setSheetState(() {
+                          tempExperience = (tempExperience == index) ? null : index;
+                        }),
+                      ),
+                      const SizedBox(height: 24),
+
+                      // 4. Language
+                      _buildSectionTitle('language'.tr, primaryText),
+                      _buildChips(
+                        _languages,
+                        tempLanguage,
+                        (index) => setSheetState(() {
+                          tempLanguage = (tempLanguage == index) ? null : index;
+                        }),
+                      ),
+                      const SizedBox(height: 24),
+
+                      // 5. Consultation Type
+                      _buildSectionTitle('consultation_type'.tr, primaryText),
+                      _buildChips(
+                        _consultationTypes,
+                        tempConsultation,
+                        (index) => setSheetState(() {
+                          tempConsultation = (tempConsultation == index) ? null : index;
+                        }),
+                      ),
+                      const SizedBox(height: 24),
+
+                      // 6. Other (Verified Toggle)
+                      _buildSectionTitle('other'.tr, primaryText),
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                        decoration: BoxDecoration(
+                          color: isDark ? kDarkInputFill : kLightInputFill,
+                          borderRadius: BorderRadius.circular(16),
+                          border: Border.all(
+                            color: isDark ? kDarkDivider : kLightDivider,
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          children: [
+                            const Icon(
+                              Icons.verified_user_outlined,
+                              color: kPrimaryBlue,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                'verified_lawyers_only'.tr,
+                                style: GoogleFonts.outfit(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: primaryText,
+                                ),
+                              ),
+                            ),
+                            Switch.adaptive(
+                              value: tempVerifiedOnly,
+                              activeColor: kPrimaryBlue,
+                              onChanged: (val) {
+                                setSheetState(() {
+                                  tempVerifiedOnly = val;
+                                });
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+                  ),
+                ),
+              ),
+              Divider(
+                color: isDark ? kDarkDivider : kLightDivider,
+                height: 1,
+              ),
+              // Sticky bottom action button
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 52,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        _selectedLocation = tempLocation;
+                        _selectedPracticeArea = tempPracticeArea;
+                        _selectedExperience = tempExperience;
+                        _selectedLanguage = tempLanguage;
+                        _selectedConsultation = tempConsultation;
+                        _verifiedOnly = tempVerifiedOnly;
+                      });
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: kPrimaryBlue,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      elevation: 0,
+                    ),
+                    child: Text(
+                      'apply_filters'.tr,
+                      style: GoogleFonts.outfit(
+                        fontSize: 15,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
                       ),
                     ),
                   ),
-                ],
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'experience'.tr,
-                style: GoogleFonts.outfit(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: primaryText,
                 ),
               ),
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 8,
-                children: ['1-3 yrs', '3-5 yrs', '5-10 yrs', '10+ yrs']
-                    .asMap()
-                    .entries
-                    .map(
-                      (e) => AppTagChip(
-                        label: e.value,
-                        isSelected: _selectedExperience == e.key,
-                        onTap: () =>
-                            setSheetState(() => _selectedExperience = e.key),
-                      ),
-                    )
-                    .toList(),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'consultation_type'.tr,
-                style: GoogleFonts.outfit(
-                  fontSize: 15,
-                  fontWeight: FontWeight.w600,
-                  color: primaryText,
-                ),
-              ),
-              const SizedBox(height: 10),
-              Wrap(
-                spacing: 8,
-                children: ['Video', 'Phone', 'In-Person']
-                    .asMap()
-                    .entries
-                    .map(
-                      (e) => AppTagChip(
-                        label: e.value,
-                        isSelected: _selectedConsultation == e.key,
-                        onTap: () =>
-                            setSheetState(() => _selectedConsultation = e.key),
-                      ),
-                    )
-                    .toList(),
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                height: 52,
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pop(context),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: kPrimaryBlue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: Text(
-                    'apply_filters'.tr,
-                    style: GoogleFonts.outfit(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(height: 8),
             ],
           ),
         ),

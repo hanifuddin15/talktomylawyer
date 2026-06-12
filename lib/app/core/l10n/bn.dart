@@ -139,6 +139,9 @@ const Map<String, String> bn = {
   'apply_filters': 'ফিল্টার প্রয়োগ করুন',
   'hr': '/ঘণ্টা',
   'yrs_exp': 'বছর অভিজ্ঞতা',
+  'practice_area': 'অনুশীলন ক্ষেত্র',
+  'verified_lawyers_only': 'শুধুমাত্র যাচাইকৃত আইনজীবী',
+  'other': 'অন্যান্য',
 
   // Premium
   'go_premium': 'প্রিমিয়ামে যান',
