@@ -6,7 +6,20 @@ import 'package:talktomylawyer/app/core/widgets/app_button.dart';
 import 'package:talktomylawyer/app/core/widgets/app_payment_option.dart';
 
 class CheckoutView extends StatefulWidget {
-  const CheckoutView({super.key});
+  const CheckoutView({
+    super.key,
+    this.planName,
+    this.planKey,
+    this.duration,
+    this.savings,
+    this.price,
+  });
+
+  final String? planName;
+  final String? planKey;
+  final String? duration;
+  final String? savings;
+  final String? price;
 
   @override
   State<CheckoutView> createState() => _CheckoutViewState();
@@ -91,7 +104,7 @@ class _CheckoutViewState extends State<CheckoutView> {
                               ),
                               const SizedBox(width: 8),
                               Text(
-                                'quarterly_premium'.tr,
+                                widget.planName ?? 'quarterly_premium'.tr,
                                 style: GoogleFonts.outfit(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w700,
@@ -103,25 +116,27 @@ class _CheckoutViewState extends State<CheckoutView> {
                           const SizedBox(height: 14),
                           _SummaryRow(
                             label: 'plan'.tr,
-                            value: 'quarterly'.tr,
+                            value: widget.planKey ?? 'quarterly'.tr,
                             isWhite: true,
                           ),
                           const SizedBox(height: 8),
                           _SummaryRow(
                             label: 'duration'.tr,
-                            value: '3_months'.tr,
+                            value: widget.duration ?? '3_months'.tr,
                             isWhite: true,
                           ),
-                          const SizedBox(height: 8),
-                          _SummaryRow(
-                            label: 'savings'.tr,
-                            value: '৳৪৯৮ (17% off)',
-                            isWhite: true,
-                          ),
+                          if (widget.savings != null && widget.savings!.isNotEmpty) ...[
+                            const SizedBox(height: 8),
+                            _SummaryRow(
+                              label: 'savings'.tr,
+                              value: widget.savings!,
+                              isWhite: true,
+                            ),
+                          ],
                           const Divider(color: Colors.white24, height: 20),
                           _SummaryRow(
                             label: 'total'.tr,
-                            value: '৳২,৪৯৯',
+                            value: widget.price ?? '৳২,৪৯৯',
                             isWhite: true,
                             isBold: true,
                             valueColor: kAccentGold,
@@ -206,7 +221,7 @@ class _CheckoutViewState extends State<CheckoutView> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
               child: AppButton(
-                label: '${'pay'.tr} ৳২,৪৯৯',
+                label: '${'pay'.tr} ${widget.price ?? '৳২,৪৯৯'}',
                 onPressed: () {
                   Get.back();
                   Get.snackbar(
