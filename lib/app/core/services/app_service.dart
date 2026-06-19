@@ -1,7 +1,7 @@
 import 'package:talktomylawyer/app/core/config/api_constant.dart';
 import 'package:talktomylawyer/app/core/config/app_assets.dart';
 import 'package:talktomylawyer/app/core/services/theme_service.dart';
-import 'package:talktomylawyer/app/repository/auth_repository.dart';
+import 'package:talktomylawyer/app/repository/lawyer-auth-repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'api_communication.dart';
@@ -23,7 +23,7 @@ class AppService {
 
     await CachingService.instance.init();
 
-    final authRepo = AuthRepository();
+    final authRepo = LawyerAuthRepository();
 
     final String? token = authRepo.getToken();
     // final String? ipPort = authRepo.getIpPortData();

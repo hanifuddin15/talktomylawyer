@@ -1,4 +1,6 @@
+import 'dart:io';
 import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart' as dio;
 import 'package:talktomylawyer/app/core/services/api_communication.dart';
 import 'package:talktomylawyer/app/core/services/caching_service.dart';
 
@@ -9,14 +11,14 @@ import '../core/extensions/nullable_object.dart';
 import '../core/models/api_response.dart';
 import '../core/models/user.dart';
 
-class AuthRepository {
+class LawyerAuthRepository {
   //* ============================= CHANGE PASSWORD ============================
 
-  AuthRepository._internal();
+  LawyerAuthRepository._internal();
 
-  static final AuthRepository instance = AuthRepository._internal();
+  static final LawyerAuthRepository instance = LawyerAuthRepository._internal();
 
-  factory AuthRepository() {
+  factory LawyerAuthRepository() {
     return instance;
   }
 
@@ -185,5 +187,60 @@ class AuthRepository {
 
   bool get hasImagePath {
     return _cachingService.hasData(DataKey.imagePath);
+  }
+
+  Future<bool> registerLawyer({
+    required String name,
+    required String email,
+    required String phone,
+    required String password,
+    required String experience,
+    required String education,
+    required String barNumber,
+    required List<int> specializations,
+    required File profilePic,
+    required File licence,
+    required File nid,
+  }) async {
+    final Map<String, dynamic> requestData = {
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'password': password,
+      'number_of_experience': experience,
+      'last_education': education,
+      'bar_coucil_number': barNumber,
+    };
+
+    for (int i = 0; i < specializations.length; i++) {
+      requestData['specializations[$i]'] = specializations[i].toString();
+    }
+
+    requestData['profile_pic'] = await dio.MultipartFile.fromFile(
+      profilePic.path,
+      filename: profilePic.path.split('/').last,
+    );
+
+    requestData['licence'] = await dio.MultipartFile.fromFile(
+      licence.path,
+      filename: licence.path.split('/').last,
+    );
+
+    requestData['nid'] = await dio.MultipartFile.fromFile(
+      nid.path,
+      filename: nid.path.split('/').last,
+    );
+
+    final ApiResponse response = await _apiCommunication.doPostRequest(
+      apiEndPoint: 'lawyer-registration',
+      requestData: requestData,
+      isFormData: true,
+      responseDataKey: ApiConstant.fullResponse,
+      showSuccessMessage: true,
+      addUserData: false,
+      successMessage: 'Lawyer registered successfully',
+    );
+
+    return response.isSuccessful;
   }
 }

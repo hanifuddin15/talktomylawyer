@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:talktomylawyer/app/repository/auth_repository.dart';
+import 'package:talktomylawyer/app/repository/lawyer-auth-repository.dart';
 import 'package:talktomylawyer/app/routes/app_pages.dart';
 import 'package:get/get.dart';
 
@@ -47,7 +47,8 @@ class ErrorHandler {
   }
 
   static void _handleUnauthorizedRequest() {
-    AuthRepository.instance.clearAuthCredential();
+    LawyerAuthRepository.instance.clearAuthCredential();
+
     Get.offAllNamed(Routes.login);
   }
 }

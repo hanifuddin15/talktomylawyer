@@ -169,45 +169,58 @@ class _Step1Profile extends StatelessWidget {
           // Upload photo
           Center(
             child: GestureDetector(
-              onTap: () {},
-              child: Container(
-                width: Get.width * 0.9,
-                height: Get.height * 0.2,
-                decoration: BoxDecoration(
-                  color: isDark ? kDarkInputFill : kLightInputFill,
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(
-                    // color: kPrimaryBlue.withValues(alpha: 0.4),
-                    width: 2,
-                  ),
-                ),
-                child: DottedBorder(
-                  options: RoundedRectDottedBorderOptions(
-                    radius: const Radius.circular(24),
-                    color: kDarkTextHint,
-                    dashPattern: [8, 4],
-                    strokeWidth: 2,
-                  ),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(
-                        Icons.camera_alt,
-                        color: kPrimaryBlue,
-                        size: 24,
+              onTap: () => controller.photoPath.value =
+                  controller.photoPath.value.isEmpty
+                      ? 'dummy_profile.jpg'
+                      : '',
+              child: Obx(
+                () {
+                  final hasPhoto = controller.photoPath.value.isNotEmpty;
+                  return Container(
+                    width: Get.width * 0.9,
+                    height: Get.height * 0.2,
+                    decoration: BoxDecoration(
+                      color: isDark ? kDarkInputFill : kLightInputFill,
+                      borderRadius: BorderRadius.circular(24),
+                      border: Border.all(
+                        color: hasPhoto ? kSuccess : Colors.transparent,
+                        width: 2,
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'upload_profile_photo'.tr,
-                        style: GoogleFonts.outfit(
-                          fontSize: 9,
-                          color: kPrimaryBlue,
+                    ),
+                    child: DottedBorder(
+                      options: RoundedRectDottedBorderOptions(
+                        radius: const Radius.circular(24),
+                        color: hasPhoto ? kSuccess : kDarkTextHint,
+                        dashPattern: const [8, 4],
+                        strokeWidth: 2,
+                      ),
+                      child: Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              hasPhoto ? Icons.check_circle : Icons.camera_alt,
+                              color: hasPhoto ? kSuccess : kPrimaryBlue,
+                              size: 24,
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              hasPhoto
+                                  ? 'Profile photo uploaded ✓'
+                                  : 'upload_profile_photo'.tr,
+                              style: GoogleFonts.outfit(
+                                fontSize: 11,
+                                color: hasPhoto ? kSuccess : kPrimaryBlue,
+                                fontWeight: hasPhoto ? FontWeight.w600 : null,
+                              ),
+                              textAlign: TextAlign.center,
+                            ),
+                          ],
                         ),
-                        textAlign: TextAlign.center,
                       ),
-                    ],
-                  ),
-                ),
+                    ),
+                  );
+                },
               ),
             ),
           ),
@@ -382,25 +395,46 @@ class _Step3Documents extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-          _DocumentUploadTile(
-            label: 'bar_license'.tr,
-            isDark: isDark,
-            primaryText: primaryText,
-            secondaryText: secondaryText,
+          Obx(
+            () => _DocumentUploadTile(
+              label: 'bar_license'.tr,
+              isUploaded: controller.barLicensePath.value.isNotEmpty,
+              onTap: () => controller.barLicensePath.value =
+                  controller.barLicensePath.value.isEmpty
+                      ? 'dummy_license.pdf'
+                      : '',
+              isDark: isDark,
+              primaryText: primaryText,
+              secondaryText: secondaryText,
+            ),
           ),
           const SizedBox(height: 12),
-          _DocumentUploadTile(
-            label: 'national_id'.tr,
-            isDark: isDark,
-            primaryText: primaryText,
-            secondaryText: secondaryText,
+          Obx(
+            () => _DocumentUploadTile(
+              label: 'national_id'.tr,
+              isUploaded: controller.nidPath.value.isNotEmpty,
+              onTap: () => controller.nidPath.value =
+                  controller.nidPath.value.isEmpty
+                      ? 'dummy_nid.pdf'
+                      : '',
+              isDark: isDark,
+              primaryText: primaryText,
+              secondaryText: secondaryText,
+            ),
           ),
           const SizedBox(height: 12),
-          _DocumentUploadTile(
-            label: 'professional_photo'.tr,
-            isDark: isDark,
-            primaryText: primaryText,
-            secondaryText: secondaryText,
+          Obx(
+            () => _DocumentUploadTile(
+              label: 'professional_photo'.tr,
+              isUploaded: controller.photoPath.value.isNotEmpty,
+              onTap: () => controller.photoPath.value =
+                  controller.photoPath.value.isEmpty
+                      ? 'dummy_profile.jpg'
+                      : '',
+              isDark: isDark,
+              primaryText: primaryText,
+              secondaryText: secondaryText,
+            ),
           ),
           const SizedBox(height: 28),
           AppButton(label: 'next'.tr, onPressed: controller.nextStep),
@@ -411,39 +445,36 @@ class _Step3Documents extends StatelessWidget {
   }
 }
 
-class _DocumentUploadTile extends StatefulWidget {
+class _DocumentUploadTile extends StatelessWidget {
   const _DocumentUploadTile({
     required this.label,
+    required this.isUploaded,
+    required this.onTap,
     required this.isDark,
     required this.primaryText,
     required this.secondaryText,
   });
   final String label;
+  final bool isUploaded;
+  final VoidCallback onTap;
   final bool isDark;
   final Color primaryText;
   final Color secondaryText;
 
   @override
-  State<_DocumentUploadTile> createState() => _DocumentUploadTileState();
-}
-
-class _DocumentUploadTileState extends State<_DocumentUploadTile> {
-  bool _uploaded = false;
-
-  @override
   Widget build(BuildContext context) {
-    final cardColor = widget.isDark ? kDarkCard : kLightCard;
+    final cardColor = isDark ? kDarkCard : kLightCard;
     return GestureDetector(
-      onTap: () => setState(() => _uploaded = !_uploaded),
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           color: cardColor,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: _uploaded
+            color: isUploaded
                 ? kSuccess
-                : (widget.isDark ? kDarkDivider : kLightDivider),
+                : (isDark ? kDarkDivider : kLightDivider),
             width: 1.5,
           ),
         ),
@@ -453,14 +484,14 @@ class _DocumentUploadTileState extends State<_DocumentUploadTile> {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: (_uploaded ? kSuccess : kPrimaryBlue).withValues(
+                color: (isUploaded ? kSuccess : kPrimaryBlue).withValues(
                   alpha: 0.15,
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
               child: Icon(
-                _uploaded ? Icons.check_circle_outline : Icons.upload_file,
-                color: _uploaded ? kSuccess : kPrimaryBlue,
+                isUploaded ? Icons.check_circle_outline : Icons.upload_file,
+                color: isUploaded ? kSuccess : kPrimaryBlue,
                 size: 22,
               ),
             ),
@@ -470,18 +501,18 @@ class _DocumentUploadTileState extends State<_DocumentUploadTile> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    widget.label,
+                    label,
                     style: GoogleFonts.outfit(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      color: widget.primaryText,
+                      color: primaryText,
                     ),
                   ),
                   Text(
-                    _uploaded ? 'File uploaded ✓' : 'tap_to_upload'.tr,
+                    isUploaded ? 'File uploaded ✓' : 'tap_to_upload'.tr,
                     style: GoogleFonts.outfit(
                       fontSize: 12,
-                      color: _uploaded ? kSuccess : widget.secondaryText,
+                      color: isUploaded ? kSuccess : secondaryText,
                     ),
                   ),
                 ],

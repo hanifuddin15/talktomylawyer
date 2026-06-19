@@ -12,7 +12,7 @@ import 'package:talktomylawyer/app/core/services/log.dart';
 import 'package:talktomylawyer/app/core/utils/loader.dart';
 import 'package:talktomylawyer/app/core/utils/network.dart';
 import 'package:talktomylawyer/app/core/utils/snackbar.dart';
-import 'package:talktomylawyer/app/repository/auth_repository.dart';
+import 'package:talktomylawyer/app/repository/lawyer-auth-repository.dart';
 import '../error/error_handler.dart';
 import '../error/failure.dart';
 
@@ -69,12 +69,15 @@ class ApiCommunication {
   }
 
   void updateHeader(String newToken) {
-    header = {'Accept': 'application/json', 'Authorization': 'Bearer $newToken'};
+    header = {
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $newToken',
+    };
   }
 
   Future<bool> isConnectedToInternet() async {
-    final List<ConnectivityResult> connectivityResult =
-        await (Connectivity().checkConnectivity());
+    final List<ConnectivityResult> connectivityResult = await (Connectivity()
+        .checkConnectivity());
 
     if (connectivityResult.contains(ConnectivityResult.mobile) ||
         connectivityResult.contains(ConnectivityResult.wifi)) {
@@ -101,7 +104,7 @@ class ApiCommunication {
     String requestUrl = '$_baseUrl/$apiEndPoint';
 
     if (addUserData) {
-      UserModel? user = AuthRepository.instance.getUserData();
+      UserModel? user = LawyerAuthRepository.instance.getUserData();
       requestData?.addAll({
         'companyId': user?.companyId,
         'organizationId': user?.organizationId,
@@ -128,7 +131,8 @@ class ApiCommunication {
               response.data; // Changed from Map<String, dynamic> to dynamic
           showSuccessMessage
               ? showSuccessSnackkbar(
-                  message: successMessage ??
+                  message:
+                      successMessage ??
                       (responseData is Map
                           ? responseData['message']
                           : 'Success'),
@@ -149,7 +153,8 @@ class ApiCommunication {
           int? statusCode;
           int? totalCount;
           if (responseData is Map) {
-            statusCode = responseData[ApiConstant.statusCodeKey] ?? response.statusCode;
+            statusCode =
+                responseData[ApiConstant.statusCodeKey] ?? response.statusCode;
             totalCount = responseData[ApiConstant.totalCount];
           } else {
             statusCode = response.statusCode;
@@ -215,7 +220,7 @@ class ApiCommunication {
     String requestUrl = '$_baseUrl/$apiEndPoint';
 
     if (addUserData) {
-      UserModel? user = AuthRepository.instance.getUserData();
+      UserModel? user = LawyerAuthRepository.instance.getUserData();
       requestData = requestData ?? {};
       requestData.addAll({
         'companyId': user?.companyId,
@@ -300,7 +305,8 @@ class ApiCommunication {
           logFullResponse(responseData);
           return ApiResponse(
             isSuccessful: true,
-            statusCode: responseData[ApiConstant.statusCodeKey] ?? response.statusCode,
+            statusCode:
+                responseData[ApiConstant.statusCodeKey] ?? response.statusCode,
             data: responseDataKey != ApiConstant.fullResponse
                 ? responseData[responseDataKey]
                 : responseData,
