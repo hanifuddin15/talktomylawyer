@@ -102,6 +102,10 @@ const Map<String, String> bn = {
   'verification_pending_body':
       'আপনার প্রোফাইল ২৪-৪৮ ঘণ্টার মধ্যে পর্যালোচনা করা হবে। যাচাই হলে আপনি একটি বিজ্ঞপ্তি পাবেন।',
   'submit_for_review': 'পর্যালোচনার জন্য জমা দিন',
+  'camera': 'ক্যামেরা',
+  'gallery': 'গ্যালারি',
+  'document_pdf': 'পিডিএফ ডকুমেন্ট',
+  'choose_source_description': 'আপনার ফাইল/ফটো আপলোড করার জন্য একটি উৎস বেছে নিন।',
 
   // Client Home
   'good_morning': 'শুভ সকাল',

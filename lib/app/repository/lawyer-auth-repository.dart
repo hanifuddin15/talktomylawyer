@@ -5,6 +5,9 @@ import 'package:talktomylawyer/app/core/services/api_communication.dart';
 import 'package:talktomylawyer/app/core/services/caching_service.dart';
 import 'package:talktomylawyer/app/models/lawyers_models/lawyer_user_model.dart';
 
+import 'package:talktomylawyer/app/models/lawyers_models/law_categories_model.dart';
+import 'package:talktomylawyer/app/core/utils/network.dart';
+
 import '../core/config/api_constant.dart';
 import '../core/config/data_key.dart';
 import '../core/error/failure.dart';
@@ -84,7 +87,10 @@ class LawyerAuthRepository {
 
         // Cache token & role & lawyer user model
         await _cachingService.saveAuthToken(token);
-        await _cachingService.saveData(DataKey.accessToken, token); // For general app token check
+        await _cachingService.saveData(
+          DataKey.accessToken,
+          token,
+        ); // For general app token check
         await _cachingService.saveUserRole('lawyer');
         await _cachingService.saveLawyerUser(lawyer.toJson());
 
@@ -286,8 +292,25 @@ class LawyerAuthRepository {
       showSuccessMessage: true,
       addUserData: false,
       successMessage: 'Lawyer registered successfully',
+      // multipleFileKey:
+      // files:
     );
 
     return response.isSuccessful;
+  }
+
+  Future<List<CategoryModel>> getCategories() async {
+    final ApiResponse response = await _apiCommunication.doGetRequest(
+      apiEndPoint: 'categories',
+      responseDataKey: 'data',
+      enableLoading: false,
+    );
+    if (response.isSuccessful && response.data != null) {
+      final List<dynamic> list = response.data as List<dynamic>;
+      return list
+          .map((item) => CategoryModel.fromMap(item as Map<String, dynamic>))
+          .toList();
+    }
+    return [];
   }
 }

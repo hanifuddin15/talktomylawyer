@@ -102,6 +102,10 @@ const Map<String, String> en = {
   'verification_pending_body':
       'Your profile will be reviewed within 24-48 hours. You\'ll receive a notification once verified.',
   'submit_for_review': 'Submit for Review',
+  'camera': 'Camera',
+  'gallery': 'Gallery',
+  'document_pdf': 'PDF Document',
+  'choose_source_description': 'Select source to upload files or photos.',
 
   // Client Home
   'good_morning': 'Good morning',

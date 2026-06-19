@@ -121,7 +121,10 @@ class ApiCommunication {
           requestUrl,
           data: requestData,
           queryParameters: queryParams,
-          options: dio.Options(headers: header),
+          options: dio.Options(
+            validateStatus: (_) => true,
+            headers: header,
+          ),
         );
         if (enableLoading) dismissLoader();
         if (response.statusCode != null &&
@@ -167,17 +170,16 @@ class ApiCommunication {
             totalCount: totalCount,
           );
         } else {
-          Map<String, dynamic> responseData = response.data is Map
-              ? response.data
-              : {'message': 'Error ${response.statusCode}'};
-          showErrorMessage
-              ? showErrorSnackkbar(message: responseData['message'])
-              : ();
-          debugPrint('${response.statusCode}');
-          logFullResponse(responseData);
+          final String errMsg = _getErrorMessage(response);
+          if (showErrorMessage) {
+            showErrorSnackkbar(message: errMsg);
+          }
+          debugPrint('Status Code: ${response.statusCode}');
+          logFullResponse(response.data);
           return ApiResponse(
             isSuccessful: false,
             statusCode: response.statusCode,
+            errorMessage: errMsg,
           );
         }
       } catch (error) {
@@ -264,7 +266,7 @@ class ApiCommunication {
 
               requestFormData.files.add(
                 MapEntry(
-                  'attachments', // or 'attachments[]' based on backend
+                  multipleFileKey, // or 'attachments[]' based on backend
                   await dio.MultipartFile.fromFile(
                     f.path,
                     filename: getFileNameFromFile(f),
@@ -313,13 +315,16 @@ class ApiCommunication {
             totalCount: responseData[ApiConstant.totalCount],
           );
         } else {
+          final String errMsg = _getErrorMessage(response);
           if (showErrorMessage) {
-            Map<String, dynamic> responseData = response.data;
-            showErrorSnackkbar(message: responseData['message']);
+            showErrorSnackkbar(message: errMsg);
           }
+          debugPrint('Status Code: ${response.statusCode}');
+          logFullResponse(response.data);
           return ApiResponse(
             isSuccessful: false,
             statusCode: response.statusCode,
+            errorMessage: errMsg,
           );
         }
       } catch (error) {
@@ -407,5 +412,41 @@ class ApiCommunication {
     final newHeaders = Map<String, dynamic>.from(headers);
     newHeaders.remove('Content-Type');
     return newHeaders;
+  }
+
+  String _getErrorMessage(dio.Response? response) {
+    if (response == null || response.data == null) {
+      return 'No response from server';
+    }
+    final data = response.data;
+    if (data is Map) {
+      // 1. Check if there are nested Laravel validation errors
+      if (data.containsKey('errors') && data['errors'] is Map) {
+        final errors = data['errors'] as Map;
+        if (errors.isNotEmpty) {
+          final firstErrorList = errors.values.first;
+          if (firstErrorList is List && firstErrorList.isNotEmpty) {
+            return firstErrorList.first.toString();
+          } else if (firstErrorList != null) {
+            return firstErrorList.toString();
+          }
+        }
+      }
+      // 2. Check general message keys
+      if (data.containsKey('message') && data['message'] != null) {
+        return data['message'].toString();
+      }
+      if (data.containsKey('error') && data['error'] != null) {
+        return data['error'].toString();
+      }
+      return 'Error ${response.statusCode}';
+    } else if (data is String) {
+      // If it's HTML, we should not show the full HTML. Instead show status code description
+      if (data.trim().startsWith('<!DOCTYPE') || data.trim().startsWith('<html')) {
+        return 'Server error (${response.statusCode})';
+      }
+      return data;
+    }
+    return 'Error ${response.statusCode}';
   }
 }
