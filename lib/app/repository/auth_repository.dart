@@ -102,6 +102,7 @@ class AuthRepository {
 
   Future<void> cacheAccessToken(String token) async {
     await _cachingService.saveData(DataKey.accessToken, token);
+    await _cachingService.saveData('auth_token', token);
   }
 
   Future<void> cacheRefreshToken(String token) async {
@@ -110,6 +111,7 @@ class AuthRepository {
 
   Future<void> saveUserData(UserModel model) async {
     await _cachingService.saveData(DataKey.user, model.toJson());
+    await _cachingService.saveData('user_role', model.role ?? 'lawyer');
   }
 
   /*
@@ -130,6 +132,9 @@ class AuthRepository {
 
   String? getToken() {
     String? token = _cachingService.getData(DataKey.accessToken);
+    if (token == null || token.isEmpty) {
+      token = _cachingService.getData('auth_token');
+    }
     return token;
   }
 
@@ -151,7 +156,10 @@ class AuthRepository {
 
   void clearAuthCredential() async {
     await _cachingService.removeData(DataKey.accessToken);
+    await _cachingService.removeData('auth_token');
     await _cachingService.removeData(DataKey.user);
+    await _cachingService.removeData('user_role');
+    await _cachingService.removeData('client_user');
   }
   /*
    * ┏==================================================================================================┓

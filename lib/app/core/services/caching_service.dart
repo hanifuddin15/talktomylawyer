@@ -39,4 +39,28 @@ class CachingService {
   Future<void> clearAll() async {
     await _storage.erase();
   }
+
+  Future<void> saveClientUser(String clientJson) async {
+    await saveData('client_user', clientJson);
+  }
+
+  String? getClientUser() {
+    return getData('client_user') as String?;
+  }
+
+  Future<void> saveAuthToken(String token) async {
+    await saveData('auth_token', token);
+  }
+
+  String? getAuthToken() {
+    return getData('auth_token') as String?;
+  }
+
+  Future<void> saveUserRole(String role) async {
+    await saveData('user_role', role);
+  }
+
+  String? getUserRole() {
+    return getData('user_role') as String?;
+  }
 }

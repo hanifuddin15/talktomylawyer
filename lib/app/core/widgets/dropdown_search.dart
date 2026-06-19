@@ -67,7 +67,7 @@ class PrimaryDropdownSearch<T> extends StatelessWidget {
       },
       // asyncItems: (String filter) => list,
       itemAsString: (T u) => u.toString(),
-      onChanged: onChanged,
+      onSelected: onChanged,
       validator: (T? item) {
         if (item == null) {
           return validationText;
@@ -125,7 +125,7 @@ class SecondaryDropdownSearch<T> extends StatelessWidget {
       ),
       // items: list,
       itemAsString: (T u) => u.toString(),
-      onChanged: onChanged,
+      onSelected: onChanged,
       validator: (T? item) {
         if (item == null) {
           return validationText;
@@ -139,7 +139,7 @@ class SecondaryDropdownSearch<T> extends StatelessWidget {
 
 class PaginatedSearchableDropDown<T> extends StatelessWidget {
   final Future<List<SearchableDropdownMenuItem<T>>?> Function(int, String?)?
-      paginatedRequest;
+  paginatedRequest;
   final void Function(T?)? onChanged;
   final String? hintText;
 

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 /// Unified Validator Class for common validation scenarios
 class AppValidator {
   // Private constructor to prevent instantiation
