@@ -121,7 +121,9 @@ class ApiCommunication {
           options: dio.Options(headers: header),
         );
         if (enableLoading) dismissLoader();
-        if (response.statusCode == 200) {
+        if (response.statusCode != null &&
+            response.statusCode! >= 200 &&
+            response.statusCode! < 300) {
           dynamic responseData =
               response.data; // Changed from Map<String, dynamic> to dynamic
           showSuccessMessage
@@ -147,10 +149,10 @@ class ApiCommunication {
           int? statusCode;
           int? totalCount;
           if (responseData is Map) {
-            statusCode = responseData[ApiConstant.statusCodeKey];
+            statusCode = responseData[ApiConstant.statusCodeKey] ?? response.statusCode;
             totalCount = responseData[ApiConstant.totalCount];
           } else {
-            statusCode = 200;
+            statusCode = response.statusCode;
           }
 
           return ApiResponse(
@@ -285,7 +287,9 @@ class ApiCommunication {
 
         if (enableLoading) dismissLoader();
 
-        if (response.statusCode == 200) {
+        if (response.statusCode != null &&
+            response.statusCode! >= 200 &&
+            response.statusCode! < 300) {
           Map<String, dynamic> responseData = response.data;
 
           if (showSuccessMessage) {
@@ -296,7 +300,7 @@ class ApiCommunication {
           logFullResponse(responseData);
           return ApiResponse(
             isSuccessful: true,
-            statusCode: responseData[ApiConstant.statusCodeKey],
+            statusCode: responseData[ApiConstant.statusCodeKey] ?? response.statusCode,
             data: responseDataKey != ApiConstant.fullResponse
                 ? responseData[responseDataKey]
                 : responseData,

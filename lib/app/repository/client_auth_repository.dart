@@ -57,6 +57,30 @@ class ClientAuthRepository {
     return null;
   }
 
+  Future<bool> registerClient({
+    required String name,
+    required String email,
+    required String phone,
+    required String password,
+  }) async {
+    final ApiResponse response = await _apiCommunication.doPostRequest(
+      apiEndPoint: 'client-registration',
+      requestData: {
+        'name': name,
+        'email': email,
+        'phone': phone,
+        'password': password,
+      },
+      isFormData: false,
+      responseDataKey: ApiConstant.fullResponse,
+      showSuccessMessage: true,
+      addUserData: false,
+      successMessage: 'Client created successfully',
+    );
+
+    return response.isSuccessful;
+  }
+
   String? getToken() {
     return _cachingService.getAuthToken();
   }
