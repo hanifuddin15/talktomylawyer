@@ -78,6 +78,8 @@ class AppLawyerCard extends StatelessWidget {
                                 fontWeight: FontWeight.w700,
                                 color: primaryText,
                               ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
                           Icon(Icons.verified, color: kPrimaryBlue, size: 18),
@@ -99,6 +101,8 @@ class AppLawyerCard extends StatelessWidget {
                           fontSize: 13,
                           color: secondaryText,
                         ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
                     ],
                   ),
@@ -111,6 +115,7 @@ class AppLawyerCard extends StatelessWidget {
               spacing: 6,
               runSpacing: 4,
               children: tags
+                  .take(3)
                   .map(
                     (t) => Container(
                       padding: const EdgeInsets.symmetric(
@@ -165,9 +170,13 @@ class AppLawyerCard extends StatelessWidget {
                   size: 13,
                 ),
                 const SizedBox(width: 3),
-                Text(
-                  location,
-                  style: GoogleFonts.outfit(fontSize: 12, color: secondaryText),
+                Expanded(
+                  child: Text(
+                    location,
+                    style: GoogleFonts.outfit(fontSize: 12, color: secondaryText),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
                 ),
               ],
             ),

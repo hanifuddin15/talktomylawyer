@@ -6,6 +6,7 @@ import 'package:talktomylawyer/app/core/widgets/app_lawyer_card.dart';
 import 'package:talktomylawyer/app/core/widgets/app_tag_chip.dart';
 import 'package:talktomylawyer/app/core/widgets/input_fields/app_search_field.dart';
 import 'package:talktomylawyer/app/core/config/api_constant.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:talktomylawyer/app/modules/client_dashboard/controllers/client_search_controller.dart';
 
 class ClientSearchTab extends GetView<ClientSearchController> {
@@ -268,81 +269,109 @@ class ClientSearchTab extends GetView<ClientSearchController> {
             ),
             // Lawyer List
             Expanded(
-              child: Obx(() {
-                if (controller.isLawyersLoading.value) {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-                final baseList = controller.lawyersList;
-                final query = controller.searchQuery.value.trim().toLowerCase();
-                final filteredList = baseList.where((lawyer) {
-                  if (query.isEmpty) return true;
-                  final name = (lawyer.name ?? '').toLowerCase();
-                  final address = (lawyer.address ?? '').toLowerCase();
-                  final exp = (lawyer.numberOfExperience ?? '').toLowerCase();
-                  
-                  final categoryMatch = lawyer.categories?.any(
-                    (cat) => (cat.name ?? '').toLowerCase().contains(query)
-                  ) ?? false;
-                  
-                  return name.contains(query) ||
-                      address.contains(query) ||
-                      exp.contains(query) ||
-                      categoryMatch;
-                }).toList();
-
-                if (filteredList.isEmpty) {
-                  return Center(
-                    child: Text(
-                      'No lawyers found',
-                      style: GoogleFonts.outfit(color: secondaryText),
-                    ),
-                  );
-                }
-
-                return ListView.builder(
-                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-                  itemCount: filteredList.length,
-                  itemBuilder: (context, index) {
-                    final lawyer = filteredList[index];
-                    final hasAvatar = lawyer.profilePic != null &&
-                        lawyer.profilePic != 'default.png';
-                    final avatar = hasAvatar
-                        ? '${ApiConstant.serverIpPort}/storage/${lawyer.profilePic}'
-                        : null;
-
-                    final initials = lawyer.name != null && lawyer.name!.isNotEmpty
-                        ? lawyer.name!
-                            .trim()
-                            .split(' ')
-                            .map((e) => e.isNotEmpty ? e.substring(0, 1) : '')
-                            .join()
-                            .toUpperCase()
-                        : 'L';
-
-                    final title = lawyer.categories != null && lawyer.categories!.isNotEmpty
-                        ? '${lawyer.categories!.first.name} • ${lawyer.numberOfExperience ?? '1'} yr exp'
-                        : 'Lawyer • ${lawyer.numberOfExperience ?? '1'} yr exp';
-
-                    final tags = lawyer.categories?.map((e) => e.name ?? '').toList() ?? [];
-
-                    return AppLawyerCard(
-                      name: lawyer.name ?? 'Jane Lawyer',
-                      title: title,
-                      tags: tags,
-                      rating: 4.8,
-                      reviewCount: 120,
-                      experience: int.tryParse(lawyer.numberOfExperience ?? '1') ?? 1,
-                      location: lawyer.address ?? 'Dhaka',
-                      availability: 'available_today'.tr,
-                      rate: 2000,
-                      avatarUrl: avatar,
-                      initials: initials,
+              child: RefreshIndicator(
+                onRefresh: () => controller.fetchLawyers(),
+                child: Obx(() {
+                  if (controller.isLawyersLoading.value) {
+                    return Skeletonizer(
+                      child: ListView.builder(
+                        padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+                        itemCount: 5,
+                        itemBuilder: (context, index) {
+                          return AppLawyerCard(
+                            name: 'Loading Lawyer...',
+                            title: 'Loading Title...',
+                            tags: const ['Tag 1', 'Tag 2'],
+                            rating: 4.8,
+                            reviewCount: 120,
+                            experience: 5,
+                            location: 'Loading...',
+                            availability: 'Loading...',
+                            rate: 2000,
+                          );
+                        },
+                      ),
                     );
-                  },
-                );
-              }),
+                  }
+                  final baseList = controller.lawyersList;
+                  final query = controller.searchQuery.value.trim().toLowerCase();
+                  final filteredList = baseList.where((lawyer) {
+                    if (query.isEmpty) return true;
+                    final name = (lawyer.name ?? '').toLowerCase();
+                    final address = (lawyer.address ?? '').toLowerCase();
+                    final exp = (lawyer.numberOfExperience ?? '').toLowerCase();
+                    
+                    final categoryMatch = lawyer.categories?.any(
+                      (cat) => (cat.name ?? '').toLowerCase().contains(query)
+                    ) ?? false;
+                    
+                    return name.contains(query) ||
+                        address.contains(query) ||
+                        exp.contains(query) ||
+                        categoryMatch;
+                  }).toList();
+
+                  if (filteredList.isEmpty) {
+                    return ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      children: [
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.5,
+                          child: Center(
+                            child: Text(
+                              'No lawyers found',
+                              style: GoogleFonts.outfit(color: secondaryText),
+                            ),
+                          ),
+                        ),
+                      ],
+                    );
+                  }
+
+                  return ListView.builder(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+                    itemCount: filteredList.length,
+                    itemBuilder: (context, index) {
+                      final lawyer = filteredList[index];
+                      final hasAvatar = lawyer.profilePic != null &&
+                          lawyer.profilePic != 'default.png';
+                      final avatar = hasAvatar
+                          ? '${ApiConstant.serverIpPort}/storage/${lawyer.profilePic}'
+                          : null;
+
+                      final initials = lawyer.name != null && lawyer.name!.isNotEmpty
+                          ? lawyer.name!
+                              .trim()
+                              .split(' ')
+                              .map((e) => e.isNotEmpty ? e.substring(0, 1) : '')
+                              .join()
+                              .toUpperCase()
+                          : 'L';
+
+                      final title = lawyer.categories != null && lawyer.categories!.isNotEmpty
+                          ? '${lawyer.categories!.first.name} • ${lawyer.numberOfExperience ?? '1'} yr exp'
+                          : 'Lawyer • ${lawyer.numberOfExperience ?? '1'} yr exp';
+
+                      final tags = lawyer.categories?.map((e) => e.name ?? '').toList() ?? [];
+
+                      return AppLawyerCard(
+                        name: lawyer.name ?? 'Jane Lawyer',
+                        title: title,
+                        tags: tags,
+                        rating: 4.8,
+                        reviewCount: 120,
+                        experience: int.tryParse(lawyer.numberOfExperience ?? '1') ?? 1,
+                        location: lawyer.address ?? 'Dhaka',
+                        availability: 'available_today'.tr,
+                        rate: 2000,
+                        avatarUrl: avatar,
+                        initials: initials,
+                      );
+                    },
+                  );
+                }),
+              ),
             ),
           ],
         ),

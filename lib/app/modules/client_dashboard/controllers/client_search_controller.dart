@@ -42,6 +42,11 @@ class ClientSearchController extends GetxController {
     searchTextController.addListener(() {
       searchQuery.value = searchTextController.text;
     });
+    // Debounce search query text changes to limit API request frequency
+    debounce(searchQuery, (String query) {
+      fetchLawyers(search: query);
+    }, time: const Duration(milliseconds: 500));
+
     fetchCategories();
     fetchLawyers();
   }
@@ -64,14 +69,16 @@ class ClientSearchController extends GetxController {
     }
   }
 
-  Future<void> fetchLawyers() async {
+  Future<void> fetchLawyers({String? search}) async {
     isLawyersLoading.value = true;
+    final query = search ?? searchQuery.value;
     try {
       final list = await ClientAuthRepository.instance.getLawyers(
         categoryId: selectedCategoryId.value,
         address: filterAddress.value,
         experience: filterExperience.value,
         language: filterLanguage.value,
+        search: query.trim().isEmpty ? null : query.trim(),
       );
       lawyersList.assignAll(list);
     } catch (e) {

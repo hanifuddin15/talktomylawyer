@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:talktomylawyer/app/core/widgets/input_fields/app_search_field.dart';
 import 'package:talktomylawyer/app/core/config/api_constant.dart';
+import 'package:talktomylawyer/app/core/widgets/no_data_widget.dart';
 import '../../../../core/constants/app_colors.dart';
 import '../../../../core/widgets/app_badge.dart';
 import '../../../../core/widgets/app_category_card.dart';
@@ -85,39 +87,39 @@ class ClientHomeTab extends GetView<ClientHomeController> {
             ),
 
             // ── Search Bar ──
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: SizedBox(
-                        height: 52,
-                        child: AppSearchField(
-                          primaryText: primaryText,
-                          secondaryText: secondaryText,
-                          cardColor: cardColor,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Container(
-                      width: 48,
-                      height: 48,
-                      decoration: BoxDecoration(
-                        color: kPrimaryBlue,
-                        borderRadius: BorderRadius.circular(14),
-                      ),
-                      child: const Icon(
-                        Icons.tune_rounded,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            // SliverToBoxAdapter(
+            //   child: Padding(
+            //     padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+            //     child: Row(
+            //       children: [
+            //         Expanded(
+            //           child: SizedBox(
+            //             height: 52,
+            //             child: AppSearchField(
+            //               primaryText: primaryText,
+            //               secondaryText: secondaryText,
+            //               cardColor: cardColor,
+            //             ),
+            //           ),
+            //         ),
+            //         const SizedBox(width: 12),
+            //         Container(
+            //           width: 48,
+            //           height: 48,
+            //           decoration: BoxDecoration(
+            //             color: kPrimaryBlue,
+            //             borderRadius: BorderRadius.circular(14),
+            //           ),
+            //           child: const Icon(
+            //             Icons.tune_rounded,
+            //             color: Colors.white,
+            //             size: 20,
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             // ── Premium Banner ──
             SliverToBoxAdapter(
               child: Padding(
@@ -198,17 +200,36 @@ class ClientHomeTab extends GetView<ClientHomeController> {
 
             Obx(() {
               if (controller.isCategoriesLoading.value) {
-                return const SliverToBoxAdapter(
-                  child: Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 24.0),
-                      child: CircularProgressIndicator(),
+                return Skeletonizer.sliver(
+                  child: SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                    sliver: SliverGrid(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          return const AppCategoryCard(
+                            title: 'Loading Category',
+                            lawyerCount: 0,
+                            icon: Icons.gavel_rounded,
+                            iconBg: Colors.grey,
+                            iconColor: Colors.grey,
+                          );
+                        },
+                        childCount: 4,
+                      ),
+                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 2,
+                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 12,
+                        childAspectRatio: 1.4,
+                      ),
                     ),
                   ),
                 );
               }
               if (controller.categoriesList.isEmpty) {
-                return const SliverToBoxAdapter(child: SizedBox.shrink());
+                return SliverToBoxAdapter(
+                  child: NoDataWidget(message: 'no_categories_found'.tr),
+                );
               }
 
               final displayCats = controller.categoriesList.take(4).toList();
@@ -267,25 +288,41 @@ class ClientHomeTab extends GetView<ClientHomeController> {
 
             Obx(() {
               if (controller.isFeaturedLawyersLoading.value) {
-                return const SliverToBoxAdapter(
-                  child: Center(
-                    child: Padding(
-                      padding: EdgeInsets.symmetric(vertical: 40.0),
-                      child: CircularProgressIndicator(),
+                return SliverToBoxAdapter(
+                  child: Skeletonizer(
+                    child: SizedBox(
+                      height: 250,
+                      child: ListView.separated(
+                        padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
+                        scrollDirection: Axis.horizontal,
+                        itemCount: 5,
+                        separatorBuilder: (_, _) => const SizedBox(width: 16),
+                        itemBuilder: (context, index) {
+                          return SizedBox(
+                            width: 320,
+                            child: AppLawyerCard(
+                              name: 'Loading...',
+                              title: 'Loading...',
+                              tags: const ['Tag 1', 'Tag 2'],
+                              rating: 0,
+                              reviewCount: 0,
+                              experience: 0,
+                              location: 'Loading...',
+                              availability: 'Loading...',
+                              rate: 0,
+                            ),
+                          );
+                        },
+                      ),
                     ),
                   ),
                 );
               }
               if (controller.featuredLawyersList.isEmpty) {
                 return SliverToBoxAdapter(
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 40.0),
-                      child: Text(
-                        'No lawyers found',
-                        style: GoogleFonts.outfit(color: secondaryText),
-                      ),
-                    ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 50),
+                    child: NoDataWidget(message: 'no_lawyers_found'.tr),
                   ),
                 );
               }

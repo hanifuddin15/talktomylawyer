@@ -128,17 +128,22 @@ class ClientAuthRepository {
     String? address,
     int? experience,
     String? language,
+    String? search,
   }) async {
     final Map<String, dynamic> queryParams = {};
     if (categoryId != null) queryParams['category_id'] = categoryId;
     if (address != null && address.isNotEmpty) queryParams['address'] = address;
     if (experience != null) queryParams['experience'] = experience;
-    if (language != null && language.isNotEmpty) queryParams['language'] = language;
+    if (language != null && language.isNotEmpty) {
+      queryParams['language'] = language;
+    }
+
+    if (search != null && search.isNotEmpty) queryParams['search'] = search;
 
     final ApiResponse response = await _apiCommunication.doGetRequest(
       apiEndPoint: 'lawyers',
       queryParams: queryParams,
-      responseDataKey: 'lawyers',
+      responseDataKey: 'data',
       enableLoading: false,
     );
 

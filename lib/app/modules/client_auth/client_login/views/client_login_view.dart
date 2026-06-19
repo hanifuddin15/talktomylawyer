@@ -170,54 +170,55 @@ class ClientLoginView extends GetView<ClientLoginController> {
                 ),
                 const SizedBox(height: 20),
                 // Or divider
-                Row(
-                  children: [
-                    Expanded(
-                      child: Divider(
-                        color: isDark ? kDarkDivider : kLightDivider,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Text(
-                        'or_continue_with'.tr,
-                        style: GoogleFonts.outfit(
-                          fontSize: 13,
-                          color: secondaryText,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Divider(
-                        color: isDark ? kDarkDivider : kLightDivider,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                // Social Buttons
-                Row(
-                  children: [
-                    Expanded(
-                      child: _SocialButton(
-                        label: 'google'.tr,
-                        icon: Icons.g_mobiledata_rounded,
-                        iconColor: Colors.red,
-                        onTap: () {},
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Expanded(
-                      child: _SocialButton(
-                        label: 'facebook'.tr,
-                        icon: Icons.facebook_rounded,
-                        iconColor: const Color(0xFF1877F2),
-                        onTap: () {},
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 24),
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: Divider(
+                //         color: isDark ? kDarkDivider : kLightDivider,
+                //       ),
+                //     ),
+                //     Padding(
+                //       padding: const EdgeInsets.symmetric(horizontal: 12),
+                //       child: Text(
+                //         'or_continue_with'.tr,
+                //         style: GoogleFonts.outfit(
+                //           fontSize: 13,
+                //           color: secondaryText,
+                //         ),
+                //       ),
+                //     ),
+                //     Expanded(
+                //       child: Divider(
+                //         color: isDark ? kDarkDivider : kLightDivider,
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // const SizedBox(height: 16),
+                // // Social Buttons
+                // Row(
+                //   children: [
+                //     Expanded(
+                //       child: _SocialButton(
+                //         label: 'google'.tr,
+                //         icon: Icons.g_mobiledata_rounded,
+                //         iconColor: Colors.red,
+                //         onTap: () {},
+                //       ),
+                //     ),
+                //     const SizedBox(width: 12),
+                //     Expanded(
+                //       child: _SocialButton(
+                //         label: 'facebook'.tr,
+                //         icon: Icons.facebook_rounded,
+                //         iconColor: const Color(0xFF1877F2),
+                //         onTap: () {},
+                //       ),
+                //     ),
+                //   ],
+                // ),
+                // const SizedBox(height: 24),
+
                 // Register link
                 Center(
                   child: GestureDetector(
