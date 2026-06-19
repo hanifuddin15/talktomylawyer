@@ -12,7 +12,7 @@ class ClientModel {
   String? country;
   String? createdAt;
   String? updatedAt;
-
+  dynamic subscription; //TODO: make subscription model later
   ClientModel({
     this.id,
     this.name,
@@ -25,6 +25,7 @@ class ClientModel {
     this.country,
     this.createdAt,
     this.updatedAt,
+    this.subscription,
   });
 
   factory ClientModel.fromMap(Map<String, dynamic> map) {
@@ -40,6 +41,7 @@ class ClientModel {
       country: map['country'] as String?,
       createdAt: map['created_at'] as String?,
       updatedAt: map['updated_at'] as String?,
+      subscription: map['subscription'],
     );
   }
 
@@ -56,6 +58,7 @@ class ClientModel {
       'country': country,
       'created_at': createdAt,
       'updated_at': updatedAt,
+      'subscription': subscription,
     };
   }
 

@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:talktomylawyer/app/core/config/api_constant.dart';
 import 'package:talktomylawyer/app/core/constants/app_colors.dart';
 import '../controllers/lawyer_details_controller.dart';
+import '../widgets/lawyer_stats_row.dart';
+import '../widgets/lawyer_tabs.dart';
+import '../widgets/lawyer_about_tab_content.dart';
+import '../widgets/lawyer_reviews_tab_content.dart';
+import '../widgets/lawyer_availability_tab_content.dart';
+import '../widgets/unlock_premium_banner.dart';
+import '../widgets/premium_contact_info_box.dart';
+import '../widgets/locked_actions_row.dart';
 
 class LawyerDetailsView extends GetView<LawyerDetailsController> {
   const LawyerDetailsView({super.key});
@@ -36,8 +43,7 @@ class LawyerDetailsView extends GetView<LawyerDetailsController> {
             );
           }
 
-          final hasAvatar =
-              lawyer.profilePic != null && lawyer.profilePic != 'default.png';
+          final hasAvatar = lawyer.profilePic != null && lawyer.profilePic != 'default.png';
           final avatarUrl = hasAvatar
               ? '${ApiConstant.serverIpPort}/storage/${lawyer.profilePic}'
               : null;
@@ -51,13 +57,13 @@ class LawyerDetailsView extends GetView<LawyerDetailsController> {
                     .toUpperCase()
               : 'L';
 
-          final primaryCategory =
-              (lawyer.categories != null && lawyer.categories!.isNotEmpty)
+          final primaryCategory = (lawyer.categories != null && lawyer.categories!.isNotEmpty)
               ? lawyer.categories!.first.name ?? 'Lawyer'
               : 'Lawyer';
 
-          final biography =
-              'Experienced $primaryCategory attorney with over ${lawyer.numberOfExperience ?? '5'} years of practice in ${lawyer.address ?? 'Dhaka'} courts. Specializes in providing expert legal representation and strategic counsel to clients.';
+          final biography = 'Experienced $primaryCategory attorney with over ${lawyer.numberOfExperience ?? '5'} years of practice in ${lawyer.address ?? 'Dhaka'} courts. Specializes in providing expert legal representation and strategic counsel to clients.';
+
+          final hasSub = controller.hasSubscription.value;
 
           return Column(
             children: [
@@ -232,64 +238,55 @@ class LawyerDetailsView extends GetView<LawyerDetailsController> {
                       const SizedBox(height: 24),
 
                       // ── Quick Stats Grid ──
-                      Row(
-                        children: [
-                          _buildStatCard(
-                            context,
-                            '${lawyer.numberOfExperience ?? "5"} yrs',
-                            'Experience',
-                            isDark,
-                          ),
-                          const SizedBox(width: 12),
-                          _buildStatCard(context, '127+', 'Reviews', isDark),
-                          const SizedBox(width: 12),
-                          _buildStatCard(context, '৳2K', 'Rate/hr', isDark),
-                        ],
+                      LawyerStatsRow(
+                        experience: lawyer.numberOfExperience ?? '5',
+                        reviewsCount: '127',
+                        rate: '5K',
+                        isDark: isDark,
                       ),
                       const SizedBox(height: 24),
 
                       // ── Tabs ──
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border(
-                            bottom: BorderSide(color: dividerColor, width: 1.5),
-                          ),
-                        ),
-                        child: Obx(
-                          () => Row(
-                            children: [
-                              _buildTabItem('About', 0),
-                              _buildTabItem('Reviews', 1),
-                              _buildTabItem('Availability', 2),
-                            ],
-                          ),
-                        ),
-                      ),
+                      Obx(() => LawyerTabs(
+                        activeIndex: controller.activeTab.value,
+                        onTabChanged: (val) => controller.activeTab.value = val,
+                        dividerColor: dividerColor,
+                      )),
                       const SizedBox(height: 20),
 
                       // ── Tab Content ──
                       Obx(() {
+                        if (!controller.hasSubscription.value) {
+                          return const Column(
+                            children: [
+                              PremiumContactInfoBox(),
+                              LockedActionsRow(),
+                            ],
+                          );
+                        }
                         switch (controller.activeTab.value) {
                           case 0:
-                            return _buildAboutTab(
-                              biography,
-                              lawyer.lastEducation,
-                              lawyer.barCouncilNumber,
-                              lawyer.categories,
-                              primaryText,
-                              secondaryText,
+                            return LawyerAboutTabContent(
+                              bio: biography,
+                              education: lawyer.lastEducation,
+                              barRegistration: lawyer.barCouncilNumber,
+                              categories: lawyer.categories,
+                              primaryText: primaryText,
+                              secondaryText: secondaryText,
+                              phoneNumber: lawyer.phone,
+                              email: lawyer.email,
                             );
                           case 1:
-                            return _buildReviewsTab(
-                              primaryText,
-                              secondaryText,
-                              cardColor,
+                            return LawyerReviewsTabContent(
+                              primaryText: primaryText,
+                              secondaryText: secondaryText,
+                              cardColor: cardColor,
                             );
                           case 2:
-                            return _buildAvailabilityTab(
-                              primaryText,
-                              secondaryText,
-                              cardColor,
+                            return LawyerAvailabilityTabContent(
+                              primaryText: primaryText,
+                              secondaryText: secondaryText,
+                              cardColor: cardColor,
                             );
                           default:
                             return const SizedBox.shrink();
@@ -310,408 +307,37 @@ class LawyerDetailsView extends GetView<LawyerDetailsController> {
                     top: BorderSide(color: dividerColor, width: 1),
                   ),
                 ),
-                child: Row(
-                  children: [
-                    // Premium Unlock Button
-                    Expanded(
-                      flex: 6,
-                      child: Container(
+                child: hasSub
+                    ? SizedBox(
+                        width: double.infinity,
                         height: 52,
-                        decoration: BoxDecoration(
-                          color: kAccentGold,
-                          borderRadius: BorderRadius.circular(14),
-                          boxShadow: [
-                            BoxShadow(
-                              color: kAccentGold.withValues(alpha: .25),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
-                        ),
-                        child: TextButton.icon(
+                        child: ElevatedButton(
                           onPressed: () {},
-                          icon: const FaIcon(
-                            FontAwesomeIcons.crown,
-                            color: Colors.white,
-                            size: 20,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: kPrimaryBlue,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            elevation: 0,
                           ),
-                          label: Text(
-                            'Unlock with Premium',
+                          child: Text(
+                            'Book appoinment',
                             style: GoogleFonts.outfit(
-                              fontSize: 14,
+                              fontSize: 15,
                               fontWeight: FontWeight.w700,
                               color: Colors.white,
                             ),
                           ),
                         ),
+                      )
+                    : UnlockPremiumBanner(
+                        onTap: controller.navigateToPremiumTab,
                       ),
-                    ),
-                    const SizedBox(width: 12),
-                    // Book Paid Button
-                    Expanded(
-                      flex: 5,
-                      child: Container(
-                        height: 52,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(14),
-                          border: Border.all(
-                            color: kPrimaryBlue.withValues(alpha: .4),
-                            width: 1.5,
-                          ),
-                        ),
-                        child: TextButton.icon(
-                          onPressed: () {},
-                          icon: const Icon(
-                            Icons.calendar_today_outlined,
-                            color: kPrimaryBlue,
-                            size: 16,
-                          ),
-                          label: Text(
-                            'Book Paid',
-                            style: GoogleFonts.outfit(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w700,
-                              color: kPrimaryBlue,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
               ),
             ],
           );
         }),
       ),
-    );
-  }
-
-  Widget _buildStatCard(
-    BuildContext context,
-    String value,
-    String label,
-    bool isDark,
-  ) {
-    final cardBg = isDark ? kDarkInputFill : kLightInputFill;
-    final dividerColor = isDark ? kDarkDivider : kLightDivider;
-    return Expanded(
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 16),
-        decoration: BoxDecoration(
-          color: cardBg,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: dividerColor),
-        ),
-        child: Column(
-          children: [
-            Text(
-              value,
-              style: GoogleFonts.outfit(
-                fontSize: 18,
-                fontWeight: FontWeight.w800,
-                color: isDark ? Colors.white : kLightTextPrimary,
-              ),
-            ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: GoogleFonts.outfit(
-                fontSize: 12,
-                color: isDark ? kDarkTextSecondary : kLightTextSecondary,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTabItem(String title, int index) {
-    final isSelected = controller.activeTab.value == index;
-    return Expanded(
-      child: GestureDetector(
-        onTap: () => controller.activeTab.value = index,
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12),
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-            border: Border(
-              bottom: BorderSide(
-                color: isSelected ? kPrimaryBlue : Colors.transparent,
-                width: 2.5,
-              ),
-            ),
-          ),
-          child: Text(
-            title,
-            style: GoogleFonts.outfit(
-              fontSize: 15,
-              fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-              color: isSelected ? kPrimaryBlue : Colors.grey,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildAboutTab(
-    String bio,
-    String? education,
-    String? barRegistration,
-    List<dynamic>? categories,
-    Color primaryText,
-    Color secondaryText,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Biography
-        Text(
-          'Biography',
-          style: GoogleFonts.outfit(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: primaryText,
-          ),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          bio,
-          style: GoogleFonts.outfit(
-            fontSize: 13.5,
-            color: secondaryText,
-            height: 1.5,
-          ),
-        ),
-        const SizedBox(height: 20),
-
-        // Education
-        Text(
-          'Education',
-          style: GoogleFonts.outfit(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: primaryText,
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          education ?? 'LLB, University of Dhaka | LLM, BUET Law',
-          style: GoogleFonts.outfit(fontSize: 13.5, color: secondaryText),
-        ),
-        const SizedBox(height: 20),
-
-        // Bar Registration
-        Text(
-          'Bar Registration',
-          style: GoogleFonts.outfit(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: primaryText,
-          ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          barRegistration ?? 'BD-2012-04521',
-          style: GoogleFonts.outfit(fontSize: 13.5, color: secondaryText),
-        ),
-        const SizedBox(height: 20),
-
-        // Practice Areas
-        Text(
-          'Practice Areas',
-          style: GoogleFonts.outfit(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: primaryText,
-          ),
-        ),
-        const SizedBox(height: 10),
-        if (categories == null || categories.isEmpty)
-          Text(
-            'General Law Practice',
-            style: GoogleFonts.outfit(fontSize: 13.5, color: secondaryText),
-          )
-        else
-          Wrap(
-            spacing: 8,
-            runSpacing: 8,
-            children: categories.map((cat) {
-              return Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 6,
-                ),
-                decoration: BoxDecoration(
-                  color: kPrimaryBlue.withValues(alpha: .12),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Text(
-                  cat.name ?? '',
-                  style: GoogleFonts.outfit(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w600,
-                    color: kPrimaryBlue,
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-      ],
-    );
-  }
-
-  Widget _buildReviewsTab(
-    Color primaryText,
-    Color secondaryText,
-    Color cardColor,
-  ) {
-    // Return a mock reviews list
-    final reviews = [
-      {
-        'name': 'Rahat Hossain',
-        'rating': 5.0,
-        'comment':
-            'Advocate Jane provided exceptional help with our civil litigation. Extremely knowledgeable and supportive throughout.',
-        'time': '2 weeks ago',
-      },
-      {
-        'name': 'Sharmin Akter',
-        'rating': 4.8,
-        'comment':
-            'Very professional and responsive. Got sound advice on corporate registry issues.',
-        'time': '1 month ago',
-      },
-    ];
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Client Reviews',
-          style: GoogleFonts.outfit(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: primaryText,
-          ),
-        ),
-        const SizedBox(height: 12),
-        ...reviews.map(
-          (rev) => Container(
-            margin: const EdgeInsets.only(bottom: 12),
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              color: cardColor,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      rev['name'] as String,
-                      style: GoogleFonts.outfit(
-                        fontWeight: FontWeight.w700,
-                        color: primaryText,
-                        fontSize: 13.5,
-                      ),
-                    ),
-                    Text(
-                      rev['time'] as String,
-                      style: GoogleFonts.outfit(
-                        color: Colors.grey,
-                        fontSize: 11,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Icon(Icons.star_rounded, color: kAccentGold, size: 14),
-                    const SizedBox(width: 2),
-                    Text(
-                      rev['rating'].toString(),
-                      style: GoogleFonts.outfit(
-                        fontSize: 11.5,
-                        fontWeight: FontWeight.w600,
-                        color: primaryText,
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  rev['comment'] as String,
-                  style: GoogleFonts.outfit(
-                    fontSize: 12.5,
-                    color: secondaryText,
-                    height: 1.4,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildAvailabilityTab(
-    Color primaryText,
-    Color secondaryText,
-    Color cardColor,
-  ) {
-    final days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday'];
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Weekly Consultation Schedule',
-          style: GoogleFonts.outfit(
-            fontSize: 16,
-            fontWeight: FontWeight.w700,
-            color: primaryText,
-          ),
-        ),
-        const SizedBox(height: 12),
-        ...days.map(
-          (day) => Container(
-            margin: const EdgeInsets.only(bottom: 10),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: BoxDecoration(
-              color: cardColor,
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  day,
-                  style: GoogleFonts.outfit(
-                    fontWeight: FontWeight.w600,
-                    color: primaryText,
-                    fontSize: 13.5,
-                  ),
-                ),
-                Text(
-                  '04:00 PM - 07:00 PM',
-                  style: GoogleFonts.outfit(
-                    color: kPrimaryBlue,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 12.5,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ],
     );
   }
 }

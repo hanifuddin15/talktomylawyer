@@ -4,6 +4,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:talktomylawyer/app/core/constants/app_colors.dart';
 import 'package:talktomylawyer/app/core/widgets/app_button.dart';
 import 'package:talktomylawyer/app/core/widgets/app_payment_option.dart';
+import 'package:talktomylawyer/app/repository/client_auth_repository.dart';
+import 'package:talktomylawyer/app/core/services/caching_service.dart';
 
 class CheckoutView extends StatefulWidget {
   const CheckoutView({
@@ -222,7 +224,16 @@ class _CheckoutViewState extends State<CheckoutView> {
               padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
               child: AppButton(
                 label: '${'pay'.tr} ${widget.price ?? '৳২,৪৯৯'}',
-                onPressed: () {
+                onPressed: () async {
+                  try {
+                    final clientAuth = ClientAuthRepository.instance;
+                    final currentClient = clientAuth.getClientData();
+                    if (currentClient != null) {
+                      currentClient.subscription = 'active';
+                      await CachingService.instance.saveClientUser(currentClient.toJson());
+                    }
+                  } catch (_) {}
+
                   Get.back();
                   Get.snackbar(
                     'Payment Successful',
