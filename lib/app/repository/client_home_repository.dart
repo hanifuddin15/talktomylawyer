@@ -2,6 +2,7 @@ import 'package:talktomylawyer/app/core/models/api_response.dart';
 import 'package:talktomylawyer/app/core/services/api_communication.dart';
 import 'package:talktomylawyer/app/models/lawyers_models/law_categories_model.dart';
 import 'package:talktomylawyer/app/models/lawyers_models/lawyer_user_model.dart';
+import 'package:talktomylawyer/app/models/client_models/subscription_model.dart';
 
 class ClientHomeRepository {
   ClientHomeRepository._internal();
@@ -72,5 +73,21 @@ class ClientHomeRepository {
       return LawyerModel.fromMap(response.data as Map<String, dynamic>);
     }
     return null;
+  }
+
+  Future<List<SubscriptionModel>> getSubscriptions() async {
+    final ApiResponse response = await _apiCommunication.doGetRequest(
+      apiEndPoint: 'subscriptions',
+      responseDataKey: 'data',
+      enableLoading: false,
+    );
+
+    if (response.isSuccessful && response.data != null) {
+      final List<dynamic> list = response.data as List<dynamic>;
+      return list
+          .map((item) => SubscriptionModel.fromMap(item as Map<String, dynamic>))
+          .toList();
+    }
+    return [];
   }
 }

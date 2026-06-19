@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:talktomylawyer/app/core/constants/app_colors.dart';
 import 'package:talktomylawyer/app/modules/client_dashboard/controllers/client_premium_controller.dart';
+import 'package:talktomylawyer/app/models/client_models/subscription_model.dart';
 import '../../../client_subscription/checkout/views/checkout_view.dart';
 
 class ClientPremiumTab extends GetView<ClientPremiumController> {
@@ -15,30 +16,6 @@ class ClientPremiumTab extends GetView<ClientPremiumController> {
     final primaryText = isDark ? kDarkTextPrimary : kLightTextPrimary;
     final secondaryText = isDark ? kDarkTextSecondary : kLightTextSecondary;
     final isBn = Get.locale?.languageCode == 'bn';
-
-    final monthlyFeatures = [
-      'feature_monthly_1'.tr,
-      'feature_monthly_2'.tr,
-      'feature_monthly_3'.tr,
-      'feature_monthly_4'.tr,
-      'feature_monthly_5'.tr,
-    ];
-
-    final quarterlyFeatures = [
-      'everything_monthly'.tr,
-      'unlimited_consultations'.tr,
-      'doc_review'.tr,
-      'feature_quarterly_4'.tr,
-      'feature_quarterly_5'.tr,
-    ];
-
-    final yearlyFeatures = [
-      'everything_quarterly'.tr,
-      'feature_yearly_2'.tr,
-      'feature_yearly_3'.tr,
-      'feature_yearly_4'.tr,
-      'feature_yearly_5'.tr,
-    ];
 
     return Scaffold(
       backgroundColor: bg,
@@ -72,53 +49,89 @@ class ClientPremiumTab extends GetView<ClientPremiumController> {
                 ),
                 const SizedBox(height: 24),
 
-                // 1. Monthly Plan Card
-                _buildPlanCard(
-                  index: 0,
-                  title: 'monthly'.tr,
-                  price: isBn ? '৳৯৯৯' : '৳999',
-                  duration: 'per_month'.tr,
-                  features: monthlyFeatures,
-                  isHighlighted: false,
-                  isDark: isDark,
-                  primaryText: primaryText,
-                  secondaryText: secondaryText,
-                  selectedPlan: selected,
-                ),
-                const SizedBox(height: 16),
+                if (controller.isLoading.value) ...[
+                  const SizedBox(
+                    height: 300,
+                    child: Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  ),
+                ] else if (controller.subscriptions.isEmpty) ...[
+                  SizedBox(
+                    height: 200,
+                    child: Center(
+                      child: Text(
+                        'No subscription packages available.',
+                        style: GoogleFonts.outfit(color: secondaryText, fontSize: 16),
+                      ),
+                    ),
+                  ),
+                ] else ...[
+                  ...controller.subscriptions.asMap().entries.map((MapEntry<int, SubscriptionModel> entry) {
+                    final index = entry.key;
+                    final plan = entry.value;
+                    final isHighlighted = index == 1 || (plan.badgeText != null && plan.badgeText!.isNotEmpty);
 
-                // 2. Quarterly Plan Card (Highlighted blue)
-                _buildPlanCard(
-                  index: 1,
-                  title: 'quarterly'.tr,
-                  price: isBn ? '৳২,৪৯৯' : '৳2,499',
-                  duration: 'per_3_months'.tr,
-                  features: quarterlyFeatures,
-                  isHighlighted: true,
-                  isDark: isDark,
-                  primaryText: primaryText,
-                  secondaryText: secondaryText,
-                  badgeText: 'save_17'.tr,
-                  selectedPlan: selected,
-                ),
-                const SizedBox(height: 16),
+                    final title = plan.name ?? 'Premium';
+                    final currency = plan.currency ?? '৳';
+                    
+                    String priceText = plan.price ?? '1500';
+                    try {
+                      final doubleVal = double.parse(priceText);
+                      priceText = '$currency${doubleVal.toInt()}';
+                    } catch (_) {
+                      priceText = '$currency$priceText';
+                    }
 
-                // 3. Yearly Plan Card
-                _buildPlanCard(
-                  index: 2,
-                  title: 'yearly'.tr,
-                  price: isBn ? '৳৭,৯৯৯' : '৳7,999',
-                  duration: 'per_year'.tr,
-                  features: yearlyFeatures,
-                  isHighlighted: false,
-                  isDark: isDark,
-                  primaryText: primaryText,
-                  secondaryText: secondaryText,
-                  badgeText: 'save_33'.tr,
-                  badgeBg: const Color(0xFFD1FAE5),
-                  badgeTextColor: const Color(0xFF065F46),
-                  selectedPlan: selected,
-                ),
+                    String durationText = '';
+                    if (plan.duration != null && plan.durationType != null) {
+                      final dur = plan.duration;
+                      final type = plan.durationType;
+                      if (dur == '1') {
+                        durationText = 'per_$type'.tr;
+                      } else {
+                        durationText = 'per_${dur}_${type}s'.tr;
+                      }
+                      if (durationText.startsWith('per_')) {
+                        final trVal = durationText.tr;
+                        if (trVal == durationText) {
+                          final typePlural = type == 'month' ? 'months' : (type == 'year' ? 'years' : 'days');
+                          durationText = dur == '1' ? 'per $type' : 'per $dur $typePlural';
+                        } else {
+                          durationText = trVal;
+                        }
+                      }
+                    } else {
+                      durationText = 'per_month'.tr;
+                    }
+
+                    final features = plan.features ?? [];
+
+                    String? badgeText;
+                    if (plan.savePercentage != null && plan.savePercentage!.isNotEmpty && plan.savePercentage != '0') {
+                      badgeText = isBn ? 'সাশ্রয় ${plan.savePercentage}%' : 'Save ${plan.savePercentage}%';
+                    } else if (plan.badgeText != null && plan.badgeText!.isNotEmpty) {
+                      badgeText = plan.badgeText;
+                    }
+
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 16),
+                      child: _buildPlanCard(
+                        index: index,
+                        title: title,
+                        price: priceText,
+                        duration: durationText,
+                        features: features,
+                        isHighlighted: isHighlighted,
+                        isDark: isDark,
+                        primaryText: primaryText,
+                        secondaryText: secondaryText,
+                        badgeText: badgeText,
+                        selectedPlan: selected,
+                      ),
+                    );
+                  }),
+                ],
                 const SizedBox(height: 24),
 
                 // CTA Button (Subscribe Now)
@@ -127,33 +140,39 @@ class ClientPremiumTab extends GetView<ClientPremiumController> {
                   height: 56,
                   child: ElevatedButton(
                     onPressed: () {
-                      String planName = 'quarterly_premium'.tr;
-                      String planKey = 'quarterly'.tr;
-                      String duration = '3_months'.tr;
-                      String? savings = isBn ? '৳৪৯৮ (১৭% সাশ্রয়)' : '৳498 (17% off)';
-                      String price = isBn ? '৳২,৪৯৯' : '৳2,499';
+                      if (selected >= 0 && selected < controller.subscriptions.length) {
+                        final plan = controller.subscriptions[selected];
+                        final currency = plan.currency ?? '৳';
+                        
+                        String priceText = plan.price ?? '1500';
+                        try {
+                          final doubleVal = double.parse(priceText);
+                          priceText = '$currency${doubleVal.toInt()}';
+                        } catch (_) {
+                          priceText = '$currency$priceText';
+                        }
 
-                      if (selected == 0) {
-                        planName = 'monthly_premium'.tr;
-                        planKey = 'monthly'.tr;
-                        duration = '1_month'.tr;
-                        savings = null;
-                        price = isBn ? '৳৯৯৯' : '৳999';
-                      } else if (selected == 2) {
-                        planName = 'yearly_premium'.tr;
-                        planKey = 'yearly'.tr;
-                        duration = '12_months'.tr;
-                        savings = isBn ? '৳৩,৯৮৯ (৩৩% সাশ্রয়)' : '৳3,989 (33% off)';
-                        price = isBn ? '৳৭,৯৯৯' : '৳7,999';
+                        final planName = plan.name ?? 'Premium';
+                        final planKey = plan.name?.toLowerCase() ?? 'premium';
+                        
+                        final dur = plan.duration ?? '1';
+                        final type = plan.durationType ?? 'month';
+                        final typePlural = type == 'month' ? 'months' : (type == 'year' ? 'years' : 'days');
+                        final durationString = dur == '1' ? '1 $type' : '$dur $typePlural';
+
+                        String? savings;
+                        if (plan.savePercentage != null && plan.savePercentage!.isNotEmpty && plan.savePercentage != '0') {
+                          savings = isBn ? '${plan.savePercentage}% সাশ্রয়' : '${plan.savePercentage}% savings';
+                        }
+
+                        Get.to(() => CheckoutView(
+                              planName: planName,
+                              planKey: planKey,
+                              duration: durationString,
+                              savings: savings,
+                              price: priceText,
+                            ));
                       }
-
-                      Get.to(() => CheckoutView(
-                            planName: planName,
-                            planKey: planKey,
-                            duration: duration,
-                            savings: savings,
-                            price: price,
-                          ));
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFFFB300), // Orange/Gold
