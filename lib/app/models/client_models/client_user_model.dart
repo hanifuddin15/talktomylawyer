@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:talktomylawyer/app/models/client_models/subscription_model.dart';
+
 class ClientModel {
   int? id;
   String? name;
@@ -12,7 +14,9 @@ class ClientModel {
   String? country;
   String? createdAt;
   String? updatedAt;
-  dynamic subscription; //TODO: make subscription model later
+  String? subscriptionId;
+  DateTime? subscriptionExpiresAt;
+  SubscriptionModel? subscription; //TODO: make subscription model later
   ClientModel({
     this.id,
     this.name,
@@ -26,6 +30,8 @@ class ClientModel {
     this.createdAt,
     this.updatedAt,
     this.subscription,
+    this.subscriptionId,
+    this.subscriptionExpiresAt,
   });
 
   factory ClientModel.fromMap(Map<String, dynamic> map) {
@@ -41,7 +47,17 @@ class ClientModel {
       country: map['country'] as String?,
       createdAt: map['created_at'] as String?,
       updatedAt: map['updated_at'] as String?,
-      subscription: map['subscription'],
+      subscriptionId: map['subscription_id'] as String?,
+      subscriptionExpiresAt: map['subscription_expires_at'] != null
+          ? DateTime.parse(map['subscription_expires_at'] as String)
+          : null,
+      subscription: map['subscription'] is Map
+          ? SubscriptionModel.fromMap(
+              map['subscription'] as Map<String, dynamic>,
+            )
+          : (map['subscription'] is String
+                ? SubscriptionModel(status: map['subscription'] as String)
+                : null),
     );
   }
 
@@ -58,7 +74,9 @@ class ClientModel {
       'country': country,
       'created_at': createdAt,
       'updated_at': updatedAt,
-      'subscription': subscription,
+      'subscription': subscription?.toMap(),
+      'subscription_id': subscriptionId,
+      'subscription_expires_at': subscriptionExpiresAt?.toIso8601String(),
     };
   }
 

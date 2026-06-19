@@ -29,6 +29,8 @@ import '../modules/lawyer_dashboard/bindings/lawyer_dashboard_binding.dart';
 import '../modules/lawyer_dashboard/views/lawyer_dashboard_view.dart';
 import '../modules/lawyer_details/bindings/lawyer_details_binding.dart';
 import '../modules/lawyer_details/views/lawyer_details_view.dart';
+import '../modules/lawyer_details/bindings/book_consultation_binding.dart';
+import '../modules/lawyer_details/views/book_consultation_view.dart';
 
 part 'app_routes.dart';
 
@@ -78,6 +80,12 @@ class AppPages {
       name: _Paths.lawyerDetails,
       page: () => const LawyerDetailsView(),
       binding: LawyerDetailsBinding(),
+    ),
+    // Book Consultation
+    GetPage(
+      name: _Paths.bookConsultation,
+      page: () => const BookConsultationView(),
+      binding: BookConsultationBinding(),
     ),
 
     // Lawyer Auth

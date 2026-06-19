@@ -17,43 +17,8 @@ class LawyerDetailsController extends GetxController {
     if (client == null) return false;
     final sub = client.subscription;
     if (sub == null) return false;
-    if (sub is bool) return sub;
-    if (sub is num) return sub != 0;
-    if (sub is String) {
-      final s = sub.trim().toLowerCase();
-      if (s.isEmpty ||
-          s == 'free' ||
-          s == 'inactive' ||
-          s == 'none' ||
-          s == 'no' ||
-          s == '0' ||
-          s == 'false' ||
-          s == 'null') {
-        return false;
-      }
-      return true;
-    }
-    if (sub is List) {
-      if (sub.isEmpty) return false;
-      for (final item in sub) {
-        if (item is Map) {
-          final status = item['status']?.toString().toLowerCase();
-          if (status == 'active' || status == 'premium') return true;
-        }
-      }
-      return false;
-    }
-    if (sub is Map) {
-      if (sub.isEmpty) return false;
-      final status = sub['status']?.toString().toLowerCase();
-      if (status == 'active' || status == 'premium') return true;
-      final type = sub['type']?.toString().toLowerCase();
-      if (type == 'premium') return true;
-      final plan = sub['plan']?.toString().toLowerCase();
-      if (plan != null && plan != 'free' && plan != 'none') return true;
-      return false;
-    }
-    return false;
+    final status = sub.status?.trim().toLowerCase();
+    return status == 'active' || status == 'premium';
   }
 
   void updateSubscriptionStatus() {

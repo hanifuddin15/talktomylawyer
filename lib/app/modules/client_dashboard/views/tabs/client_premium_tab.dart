@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:talktomylawyer/app/core/constants/app_colors.dart';
 import 'package:talktomylawyer/app/modules/client_dashboard/controllers/client_premium_controller.dart';
 import 'package:talktomylawyer/app/models/client_models/subscription_model.dart';
-import '../../../client_subscription/checkout/views/checkout_view.dart';
+import '../../../client_subscription/checkout/views/ssl_commerz_payment_view.dart';
 
 class ClientPremiumTab extends GetView<ClientPremiumController> {
   const ClientPremiumTab({super.key});
@@ -142,36 +142,9 @@ class ClientPremiumTab extends GetView<ClientPremiumController> {
                     onPressed: () {
                       if (selected >= 0 && selected < controller.subscriptions.length) {
                         final plan = controller.subscriptions[selected];
-                        final currency = plan.currency ?? '৳';
-                        
-                        String priceText = plan.price ?? '1500';
-                        try {
-                          final doubleVal = double.parse(priceText);
-                          priceText = '$currency${doubleVal.toInt()}';
-                        } catch (_) {
-                          priceText = '$currency$priceText';
+                        if (plan.id != null) {
+                          Get.to(() => SslCommerzPaymentView(subscriptionId: plan.id!));
                         }
-
-                        final planName = plan.name ?? 'Premium';
-                        final planKey = plan.name?.toLowerCase() ?? 'premium';
-                        
-                        final dur = plan.duration ?? '1';
-                        final type = plan.durationType ?? 'month';
-                        final typePlural = type == 'month' ? 'months' : (type == 'year' ? 'years' : 'days');
-                        final durationString = dur == '1' ? '1 $type' : '$dur $typePlural';
-
-                        String? savings;
-                        if (plan.savePercentage != null && plan.savePercentage!.isNotEmpty && plan.savePercentage != '0') {
-                          savings = isBn ? '${plan.savePercentage}% সাশ্রয়' : '${plan.savePercentage}% savings';
-                        }
-
-                        Get.to(() => CheckoutView(
-                              planName: planName,
-                              planKey: planKey,
-                              duration: durationString,
-                              savings: savings,
-                              price: priceText,
-                            ));
                       }
                     },
                     style: ElevatedButton.styleFrom(

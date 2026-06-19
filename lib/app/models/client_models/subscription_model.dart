@@ -1,19 +1,19 @@
 import 'dart:convert';
 
 class SubscriptionModel {
-  final int? id;
-  final String? name;
-  final String? price;
-  final String? currency;
-  final String? durationType;
-  final String? duration;
-  final String? savePercentage;
-  final String? badgeText;
-  final String? status;
-  final List<String>? features;
-  final String? description;
-  final String? createdAt;
-  final String? updatedAt;
+  int? id;
+  String? name;
+  String? price;
+  String? currency;
+  String? durationType;
+  String? duration;
+  String? savePercentage;
+  String? badgeText;
+  String? status;
+  List<String>? features;
+  String? description;
+  String? createdAt;
+  String? updatedAt;
 
   SubscriptionModel({
     this.id,

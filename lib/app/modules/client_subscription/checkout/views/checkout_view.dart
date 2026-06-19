@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:talktomylawyer/app/core/constants/app_colors.dart';
 import 'package:talktomylawyer/app/core/widgets/app_button.dart';
 import 'package:talktomylawyer/app/core/widgets/app_payment_option.dart';
+import 'package:talktomylawyer/app/models/client_models/subscription_model.dart';
 import 'package:talktomylawyer/app/repository/client_auth_repository.dart';
 import 'package:talktomylawyer/app/core/services/caching_service.dart';
 
@@ -127,7 +128,8 @@ class _CheckoutViewState extends State<CheckoutView> {
                             value: widget.duration ?? '3_months'.tr,
                             isWhite: true,
                           ),
-                          if (widget.savings != null && widget.savings!.isNotEmpty) ...[
+                          if (widget.savings != null &&
+                              widget.savings!.isNotEmpty) ...[
                             const SizedBox(height: 8),
                             _SummaryRow(
                               label: 'savings'.tr,
@@ -229,8 +231,13 @@ class _CheckoutViewState extends State<CheckoutView> {
                     final clientAuth = ClientAuthRepository.instance;
                     final currentClient = clientAuth.getClientData();
                     if (currentClient != null) {
-                      currentClient.subscription = 'active';
-                      await CachingService.instance.saveClientUser(currentClient.toJson());
+                      currentClient.subscription = SubscriptionModel(
+                        status: 'active',
+                      );
+                      ;
+                      await CachingService.instance.saveClientUser(
+                        currentClient.toJson(),
+                      );
                     }
                   } catch (_) {}
 

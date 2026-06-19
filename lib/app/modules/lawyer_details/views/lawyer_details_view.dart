@@ -312,7 +312,10 @@ class LawyerDetailsView extends GetView<LawyerDetailsController> {
                         width: double.infinity,
                         height: 52,
                         child: ElevatedButton(
-                          onPressed: () {},
+                          onPressed: () => Get.toNamed(
+                            '/book_consultation',
+                            arguments: lawyer,
+                          ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: kPrimaryBlue,
                             shape: RoundedRectangleBorder(
