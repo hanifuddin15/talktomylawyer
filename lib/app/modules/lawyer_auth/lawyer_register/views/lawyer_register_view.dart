@@ -170,58 +170,54 @@ class _Step1Profile extends StatelessWidget {
           Center(
             child: GestureDetector(
               onTap: () => controller.photoPath.value =
-                  controller.photoPath.value.isEmpty
-                      ? 'dummy_profile.jpg'
-                      : '',
-              child: Obx(
-                () {
-                  final hasPhoto = controller.photoPath.value.isNotEmpty;
-                  return Container(
-                    width: Get.width * 0.9,
-                    height: Get.height * 0.2,
-                    decoration: BoxDecoration(
-                      color: isDark ? kDarkInputFill : kLightInputFill,
-                      borderRadius: BorderRadius.circular(24),
-                      border: Border.all(
-                        color: hasPhoto ? kSuccess : Colors.transparent,
-                        width: 2,
-                      ),
+                  controller.photoPath.value.isEmpty ? 'dummy_profile.jpg' : '',
+              child: Obx(() {
+                final hasPhoto = controller.photoPath.value.isNotEmpty;
+                return Container(
+                  width: Get.width * 0.9,
+                  height: Get.height * 0.2,
+                  decoration: BoxDecoration(
+                    color: isDark ? kDarkInputFill : kLightInputFill,
+                    borderRadius: BorderRadius.circular(24),
+                    border: Border.all(
+                      color: hasPhoto ? kSuccess : Colors.transparent,
+                      width: 2,
                     ),
-                    child: DottedBorder(
-                      options: RoundedRectDottedBorderOptions(
-                        radius: const Radius.circular(24),
-                        color: hasPhoto ? kSuccess : kDarkTextHint,
-                        dashPattern: const [8, 4],
-                        strokeWidth: 2,
-                      ),
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              hasPhoto ? Icons.check_circle : Icons.camera_alt,
+                  ),
+                  child: DottedBorder(
+                    options: RoundedRectDottedBorderOptions(
+                      radius: const Radius.circular(24),
+                      color: hasPhoto ? kSuccess : kDarkTextHint,
+                      dashPattern: const [8, 4],
+                      strokeWidth: 2,
+                    ),
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            hasPhoto ? Icons.check_circle : Icons.camera_alt,
+                            color: hasPhoto ? kSuccess : kPrimaryBlue,
+                            size: 24,
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            hasPhoto
+                                ? 'Profile photo uploaded ✓'
+                                : 'upload_profile_photo'.tr,
+                            style: GoogleFonts.outfit(
+                              fontSize: 11,
                               color: hasPhoto ? kSuccess : kPrimaryBlue,
-                              size: 24,
+                              fontWeight: hasPhoto ? FontWeight.w600 : null,
                             ),
-                            const SizedBox(height: 4),
-                            Text(
-                              hasPhoto
-                                  ? 'Profile photo uploaded ✓'
-                                  : 'upload_profile_photo'.tr,
-                              style: GoogleFonts.outfit(
-                                fontSize: 11,
-                                color: hasPhoto ? kSuccess : kPrimaryBlue,
-                                fontWeight: hasPhoto ? FontWeight.w600 : null,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ],
-                        ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ],
                       ),
                     ),
-                  );
-                },
-              ),
+                  ),
+                );
+              }),
             ),
           ),
           const SizedBox(height: 20),
@@ -333,20 +329,18 @@ class _Step2Expertise extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          Obx(
-            () => Wrap(
-              spacing: 8,
-              runSpacing: 8,
-              children: controller.allPracticeAreas
-                  .map(
-                    (area) => AppTagChip(
-                      label: area.tr,
-                      isSelected: controller.practiceAreas.contains(area),
-                      onTap: () => controller.togglePracticeArea(area),
-                    ),
-                  )
-                  .toList(),
-            ),
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: controller.allPracticeAreas
+                .map(
+                  (area) => AppTagChip(
+                    label: area.tr,
+                    isSelected: controller.practiceAreas.contains(area),
+                    onTap: () => controller.togglePracticeArea(area),
+                  ),
+                )
+                .toList(),
           ),
           const SizedBox(height: 28),
           AppButton(label: 'next'.tr, onPressed: controller.nextStep),
@@ -401,8 +395,8 @@ class _Step3Documents extends StatelessWidget {
               isUploaded: controller.barLicensePath.value.isNotEmpty,
               onTap: () => controller.barLicensePath.value =
                   controller.barLicensePath.value.isEmpty
-                      ? 'dummy_license.pdf'
-                      : '',
+                  ? 'dummy_license.pdf'
+                  : '',
               isDark: isDark,
               primaryText: primaryText,
               secondaryText: secondaryText,
@@ -414,9 +408,7 @@ class _Step3Documents extends StatelessWidget {
               label: 'national_id'.tr,
               isUploaded: controller.nidPath.value.isNotEmpty,
               onTap: () => controller.nidPath.value =
-                  controller.nidPath.value.isEmpty
-                      ? 'dummy_nid.pdf'
-                      : '',
+                  controller.nidPath.value.isEmpty ? 'dummy_nid.pdf' : '',
               isDark: isDark,
               primaryText: primaryText,
               secondaryText: secondaryText,
@@ -428,9 +420,7 @@ class _Step3Documents extends StatelessWidget {
               label: 'professional_photo'.tr,
               isUploaded: controller.photoPath.value.isNotEmpty,
               onTap: () => controller.photoPath.value =
-                  controller.photoPath.value.isEmpty
-                      ? 'dummy_profile.jpg'
-                      : '',
+                  controller.photoPath.value.isEmpty ? 'dummy_profile.jpg' : '',
               isDark: isDark,
               primaryText: primaryText,
               secondaryText: secondaryText,
