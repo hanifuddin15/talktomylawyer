@@ -23,3 +23,7 @@ password: 12345678
 //============for lawyer =========//
 email: han.lawyer@app.com,
 password: 12345678
+{
+"email": "janelawyer@example.com",
+"password": "securelawyer123"
+}

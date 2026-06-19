@@ -4,31 +4,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:talktomylawyer/app/core/constants/app_colors.dart';
 import 'package:talktomylawyer/app/core/widgets/app_button.dart';
 import 'package:talktomylawyer/app/core/widgets/app_tag_chip.dart';
+import 'package:talktomylawyer/app/modules/lawyer_dashboard/controllers/lawyer_schedule_controller.dart';
 
-class LawyerScheduleTab extends StatefulWidget {
+class LawyerScheduleTab extends GetView<LawyerScheduleController> {
   const LawyerScheduleTab({super.key});
-
-  @override
-  State<LawyerScheduleTab> createState() => _LawyerScheduleTabState();
-}
-
-class _LawyerScheduleTabState extends State<LawyerScheduleTab> {
-  final List<String> _days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  final List<int> _selectedDays = [0, 1, 2, 3, 4]; // Mon-Fri
-
-  final List<String> _timeSlots = [
-    '9:00 AM',
-    '10:00 AM',
-    '11:00 AM',
-    '12:00 PM',
-    '2:00 PM',
-    '3:00 PM',
-    '4:00 PM',
-    '5:00 PM',
-  ];
-  final List<int> _selectedSlots = [0, 1, 4, 5];
-
-  int _selectedCalDay = 9;
 
   @override
   Widget build(BuildContext context) {
@@ -75,26 +54,20 @@ class _LawyerScheduleTabState extends State<LawyerScheduleTab> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    Wrap(
+                    Obx(() => Wrap(
                       spacing: 8,
-                      children: _days
+                      children: controller.days
                           .asMap()
                           .entries
                           .map(
                             (e) => AppTagChip(
                               label: e.value,
-                              isSelected: _selectedDays.contains(e.key),
-                              onTap: () => setState(() {
-                                if (_selectedDays.contains(e.key)) {
-                                  _selectedDays.remove(e.key);
-                                } else {
-                                  _selectedDays.add(e.key);
-                                }
-                              }),
+                              isSelected: controller.selectedDays.contains(e.key),
+                              onTap: () => controller.toggleDay(e.key),
                             ),
                           )
                           .toList(),
-                    ),
+                    )),
                   ],
                 ),
               ),
@@ -148,16 +121,16 @@ class _LawyerScheduleTabState extends State<LawyerScheduleTab> {
                     ),
                     const SizedBox(height: 8),
                     // Day numbers (simplified)
-                    GridView.count(
+                    Obx(() => GridView.count(
                       crossAxisCount: 7,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
                       childAspectRatio: 1.1,
                       children: List.generate(30, (i) {
                         final day = i + 1;
-                        final isSelected = _selectedCalDay == day;
+                        final isSelected = controller.selectedCalDay.value == day;
                         return GestureDetector(
-                          onTap: () => setState(() => _selectedCalDay = day),
+                          onTap: () => controller.selectedCalDay.value = day,
                           child: Container(
                             margin: const EdgeInsets.all(2),
                             decoration: BoxDecoration(
@@ -180,7 +153,7 @@ class _LawyerScheduleTabState extends State<LawyerScheduleTab> {
                           ),
                         );
                       }),
-                    ),
+                    )),
                   ],
                 ),
               ),
@@ -205,27 +178,21 @@ class _LawyerScheduleTabState extends State<LawyerScheduleTab> {
                       ),
                     ),
                     const SizedBox(height: 12),
-                    Wrap(
+                    Obx(() => Wrap(
                       spacing: 8,
                       runSpacing: 8,
-                      children: _timeSlots
+                      children: controller.timeSlots
                           .asMap()
                           .entries
                           .map(
                             (e) => AppTagChip(
                               label: e.value,
-                              isSelected: _selectedSlots.contains(e.key),
-                              onTap: () => setState(() {
-                                if (_selectedSlots.contains(e.key)) {
-                                  _selectedSlots.remove(e.key);
-                                } else {
-                                  _selectedSlots.add(e.key);
-                                }
-                              }),
+                              isSelected: controller.selectedSlots.contains(e.key),
+                              onTap: () => controller.toggleSlot(e.key),
                             ),
                           )
                           .toList(),
-                    ),
+                    )),
                   ],
                 ),
               ),

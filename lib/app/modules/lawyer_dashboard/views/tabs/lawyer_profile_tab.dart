@@ -6,24 +6,10 @@ import 'package:talktomylawyer/app/core/widgets/app_avatar.dart';
 import 'package:talktomylawyer/app/core/widgets/app_button.dart';
 import 'package:talktomylawyer/app/core/widgets/app_tag_chip.dart';
 import 'package:talktomylawyer/app/core/widgets/app_text_field.dart';
+import 'package:talktomylawyer/app/modules/lawyer_dashboard/controllers/lawyer_profile_controller.dart';
 
-class LawyerProfileTab extends StatefulWidget {
+class LawyerProfileTab extends GetView<LawyerProfileController> {
   const LawyerProfileTab({super.key});
-
-  @override
-  State<LawyerProfileTab> createState() => _LawyerProfileTabState();
-}
-
-class _LawyerProfileTabState extends State<LawyerProfileTab> {
-  final List<String> _allAreas = [
-    'criminal_law',
-    'family_law',
-    'corporate_law',
-    'civil_law',
-    'property_law',
-    'labour_law',
-  ];
-  final List<String> _selected = ['criminal_law', 'corporate_law'];
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +17,11 @@ class _LawyerProfileTabState extends State<LawyerProfileTab> {
     final bg = isDark ? kDarkBg : kLightBg;
     final cardColor = isDark ? kDarkCard : kLightCard;
     final primaryText = isDark ? kDarkTextPrimary : kLightTextPrimary;
-    // final secondaryText = isDark ? kDarkTextSecondary : kLightTextSecondary;
+
+    final name = controller.lawyerModel.name ?? 'Rahman Khan';
+    final initials = name.isNotEmpty
+        ? name.trim().split(' ').map((e) => e.isNotEmpty ? e.substring(0, 1) : '').join().toUpperCase()
+        : 'L';
 
     return Scaffold(
       backgroundColor: bg,
@@ -62,7 +52,7 @@ class _LawyerProfileTabState extends State<LawyerProfileTab> {
                 child: Column(
                   children: [
                     AppAvatar(
-                      initials: 'RK',
+                      initials: initials,
                       radius: 44,
                       showEditButton: true,
                       onEditTap: () {},
@@ -95,7 +85,7 @@ class _LawyerProfileTabState extends State<LawyerProfileTab> {
                       label: 'full_name'.tr,
                       hint: 'Rahman Khan',
                       prefixIcon: Icons.person_outline,
-                      controller: TextEditingController(text: 'Rahman Khan'),
+                      controller: controller.nameController,
                     ),
                     const SizedBox(height: 14),
                     AppTextField(
@@ -103,17 +93,14 @@ class _LawyerProfileTabState extends State<LawyerProfileTab> {
                       hint: '2500',
                       prefixIcon: Icons.attach_money_rounded,
                       keyboardType: TextInputType.number,
-                      controller: TextEditingController(text: '2500'),
+                      controller: controller.rateController,
                     ),
                     const SizedBox(height: 14),
                     AppTextField(
                       label: 'professional_bio'.tr,
                       hint: 'Write a short bio...',
                       maxLines: 4,
-                      controller: TextEditingController(
-                        text:
-                            'Experienced corporate and criminal lawyer with 12+ years of practice in Dhaka High Court.',
-                      ),
+                      controller: controller.bioController,
                     ),
                     const SizedBox(height: 14),
                     Text(
@@ -125,25 +112,19 @@ class _LawyerProfileTabState extends State<LawyerProfileTab> {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    Wrap(
+                    Obx(() => Wrap(
                       spacing: 8,
                       runSpacing: 8,
-                      children: _allAreas
+                      children: controller.allAreas
                           .map(
                             (a) => AppTagChip(
                               label: a.tr,
-                              isSelected: _selected.contains(a),
-                              onTap: () => setState(() {
-                                if (_selected.contains(a)) {
-                                  _selected.remove(a);
-                                } else {
-                                  _selected.add(a);
-                                }
-                              }),
+                              isSelected: controller.selectedAreas.contains(a),
+                              onTap: () => controller.toggleArea(a),
                             ),
                           )
                           .toList(),
-                    ),
+                    )),
                   ],
                 ),
               ),

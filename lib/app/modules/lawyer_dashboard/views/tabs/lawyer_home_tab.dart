@@ -5,7 +5,9 @@ import 'package:talktomylawyer/app/core/constants/app_colors.dart';
 import 'package:talktomylawyer/app/core/widgets/app_analytics_card.dart';
 import 'package:talktomylawyer/app/core/widgets/app_section_header.dart';
 
-class LawyerHomeTab extends StatelessWidget {
+import 'package:talktomylawyer/app/modules/lawyer_dashboard/controllers/lawyer_home_controller.dart';
+
+class LawyerHomeTab extends GetView<LawyerHomeController> {
   const LawyerHomeTab({super.key});
 
   @override
@@ -40,7 +42,7 @@ class LawyerHomeTab extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            'Adv. Rahman Khan',
+                            controller.lawyerModel.name ?? 'Adv. Rahman Khan',
                             style: GoogleFonts.outfit(
                               fontSize: 14,
                               color: secondaryText,
@@ -155,46 +157,64 @@ class LawyerHomeTab extends StatelessWidget {
                 child: AppSectionHeader(title: 'analytics_overview'.tr),
               ),
             ),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 1.1,
-                  children: [
-                    AppAnalyticsCard(
-                      icon: Icons.visibility_outlined,
-                      value: '248',
-                      label: 'profile_views'.tr,
-                      growth: '+12% this month',
+            Obx(() {
+              if (controller.isOverviewLoading.value) {
+                return const SliverToBoxAdapter(
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.symmetric(vertical: 40.0),
+                      child: CircularProgressIndicator(),
                     ),
-                    AppAnalyticsCard(
-                      icon: Icons.people_outline,
-                      value: '18',
-                      label: 'leads_this_month'.tr,
-                      growth: '+5 vs last month',
-                    ),
-                    AppAnalyticsCard(
-                      icon: Icons.handshake_outlined,
-                      value: '7',
-                      label: 'consultations'.tr,
-                      growth: '+2 this week',
-                    ),
-                    AppAnalyticsCard(
-                      icon: Icons.star_outline_rounded,
-                      value: '4.9',
-                      label: 'avg_rating'.tr,
-                      growth: 'From 128 reviews',
-                      isPositive: true,
-                    ),
-                  ],
+                  ),
+                );
+              }
+
+              final profileView = controller.overviewData['profile_view']?.toString() ?? '0';
+              final leadOfThisMonth = controller.overviewData['lead_of_this_month']?.toString() ?? '0';
+              final consultation = controller.overviewData['consultation']?.toString() ?? '0';
+              final rating = controller.overviewData['rating']?.toString() ?? '0';
+
+              return SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
+                  child: GridView.count(
+                    crossAxisCount: 2,
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    childAspectRatio: 1.1,
+                    children: [
+                      AppAnalyticsCard(
+                        icon: Icons.visibility_outlined,
+                        value: profileView,
+                        label: 'profile_views'.tr,
+                        growth: '+12% this month',
+                      ),
+                      AppAnalyticsCard(
+                        icon: Icons.people_outline,
+                        value: leadOfThisMonth,
+                        label: 'leads_this_month'.tr,
+                        growth: '+5 vs last month',
+                      ),
+                      AppAnalyticsCard(
+                        icon: Icons.handshake_outlined,
+                        value: consultation,
+                        label: 'consultations'.tr,
+                        growth: '+2 this week',
+                      ),
+                      AppAnalyticsCard(
+                        icon: Icons.star_outline_rounded,
+                        value: rating,
+                        label: 'avg_rating'.tr,
+                        growth: 'From 128 reviews',
+                        isPositive: true,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
+              );
+            }),
 
             // ── Recent Leads ──
             SliverToBoxAdapter(

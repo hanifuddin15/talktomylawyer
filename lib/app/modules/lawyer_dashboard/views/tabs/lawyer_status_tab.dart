@@ -5,7 +5,9 @@ import 'package:talktomylawyer/app/core/constants/app_colors.dart';
 import 'package:talktomylawyer/app/core/widgets/app_section_header.dart';
 import 'package:talktomylawyer/app/core/widgets/app_timeline_item.dart';
 
-class LawyerStatusTab extends StatelessWidget {
+import 'package:talktomylawyer/app/modules/lawyer_dashboard/controllers/lawyer_status_controller.dart';
+
+class LawyerStatusTab extends GetView<LawyerStatusController> {
   const LawyerStatusTab({super.key});
 
   @override

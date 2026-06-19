@@ -313,4 +313,16 @@ class LawyerAuthRepository {
     }
     return [];
   }
+
+  Future<Map<String, dynamic>?> getLawyerDashboardOverview() async {
+    final ApiResponse response = await _apiCommunication.doGetRequest(
+      apiEndPoint: 'lawyer-dashboard',
+      responseDataKey: 'data',
+      enableLoading: false,
+    );
+    if (response.isSuccessful && response.data != null) {
+      return response.data as Map<String, dynamic>;
+    }
+    return null;
+  }
 }
