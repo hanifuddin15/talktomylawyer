@@ -299,30 +299,4 @@ class LawyerAuthRepository {
     return response.isSuccessful;
   }
 
-  Future<List<CategoryModel>> getCategories() async {
-    final ApiResponse response = await _apiCommunication.doGetRequest(
-      apiEndPoint: 'categories',
-      responseDataKey: 'data',
-      enableLoading: false,
-    );
-    if (response.isSuccessful && response.data != null) {
-      final List<dynamic> list = response.data as List<dynamic>;
-      return list
-          .map((item) => CategoryModel.fromMap(item as Map<String, dynamic>))
-          .toList();
-    }
-    return [];
-  }
-
-  Future<Map<String, dynamic>?> getLawyerDashboardOverview() async {
-    final ApiResponse response = await _apiCommunication.doGetRequest(
-      apiEndPoint: 'lawyer-dashboard',
-      responseDataKey: 'data',
-      enableLoading: false,
-    );
-    if (response.isSuccessful && response.data != null) {
-      return response.data as Map<String, dynamic>;
-    }
-    return null;
-  }
 }

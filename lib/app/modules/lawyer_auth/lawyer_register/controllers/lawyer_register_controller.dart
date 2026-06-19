@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:talktomylawyer/app/models/lawyers_models/law_categories_model.dart';
 import 'package:talktomylawyer/app/routes/app_pages.dart';
 import 'package:talktomylawyer/app/repository/lawyer-auth-repository.dart';
+import 'package:talktomylawyer/app/repository/lawyer_dashboard_repository.dart';
 
 class LawyerRegisterController extends GetxController {
   final RxInt step = 0.obs; // 0=Profile, 1=Expertise, 2=Documents, 3=Verify
@@ -72,7 +73,7 @@ class LawyerRegisterController extends GetxController {
   Future<void> fetchCategories() async {
     isCategoriesLoading.value = true;
     try {
-      final list = await LawyerAuthRepository.instance.getCategories();
+      final list = await LawyerDashboardRepository.instance.getCategories();
       categoriesList.assignAll(list);
     } catch (e) {
       // Handled

@@ -3,6 +3,7 @@ import 'package:talktomylawyer/app/models/client_models/client_user_model.dart';
 import 'package:talktomylawyer/app/models/lawyers_models/law_categories_model.dart';
 import 'package:talktomylawyer/app/models/lawyers_models/lawyer_user_model.dart';
 import 'package:talktomylawyer/app/repository/client_auth_repository.dart';
+import 'package:talktomylawyer/app/repository/client_home_repository.dart';
 
 class ClientDashboardController extends GetxController {
   final RxInt currentTab = 0.obs;
@@ -46,7 +47,7 @@ class ClientDashboardController extends GetxController {
   Future<void> fetchCategories() async {
     isCategoriesLoading.value = true;
     try {
-      final list = await ClientAuthRepository.instance.getCategories();
+      final list = await ClientHomeRepository.instance.getCategories();
       categoriesList.assignAll(list);
     } catch (e) {
       // Handled
@@ -58,7 +59,7 @@ class ClientDashboardController extends GetxController {
   Future<void> fetchLawyers() async {
     isLawyersLoading.value = true;
     try {
-      final list = await ClientAuthRepository.instance.getLawyers(
+      final list = await ClientHomeRepository.instance.getLawyers(
         categoryId: selectedCategoryId.value,
         address: filterAddress.value,
         experience: filterExperience.value,
@@ -75,7 +76,7 @@ class ClientDashboardController extends GetxController {
   Future<void> fetchFeaturedLawyers() async {
     isFeaturedLawyersLoading.value = true;
     try {
-      final list = await ClientAuthRepository.instance.getLawyers();
+      final list = await ClientHomeRepository.instance.getLawyers();
       featuredLawyersList.assignAll(list);
     } catch (e) {
       // Handled

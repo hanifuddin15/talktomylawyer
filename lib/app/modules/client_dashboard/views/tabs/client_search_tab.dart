@@ -7,6 +7,7 @@ import 'package:talktomylawyer/app/core/widgets/app_tag_chip.dart';
 import 'package:talktomylawyer/app/core/widgets/input_fields/app_search_field.dart';
 import 'package:talktomylawyer/app/core/config/api_constant.dart';
 import 'package:skeletonizer/skeletonizer.dart';
+import 'package:talktomylawyer/app/routes/app_pages.dart';
 import 'package:talktomylawyer/app/modules/client_dashboard/controllers/client_search_controller.dart';
 
 class ClientSearchTab extends GetView<ClientSearchController> {
@@ -367,6 +368,10 @@ class ClientSearchTab extends GetView<ClientSearchController> {
                         rate: 2000,
                         avatarUrl: avatar,
                         initials: initials,
+                        onTap: () => Get.toNamed(
+                          Routes.lawyerDetails,
+                          arguments: lawyer.id,
+                        ),
                       );
                     },
                   );

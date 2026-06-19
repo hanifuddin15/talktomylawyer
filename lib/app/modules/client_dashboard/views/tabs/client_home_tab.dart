@@ -11,6 +11,7 @@ import '../../../../core/widgets/app_category_card.dart';
 import '../../../../core/widgets/app_lawyer_card.dart';
 import '../../../../core/widgets/app_section_header.dart';
 import '../../../client_subscription/checkout/views/checkout_view.dart';
+import 'package:talktomylawyer/app/routes/app_pages.dart';
 import '../../controllers/client_home_controller.dart';
 
 class ClientHomeTab extends GetView<ClientHomeController> {
@@ -384,6 +385,10 @@ class ClientHomeTab extends GetView<ClientHomeController> {
                           rate: 2000,
                           avatarUrl: avatar,
                           initials: initials,
+                          onTap: () => Get.toNamed(
+                            Routes.lawyerDetails,
+                            arguments: lawyer.id,
+                          ),
                         ),
                       );
                     },

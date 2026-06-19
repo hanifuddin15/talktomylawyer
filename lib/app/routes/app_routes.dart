@@ -16,6 +16,7 @@ abstract class Routes {
   // Client App
   static const clientDashboard = _Paths.clientDashboard;
   static const clientHome = _Paths.clientHome;
+  static const lawyerDetails = _Paths.lawyerDetails;
 
   // Lawyer Auth
   static const lawyerLogin = _Paths.lawyerLogin;
@@ -37,6 +38,7 @@ abstract class _Paths {
   static const clientRegister = '/client_register';
   static const clientDashboard = '/client_dashboard';
   static const clientHome = '/client_home';
+  static const lawyerDetails = '/lawyer_details';
 
   static const lawyerLogin = '/lawyer_login';
   static const lawyerRegister = '/lawyer_register';

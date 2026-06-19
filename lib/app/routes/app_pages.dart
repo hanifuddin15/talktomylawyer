@@ -27,6 +27,8 @@ import '../modules/lawyer_auth/lawyer_register/views/lawyer_register_view.dart';
 // Lawyer dashboard
 import '../modules/lawyer_dashboard/bindings/lawyer_dashboard_binding.dart';
 import '../modules/lawyer_dashboard/views/lawyer_dashboard_view.dart';
+import '../modules/lawyer_details/bindings/lawyer_details_binding.dart';
+import '../modules/lawyer_details/views/lawyer_details_view.dart';
 
 part 'app_routes.dart';
 
@@ -69,6 +71,13 @@ class AppPages {
       name: _Paths.clientDashboard,
       page: () => const ClientDashboardView(),
       binding: ClientDashboardBinding(),
+    ),
+
+    // Lawyer Details
+    GetPage(
+      name: _Paths.lawyerDetails,
+      page: () => const LawyerDetailsView(),
+      binding: LawyerDetailsBinding(),
     ),
 
     // Lawyer Auth

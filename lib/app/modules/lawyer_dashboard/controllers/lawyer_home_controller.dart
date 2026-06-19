@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:talktomylawyer/app/models/lawyers_models/lawyer_user_model.dart';
 import 'package:talktomylawyer/app/repository/lawyer-auth-repository.dart';
+import 'package:talktomylawyer/app/repository/lawyer_dashboard_repository.dart';
 
 class LawyerHomeController extends GetxController {
   final LawyerModel lawyerModel =
@@ -23,7 +24,7 @@ class LawyerHomeController extends GetxController {
   Future<void> fetchOverview() async {
     isOverviewLoading.value = true;
     try {
-      final data = await LawyerAuthRepository.instance.getLawyerDashboardOverview();
+      final data = await LawyerDashboardRepository.instance.getLawyerDashboardOverview();
       if (data != null) {
         overviewData.assignAll(data);
       }

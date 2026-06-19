@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:talktomylawyer/app/models/lawyers_models/law_categories_model.dart';
 import 'package:talktomylawyer/app/models/lawyers_models/lawyer_user_model.dart';
-import 'package:talktomylawyer/app/repository/client_auth_repository.dart';
+import 'package:talktomylawyer/app/repository/client_home_repository.dart';
 
 class ClientSearchController extends GetxController {
   // Search text controller
@@ -60,7 +60,7 @@ class ClientSearchController extends GetxController {
   Future<void> fetchCategories() async {
     isCategoriesLoading.value = true;
     try {
-      final list = await ClientAuthRepository.instance.getCategories();
+      final list = await ClientHomeRepository.instance.getCategories();
       categoriesList.assignAll(list);
     } catch (e) {
       // Handled
@@ -73,7 +73,7 @@ class ClientSearchController extends GetxController {
     isLawyersLoading.value = true;
     final query = search ?? searchQuery.value;
     try {
-      final list = await ClientAuthRepository.instance.getLawyers(
+      final list = await ClientHomeRepository.instance.getLawyers(
         categoryId: selectedCategoryId.value,
         address: filterAddress.value,
         experience: filterExperience.value,
