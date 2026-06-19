@@ -3,7 +3,9 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:talktomylawyer/app/core/constants/app_colors.dart';
 
-class ClientSavedTab extends StatelessWidget {
+import 'package:talktomylawyer/app/modules/client_dashboard/controllers/client_saved_controller.dart';
+
+class ClientSavedTab extends GetView<ClientSavedController> {
   const ClientSavedTab({super.key});
 
   @override

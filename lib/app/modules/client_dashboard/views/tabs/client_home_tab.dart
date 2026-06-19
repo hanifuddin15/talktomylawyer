@@ -9,9 +9,9 @@ import '../../../../core/widgets/app_category_card.dart';
 import '../../../../core/widgets/app_lawyer_card.dart';
 import '../../../../core/widgets/app_section_header.dart';
 import '../../../client_subscription/checkout/views/checkout_view.dart';
-import '../../controllers/client_dashboard_controller.dart';
+import '../../controllers/client_home_controller.dart';
 
-class ClientHomeTab extends StatelessWidget {
+class ClientHomeTab extends GetView<ClientHomeController> {
   const ClientHomeTab({super.key});
 
   String _greeting() {
@@ -23,7 +23,6 @@ class ClientHomeTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.find<ClientDashboardController>();
     final isDark = Theme.of(context).brightness == Brightness.dark;
     final bg = isDark ? kDarkBg : kLightBg;
     final primaryText = isDark ? kDarkTextPrimary : kLightTextPrimary;

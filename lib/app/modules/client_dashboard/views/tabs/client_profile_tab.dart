@@ -6,7 +6,9 @@ import '../../../../core/widgets/app_avatar.dart';
 import '../../../../core/widgets/app_settings_tile.dart';
 import '../../../client_subscription/checkout/views/checkout_view.dart';
 
-class ClientProfileTab extends StatelessWidget {
+import 'package:talktomylawyer/app/modules/client_dashboard/controllers/client_profile_controller.dart';
+
+class ClientProfileTab extends GetView<ClientProfileController> {
   const ClientProfileTab({super.key});
 
   @override
@@ -16,6 +18,12 @@ class ClientProfileTab extends StatelessWidget {
     final cardColor = isDark ? kDarkCard : kLightCard;
     final primaryText = isDark ? kDarkTextPrimary : kLightTextPrimary;
     final secondaryText = isDark ? kDarkTextSecondary : kLightTextSecondary;
+
+    final name = controller.clientModel.name ?? 'User Name';
+    final email = controller.clientModel.email ?? 'user@email.com';
+    final initials = name.isNotEmpty
+        ? name.trim().split(' ').map((e) => e.isNotEmpty ? e.substring(0, 1) : '').join().toUpperCase()
+        : 'U';
 
     return Scaffold(
       backgroundColor: bg,
@@ -35,14 +43,14 @@ class ClientProfileTab extends StatelessWidget {
                 child: Column(
                   children: [
                     AppAvatar(
-                      initials: 'U',
+                      initials: initials,
                       radius: 40,
                       showEditButton: true,
                       onEditTap: () {},
                     ),
                     const SizedBox(height: 12),
                     Text(
-                      'User Name',
+                      name,
                       style: GoogleFonts.outfit(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
@@ -51,7 +59,7 @@ class ClientProfileTab extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'user@email.com',
+                      email,
                       style: GoogleFonts.outfit(
                         fontSize: 13,
                         color: secondaryText,

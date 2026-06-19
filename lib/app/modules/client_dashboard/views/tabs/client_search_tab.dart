@@ -6,27 +6,10 @@ import 'package:talktomylawyer/app/core/widgets/app_lawyer_card.dart';
 import 'package:talktomylawyer/app/core/widgets/app_tag_chip.dart';
 import 'package:talktomylawyer/app/core/widgets/input_fields/app_search_field.dart';
 import 'package:talktomylawyer/app/core/config/api_constant.dart';
-import 'package:talktomylawyer/app/modules/client_dashboard/controllers/client_dashboard_controller.dart';
+import 'package:talktomylawyer/app/modules/client_dashboard/controllers/client_search_controller.dart';
 
-class ClientSearchTab extends StatefulWidget {
+class ClientSearchTab extends GetView<ClientSearchController> {
   const ClientSearchTab({super.key});
-
-  @override
-  State<ClientSearchTab> createState() => _ClientSearchTabState();
-}
-
-class _ClientSearchTabState extends State<ClientSearchTab> {
-  late final ClientDashboardController controller;
-  late final TextEditingController _searchTextController;
-  bool _showFilter = false;
-
-  // Filter state
-  int? _selectedLocation;
-  int? _selectedPracticeArea;
-  int? _selectedExperience;
-  int? _selectedLanguage;
-  int? _selectedConsultation;
-  bool _verifiedOnly = false;
 
   final List<String> _locations = const [
     'Dhaka',
@@ -57,53 +40,6 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
     'In-person',
   ];
 
-  @override
-  void initState() {
-    super.initState();
-    controller = Get.find<ClientDashboardController>();
-    _searchTextController = TextEditingController(text: controller.searchQuery.value);
-
-    // Sync UI states with current controller values if they exist
-    if (controller.selectedCategoryId.value != null) {
-      final idx = controller.categoriesList.indexWhere(
-        (c) => c.id == controller.selectedCategoryId.value,
-      );
-      if (idx != -1) {
-        _selectedPracticeArea = idx;
-      }
-    }
-    if (controller.filterAddress.value != null) {
-      final idx = _locations.indexOf(controller.filterAddress.value!);
-      if (idx != -1) {
-        _selectedLocation = idx;
-      }
-    }
-    if (controller.filterLanguage.value != null) {
-      final idx = _languages.indexOf(controller.filterLanguage.value!);
-      if (idx != -1) {
-        _selectedLanguage = idx;
-      }
-    }
-    if (controller.filterExperience.value != null) {
-      final expVal = controller.filterExperience.value;
-      if (expVal == 5) {
-        _selectedExperience = 0;
-      } else if (expVal == 10) {
-        _selectedExperience = 1;
-      } else if (expVal == 15) {
-        _selectedExperience = 2;
-      } else if (expVal == 20) {
-        _selectedExperience = 3;
-      }
-    }
-  }
-
-  @override
-  void dispose() {
-    _searchTextController.dispose();
-    super.dispose();
-  }
-
   int? _mapExperienceToYears(int index) {
     switch (index) {
       case 0:
@@ -117,17 +53,6 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
       default:
         return null;
     }
-  }
-
-  void _resetLocalFilters() {
-    setState(() {
-      _selectedLocation = null;
-      _selectedPracticeArea = null;
-      _selectedExperience = null;
-      _selectedLanguage = null;
-      _selectedConsultation = null;
-      _verifiedOnly = false;
-    });
   }
 
   Widget _buildSectionTitle(String title, Color color) {
@@ -203,7 +128,7 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
                               primaryText: primaryText,
                               secondaryText: secondaryText,
                               cardColor: cardColor,
-                              controller: _searchTextController,
+                              controller: controller.searchTextController,
                               onChanged: (val) {
                                 controller.searchQuery.value = val;
                               },
@@ -216,15 +141,12 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
                   const SizedBox(width: 10),
                   GestureDetector(
                     onTap: () {
-                      setState(() => _showFilter = !_showFilter);
-                      if (_showFilter) {
-                        _showFilterSheet(
-                          context,
-                          isDark,
-                          primaryText,
-                          secondaryText,
-                        );
-                      }
+                      _showFilterSheet(
+                        context,
+                        isDark,
+                        primaryText,
+                        secondaryText,
+                      );
                     },
                     child: Container(
                       width: 52,
@@ -267,15 +189,11 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
                         onTap: () {
                           if (isAll) {
                             controller.updateCategoryFilter(null);
-                            setState(() {
-                              _selectedPracticeArea = null;
-                            });
+                            controller.selectedPracticeAreaIndex.value = null;
                           } else {
                             final catId = cats[i - 1].id;
                             controller.updateCategoryFilter(catId);
-                            setState(() {
-                              _selectedPracticeArea = i - 1;
-                            });
+                            controller.selectedPracticeAreaIndex.value = i - 1;
                           }
                         },
                       ),
@@ -440,13 +358,13 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
   ) {
     final sheetBg = isDark ? kDarkSurface : kLightSurface;
 
-    // Temporary local state for bottom sheet selections
-    int? tempLocation = _selectedLocation;
-    int? tempPracticeArea = _selectedPracticeArea;
-    int? tempExperience = _selectedExperience;
-    int? tempLanguage = _selectedLanguage;
-    int? tempConsultation = _selectedConsultation;
-    bool tempVerifiedOnly = _verifiedOnly;
+    // Temporary local state for bottom sheet selections from the controller
+    int? tempLocation = controller.selectedLocationIndex.value;
+    int? tempPracticeArea = controller.selectedPracticeAreaIndex.value;
+    int? tempExperience = controller.selectedExperienceIndex.value;
+    int? tempLanguage = controller.selectedLanguageIndex.value;
+    int? tempConsultation = controller.selectedConsultationIndex.value;
+    bool tempVerifiedOnly = controller.verifiedOnly.value;
 
     showModalBottomSheet(
       context: context,
@@ -469,7 +387,6 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        setState(() => _showFilter = false);
                         Navigator.pop(context);
                       },
                       child: Icon(
@@ -496,9 +413,7 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
                           tempConsultation = null;
                           tempVerifiedOnly = false;
                         });
-                        _resetLocalFilters();
                         controller.resetFilters();
-                        setState(() => _showFilter = false);
                         Navigator.pop(context);
                       },
                       child: Text(
@@ -638,15 +553,12 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
                   height: 52,
                   child: ElevatedButton(
                     onPressed: () {
-                      setState(() {
-                        _selectedLocation = tempLocation;
-                        _selectedPracticeArea = tempPracticeArea;
-                        _selectedExperience = tempExperience;
-                        _selectedLanguage = tempLanguage;
-                        _selectedConsultation = tempConsultation;
-                        _verifiedOnly = tempVerifiedOnly;
-                        _showFilter = false;
-                      });
+                      controller.selectedLocationIndex.value = tempLocation;
+                      controller.selectedPracticeAreaIndex.value = tempPracticeArea;
+                      controller.selectedExperienceIndex.value = tempExperience;
+                      controller.selectedLanguageIndex.value = tempLanguage;
+                      controller.selectedConsultationIndex.value = tempConsultation;
+                      controller.verifiedOnly.value = tempVerifiedOnly;
 
                       final address = tempLocation != null ? _locations[tempLocation!] : null;
                       final categoryId = tempPracticeArea != null ? controller.categoriesList[tempPracticeArea!].id : null;
