@@ -40,7 +40,7 @@ class AppStepIndicator extends StatelessWidget {
                         child: Text(
                           stepLabels[i],
                           style: GoogleFonts.outfit(
-                            fontSize: 12,
+                            fontSize: 10,
                             fontWeight: FontWeight.w500,
                             color: isActive ? kPrimaryBlue : kDarkTextHint,
                           ),

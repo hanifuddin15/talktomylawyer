@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -170,30 +171,42 @@ class _Step1Profile extends StatelessWidget {
             child: GestureDetector(
               onTap: () {},
               child: Container(
-                width: 90,
-                height: 90,
+                width: Get.width * 0.9,
+                height: Get.height * 0.2,
                 decoration: BoxDecoration(
                   color: isDark ? kDarkInputFill : kLightInputFill,
-                  shape: BoxShape.circle,
+                  borderRadius: BorderRadius.circular(24),
                   border: Border.all(
-                    color: kPrimaryBlue.withValues(alpha: 0.4),
+                    // color: kPrimaryBlue.withValues(alpha: 0.4),
                     width: 2,
                   ),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    const Icon(Icons.camera_alt, color: kPrimaryBlue, size: 24),
-                    const SizedBox(height: 4),
-                    Text(
-                      'upload_profile_photo'.tr,
-                      style: GoogleFonts.outfit(
-                        fontSize: 9,
+                child: DottedBorder(
+                  options: RoundedRectDottedBorderOptions(
+                    radius: const Radius.circular(24),
+                    color: kDarkTextHint,
+                    dashPattern: [8, 4],
+                    strokeWidth: 2,
+                  ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.camera_alt,
                         color: kPrimaryBlue,
+                        size: 24,
                       ),
-                      textAlign: TextAlign.center,
-                    ),
-                  ],
+                      const SizedBox(height: 4),
+                      Text(
+                        'upload_profile_photo'.tr,
+                        style: GoogleFonts.outfit(
+                          fontSize: 9,
+                          color: kPrimaryBlue,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
