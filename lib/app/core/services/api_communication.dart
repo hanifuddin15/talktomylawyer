@@ -69,7 +69,7 @@ class ApiCommunication {
   }
 
   void updateHeader(String newToken) {
-    header = {'Accept': '*/*', 'Authorization': 'Bearer $newToken'};
+    header = {'Accept': 'application/json', 'Authorization': 'Bearer $newToken'};
   }
 
   Future<bool> isConnectedToInternet() async {
