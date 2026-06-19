@@ -21,23 +21,19 @@ void showSnackkbar({required String title, required String message}) {
       message,
       style: GoogleFonts.outfit(
         fontSize: 13,
-        color: Colors.white.withOpacity(0.95),
+        color: Colors.white.withValues(alpha: .95),
       ),
     ),
-    icon: const Icon(
-      Icons.info_outline_rounded,
-      color: Colors.white,
-      size: 26,
-    ),
+    icon: const Icon(Icons.info_outline_rounded, color: Colors.white, size: 26),
     shouldIconPulse: false,
     snackPosition: SnackPosition.BOTTOM,
-    backgroundColor: kPrimaryBlue.withOpacity(0.95),
+    backgroundColor: kPrimaryBlue.withValues(alpha: .95),
     margin: const EdgeInsets.all(16),
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
     borderRadius: 16,
     boxShadows: [
       BoxShadow(
-        color: kPrimaryBlue.withOpacity(0.3),
+        color: kPrimaryBlue.withValues(alpha: .3),
         blurRadius: 12,
         offset: const Offset(0, 6),
       ),
@@ -62,23 +58,19 @@ void showSuccessSnackkbar({String? title, required String message}) {
       message,
       style: GoogleFonts.outfit(
         fontSize: 13,
-        color: Colors.white.withOpacity(0.95),
+        color: Colors.white.withValues(alpha: .95),
       ),
     ),
-    icon: const Icon(
-      Icons.check_circle_rounded,
-      color: Colors.white,
-      size: 26,
-    ),
+    icon: const Icon(Icons.check_circle_rounded, color: Colors.white, size: 26),
     shouldIconPulse: false,
     snackPosition: SnackPosition.BOTTOM,
-    backgroundColor: kSuccess.withOpacity(0.95),
+    backgroundColor: kPrimaryBlueDark.withValues(alpha: .95),
     margin: const EdgeInsets.all(16),
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
     borderRadius: 16,
     boxShadows: [
       BoxShadow(
-        color: kSuccess.withOpacity(0.3),
+        color: kPrimaryBlueDark.withValues(alpha: .3),
         blurRadius: 12,
         offset: const Offset(0, 6),
       ),
@@ -103,7 +95,7 @@ void showWarningSnackkbar({String? title, required String message}) {
       message,
       style: GoogleFonts.outfit(
         fontSize: 13,
-        color: Colors.black.withOpacity(0.9),
+        color: Colors.black.withValues(alpha: .9),
       ),
     ),
     icon: const Icon(
@@ -113,13 +105,13 @@ void showWarningSnackkbar({String? title, required String message}) {
     ),
     shouldIconPulse: false,
     snackPosition: SnackPosition.BOTTOM,
-    backgroundColor: kWarning.withOpacity(0.95),
+    backgroundColor: kWarning.withValues(alpha: .95),
     margin: const EdgeInsets.all(16),
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
     borderRadius: 16,
     boxShadows: [
       BoxShadow(
-        color: kWarning.withOpacity(0.3),
+        color: kWarning.withValues(alpha: .3),
         blurRadius: 12,
         offset: const Offset(0, 6),
       ),
@@ -144,7 +136,7 @@ void showErrorSnackkbar({String? title, required String message}) {
       message,
       style: GoogleFonts.outfit(
         fontSize: 13,
-        color: Colors.white.withOpacity(0.95),
+        color: Colors.white.withValues(alpha: .95),
       ),
     ),
     icon: const Icon(
@@ -154,13 +146,13 @@ void showErrorSnackkbar({String? title, required String message}) {
     ),
     shouldIconPulse: false,
     snackPosition: SnackPosition.BOTTOM,
-    backgroundColor: kError.withOpacity(0.95),
+    backgroundColor: kError.withValues(alpha: .95),
     margin: const EdgeInsets.all(16),
     padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
     borderRadius: 16,
     boxShadows: [
       BoxShadow(
-        color: kError.withOpacity(0.3),
+        color: kError.withValues(alpha: .3),
         blurRadius: 12,
         offset: const Offset(0, 6),
       ),

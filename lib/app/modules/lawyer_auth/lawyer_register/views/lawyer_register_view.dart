@@ -170,32 +170,104 @@ class _Step1Profile extends StatelessWidget {
           const SizedBox(height: 20),
           // Upload photo
           Center(
-            child: GestureDetector(
-              onTap: () => _showPickerBottomSheet(
-                context: context,
-                title: 'upload_profile_photo'.tr,
-                allowPdf: false,
-                onFilePicked: (file) {
-                  controller.photoPath.value = file.path;
-                },
-              ),
-              child: Obx(() {
-                final hasPhoto = controller.photoPath.value.isNotEmpty;
+            child: Obx(() {
+              final hasPhoto = controller.photoPath.value.isNotEmpty;
+              if (hasPhoto) {
                 return Container(
                   width: Get.width * 0.9,
                   height: Get.height * 0.2,
                   decoration: BoxDecoration(
                     color: isDark ? kDarkInputFill : kLightInputFill,
                     borderRadius: BorderRadius.circular(24),
-                    border: Border.all(
-                      color: hasPhoto ? kSuccess : Colors.transparent,
-                      width: 2,
-                    ),
+                  ),
+                  child: Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(24),
+                        child: SizedBox(
+                          width: double.infinity,
+                          height: double.infinity,
+                          child: Image.file(
+                            File(controller.photoPath.value),
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return const Center(child: Icon(Icons.broken_image, size: 40));
+                            },
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(24),
+                          gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [
+                              Colors.black.withOpacity(0.6),
+                              Colors.transparent,
+                            ],
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        bottom: 12,
+                        left: 16,
+                        right: 16,
+                        child: Text(
+                          'Profile photo uploaded ✓',
+                          style: GoogleFonts.outfit(
+                            fontSize: 12,
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      Positioned(
+                        top: 12,
+                        right: 12,
+                        child: GestureDetector(
+                          onTap: () {
+                            controller.photoPath.value = '';
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: const BoxDecoration(
+                              color: Colors.black54,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.close,
+                              color: Colors.white,
+                              size: 18,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return GestureDetector(
+                onTap: () => _showPickerBottomSheet(
+                  context: context,
+                  title: 'upload_profile_photo'.tr,
+                  allowPdf: false,
+                  onFilePicked: (file) {
+                    controller.photoPath.value = file.path;
+                  },
+                ),
+                child: Container(
+                  width: Get.width * 0.9,
+                  height: Get.height * 0.2,
+                  decoration: BoxDecoration(
+                    color: isDark ? kDarkInputFill : kLightInputFill,
+                    borderRadius: BorderRadius.circular(24),
                   ),
                   child: DottedBorder(
                     options: RoundedRectDottedBorderOptions(
                       radius: const Radius.circular(24),
-                      color: hasPhoto ? kSuccess : kDarkTextHint,
+                      color: kDarkTextHint,
                       dashPattern: const [8, 4],
                       strokeWidth: 2,
                     ),
@@ -203,20 +275,17 @@ class _Step1Profile extends StatelessWidget {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(
-                            hasPhoto ? Icons.check_circle : Icons.camera_alt,
-                            color: hasPhoto ? kSuccess : kPrimaryBlue,
+                          const Icon(
+                            Icons.camera_alt,
+                            color: kPrimaryBlue,
                             size: 24,
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            hasPhoto
-                                ? 'Profile photo uploaded ✓'
-                                : 'upload_profile_photo'.tr,
+                            'upload_profile_photo'.tr,
                             style: GoogleFonts.outfit(
                               fontSize: 11,
-                              color: hasPhoto ? kSuccess : kPrimaryBlue,
-                              fontWeight: hasPhoto ? FontWeight.w600 : null,
+                              color: kPrimaryBlue,
                             ),
                             textAlign: TextAlign.center,
                           ),
@@ -224,9 +293,9 @@ class _Step1Profile extends StatelessWidget {
                       ),
                     ),
                   ),
-                );
-              }),
-            ),
+                ),
+              );
+            }),
           ),
           const SizedBox(height: 20),
           AppTextField(
@@ -422,7 +491,7 @@ class _Step3Documents extends StatelessWidget {
           Obx(
             () => _DocumentUploadTile(
               label: 'bar_license'.tr,
-              isUploaded: controller.barLicensePath.value.isNotEmpty,
+              filePath: controller.barLicensePath.value,
               onTap: () => _showPickerBottomSheet(
                 context: context,
                 title: 'bar_license'.tr,
@@ -431,6 +500,7 @@ class _Step3Documents extends StatelessWidget {
                   controller.barLicensePath.value = file.path;
                 },
               ),
+              onRemove: () => controller.barLicensePath.value = '',
               isDark: isDark,
               primaryText: primaryText,
               secondaryText: secondaryText,
@@ -440,7 +510,7 @@ class _Step3Documents extends StatelessWidget {
           Obx(
             () => _DocumentUploadTile(
               label: 'national_id'.tr,
-              isUploaded: controller.nidPath.value.isNotEmpty,
+              filePath: controller.nidPath.value,
               onTap: () => _showPickerBottomSheet(
                 context: context,
                 title: 'national_id'.tr,
@@ -449,6 +519,7 @@ class _Step3Documents extends StatelessWidget {
                   controller.nidPath.value = file.path;
                 },
               ),
+              onRemove: () => controller.nidPath.value = '',
               isDark: isDark,
               primaryText: primaryText,
               secondaryText: secondaryText,
@@ -458,7 +529,7 @@ class _Step3Documents extends StatelessWidget {
           Obx(
             () => _DocumentUploadTile(
               label: 'professional_photo'.tr,
-              isUploaded: controller.photoPath.value.isNotEmpty,
+              filePath: controller.photoPath.value,
               onTap: () => _showPickerBottomSheet(
                 context: context,
                 title: 'professional_photo'.tr,
@@ -467,6 +538,7 @@ class _Step3Documents extends StatelessWidget {
                   controller.photoPath.value = file.path;
                 },
               ),
+              onRemove: () => controller.photoPath.value = '',
               isDark: isDark,
               primaryText: primaryText,
               secondaryText: secondaryText,
@@ -484,15 +556,17 @@ class _Step3Documents extends StatelessWidget {
 class _DocumentUploadTile extends StatelessWidget {
   const _DocumentUploadTile({
     required this.label,
-    required this.isUploaded,
+    required this.filePath,
     required this.onTap,
+    required this.onRemove,
     required this.isDark,
     required this.primaryText,
     required this.secondaryText,
   });
   final String label;
-  final bool isUploaded;
+  final String filePath;
   final VoidCallback onTap;
+  final VoidCallback onRemove;
   final bool isDark;
   final Color primaryText;
   final Color secondaryText;
@@ -500,6 +574,78 @@ class _DocumentUploadTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cardColor = isDark ? kDarkCard : kLightCard;
+    final isUploaded = filePath.isNotEmpty;
+
+    if (isUploaded) {
+      final isPdf = filePath.toLowerCase().endsWith('.pdf');
+      return Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(14),
+          border: Border.all(
+            color: kSuccess,
+            width: 1.5,
+          ),
+        ),
+        child: Row(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10),
+              child: Container(
+                width: 50,
+                height: 50,
+                color: isPdf ? kError.withOpacity(0.1) : Colors.transparent,
+                child: isPdf
+                    ? const Icon(
+                        Icons.picture_as_pdf,
+                        color: kError,
+                        size: 26,
+                      )
+                    : Image.file(
+                        File(filePath),
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return const Icon(Icons.broken_image, size: 20);
+                        },
+                      ),
+              ),
+            ),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: GoogleFonts.outfit(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: primaryText,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    filePath.split('/').last,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: GoogleFonts.outfit(
+                      fontSize: 11,
+                      color: secondaryText,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            IconButton(
+              icon: Icon(Icons.delete_outline, color: kError.withOpacity(0.8), size: 22),
+              onPressed: onRemove,
+            ),
+          ],
+        ),
+      );
+    }
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -508,9 +654,7 @@ class _DocumentUploadTile extends StatelessWidget {
           color: cardColor,
           borderRadius: BorderRadius.circular(14),
           border: Border.all(
-            color: isUploaded
-                ? kSuccess
-                : (isDark ? kDarkDivider : kLightDivider),
+            color: isDark ? kDarkDivider : kLightDivider,
             width: 1.5,
           ),
         ),
@@ -520,14 +664,12 @@ class _DocumentUploadTile extends StatelessWidget {
               width: 44,
               height: 44,
               decoration: BoxDecoration(
-                color: (isUploaded ? kSuccess : kPrimaryBlue).withValues(
-                  alpha: 0.15,
-                ),
+                color: kPrimaryBlue.withOpacity(0.15),
                 borderRadius: BorderRadius.circular(10),
               ),
-              child: Icon(
-                isUploaded ? Icons.check_circle_outline : Icons.upload_file,
-                color: isUploaded ? kSuccess : kPrimaryBlue,
+              child: const Icon(
+                Icons.upload_file,
+                color: kPrimaryBlue,
                 size: 22,
               ),
             ),
@@ -545,10 +687,10 @@ class _DocumentUploadTile extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    isUploaded ? 'File uploaded ✓' : 'tap_to_upload'.tr,
+                    'tap_to_upload'.tr,
                     style: GoogleFonts.outfit(
                       fontSize: 12,
-                      color: isUploaded ? kSuccess : secondaryText,
+                      color: secondaryText,
                     ),
                   ),
                 ],
