@@ -7,6 +7,7 @@ class CategoryModel {
   String? createdAt;
   String? updatedAt;
   PivotModel? pivot;
+  String? lawyersCount;
 
   CategoryModel({
     this.id,
@@ -17,6 +18,7 @@ class CategoryModel {
     this.createdAt,
     this.updatedAt,
     this.pivot,
+    this.lawyersCount,
   });
 
   factory CategoryModel.fromMap(Map<String, dynamic> map) {
@@ -31,6 +33,7 @@ class CategoryModel {
       pivot: map['pivot'] != null
           ? PivotModel.fromMap(map['pivot'] as Map<String, dynamic>)
           : null,
+      lawyersCount: map['lawyers_count'] as String?,
     );
   }
 
@@ -43,6 +46,7 @@ class CategoryModel {
       'status': status,
       'created_at': createdAt,
       'updated_at': updatedAt,
+      'lawyers_count': lawyersCount,
       'pivot': pivot?.toMap(),
     };
   }

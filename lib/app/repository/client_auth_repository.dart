@@ -2,6 +2,8 @@ import 'package:talktomylawyer/app/core/models/api_response.dart';
 import 'package:talktomylawyer/app/core/services/api_communication.dart';
 import 'package:talktomylawyer/app/core/services/caching_service.dart';
 import 'package:talktomylawyer/app/models/client_models/client_user_model.dart';
+import 'package:talktomylawyer/app/models/lawyers_models/law_categories_model.dart';
+import 'package:talktomylawyer/app/models/lawyers_models/lawyer_user_model.dart';
 import '../core/config/api_constant.dart';
 
 class ClientAuthRepository {
@@ -104,5 +106,48 @@ class ClientAuthRepository {
     await _cachingService.removeData('accessToken');
     await _cachingService.removeData('user_role');
     await _cachingService.removeData('client_user');
+  }
+
+  Future<List<CategoryModel>> getCategories() async {
+    final ApiResponse response = await _apiCommunication.doGetRequest(
+      apiEndPoint: 'categories',
+      responseDataKey: 'data',
+      enableLoading: false,
+    );
+    if (response.isSuccessful && response.data != null) {
+      final List<dynamic> list = response.data as List<dynamic>;
+      return list
+          .map((item) => CategoryModel.fromMap(item as Map<String, dynamic>))
+          .toList();
+    }
+    return [];
+  }
+
+  Future<List<LawyerModel>> getLawyers({
+    int? categoryId,
+    String? address,
+    int? experience,
+    String? language,
+  }) async {
+    final Map<String, dynamic> queryParams = {};
+    if (categoryId != null) queryParams['category_id'] = categoryId;
+    if (address != null && address.isNotEmpty) queryParams['address'] = address;
+    if (experience != null) queryParams['experience'] = experience;
+    if (language != null && language.isNotEmpty) queryParams['language'] = language;
+
+    final ApiResponse response = await _apiCommunication.doGetRequest(
+      apiEndPoint: 'lawyers',
+      queryParams: queryParams,
+      responseDataKey: 'lawyers',
+      enableLoading: false,
+    );
+
+    if (response.isSuccessful && response.data != null) {
+      final List<dynamic> list = response.data as List<dynamic>;
+      return list
+          .map((item) => LawyerModel.fromMap(item as Map<String, dynamic>))
+          .toList();
+    }
+    return [];
   }
 }

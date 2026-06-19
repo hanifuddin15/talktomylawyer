@@ -18,8 +18,8 @@ samples, guidance on mobile development, and a full API reference.
 Login credential
 //===========for client =============//
 email: client1@app.com,
-password: [PASSWORD]
+password: 12345678
 
 //============for lawyer =========//
 email: han.lawyer@app.com,
-password: [PASSWORD]
+password: 12345678

@@ -9,17 +9,21 @@ class AppSearchField extends StatelessWidget {
     required this.primaryText,
     required this.secondaryText,
     required this.cardColor,
+    this.controller,
+    this.onChanged,
   });
 
   final Color primaryText;
   final Color secondaryText;
   final Color cardColor;
+  final TextEditingController? controller;
+  final ValueChanged<String>? onChanged;
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      // readOnly: true,dsd
-      onTap: () {},
+      controller: controller,
+      onChanged: onChanged,
       style: GoogleFonts.outfit(fontSize: 14, color: primaryText),
       decoration: InputDecoration(
         hintText: 'search_hint'.tr,

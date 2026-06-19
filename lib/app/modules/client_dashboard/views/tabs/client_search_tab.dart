@@ -5,6 +5,8 @@ import 'package:talktomylawyer/app/core/constants/app_colors.dart';
 import 'package:talktomylawyer/app/core/widgets/app_lawyer_card.dart';
 import 'package:talktomylawyer/app/core/widgets/app_tag_chip.dart';
 import 'package:talktomylawyer/app/core/widgets/input_fields/app_search_field.dart';
+import 'package:talktomylawyer/app/core/config/api_constant.dart';
+import 'package:talktomylawyer/app/modules/client_dashboard/controllers/client_dashboard_controller.dart';
 
 class ClientSearchTab extends StatefulWidget {
   const ClientSearchTab({super.key});
@@ -14,17 +16,9 @@ class ClientSearchTab extends StatefulWidget {
 }
 
 class _ClientSearchTabState extends State<ClientSearchTab> {
-  int _selectedCategory = 0;
+  late final ClientDashboardController controller;
+  late final TextEditingController _searchTextController;
   bool _showFilter = false;
-
-  final _categories = const [
-    'all',
-    'criminal_law',
-    'family_law',
-    'corporate_law',
-    'property_law',
-    'tax_law',
-  ];
 
   // Filter state
   int? _selectedLocation;
@@ -40,17 +34,6 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
     'Sylhet',
     'Rajshahi',
     'Khulna',
-  ];
-
-  final List<String> _practiceAreas = const [
-    'Criminal Law',
-    'Family Law',
-    'Corporate Law',
-    'Civil Law',
-    'Property Law',
-    'Labour Law',
-    'Immigration',
-    'Tax Law',
   ];
 
   final List<String> _experiences = const [
@@ -73,6 +56,79 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
     'Phone',
     'In-person',
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.find<ClientDashboardController>();
+    _searchTextController = TextEditingController(text: controller.searchQuery.value);
+
+    // Sync UI states with current controller values if they exist
+    if (controller.selectedCategoryId.value != null) {
+      final idx = controller.categoriesList.indexWhere(
+        (c) => c.id == controller.selectedCategoryId.value,
+      );
+      if (idx != -1) {
+        _selectedPracticeArea = idx;
+      }
+    }
+    if (controller.filterAddress.value != null) {
+      final idx = _locations.indexOf(controller.filterAddress.value!);
+      if (idx != -1) {
+        _selectedLocation = idx;
+      }
+    }
+    if (controller.filterLanguage.value != null) {
+      final idx = _languages.indexOf(controller.filterLanguage.value!);
+      if (idx != -1) {
+        _selectedLanguage = idx;
+      }
+    }
+    if (controller.filterExperience.value != null) {
+      final expVal = controller.filterExperience.value;
+      if (expVal == 5) {
+        _selectedExperience = 0;
+      } else if (expVal == 10) {
+        _selectedExperience = 1;
+      } else if (expVal == 15) {
+        _selectedExperience = 2;
+      } else if (expVal == 20) {
+        _selectedExperience = 3;
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchTextController.dispose();
+    super.dispose();
+  }
+
+  int? _mapExperienceToYears(int index) {
+    switch (index) {
+      case 0:
+        return 5;
+      case 1:
+        return 10;
+      case 2:
+        return 15;
+      case 3:
+        return 20;
+      default:
+        return null;
+    }
+  }
+
+  void _resetLocalFilters() {
+    setState(() {
+      _selectedLocation = null;
+      _selectedPracticeArea = null;
+      _selectedExperience = null;
+      _selectedLanguage = null;
+      _selectedConsultation = null;
+      _verifiedOnly = false;
+    });
+  }
 
   Widget _buildSectionTitle(String title, Color color) {
     return Padding(
@@ -147,6 +203,10 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
                               primaryText: primaryText,
                               secondaryText: secondaryText,
                               cardColor: cardColor,
+                              controller: _searchTextController,
+                              onChanged: (val) {
+                                controller.searchQuery.value = val;
+                              },
                             ),
                           ),
                         ),
@@ -186,19 +246,43 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
             // Category chips
             SizedBox(
               height: 46,
-              child: ListView.builder(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
-                itemCount: _categories.length,
-                itemBuilder: (_, i) => Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: AppTagChip(
-                    label: _categories[i].tr,
-                    isSelected: _selectedCategory == i,
-                    onTap: () => setState(() => _selectedCategory = i),
-                  ),
-                ),
-              ),
+              child: Obx(() {
+                final cats = controller.categoriesList;
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.fromLTRB(20, 10, 20, 0),
+                  itemCount: cats.length + 1,
+                  itemBuilder: (_, i) {
+                    final isAll = i == 0;
+                    final label = isAll ? 'all'.tr : (cats[i - 1].name ?? '');
+                    final isSelected = isAll
+                        ? controller.selectedCategoryId.value == null
+                        : controller.selectedCategoryId.value == cats[i - 1].id;
+
+                    return Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: AppTagChip(
+                        label: label,
+                        isSelected: isSelected,
+                        onTap: () {
+                          if (isAll) {
+                            controller.updateCategoryFilter(null);
+                            setState(() {
+                              _selectedPracticeArea = null;
+                            });
+                          } else {
+                            final catId = cats[i - 1].id;
+                            controller.updateCategoryFilter(catId);
+                            setState(() {
+                              _selectedPracticeArea = i - 1;
+                            });
+                          }
+                        },
+                      ),
+                    );
+                  },
+                );
+              }),
             ),
             // Results count
             Padding(
@@ -206,24 +290,44 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  RichText(
-                    text: TextSpan(
-                      style: GoogleFonts.outfit(
-                        fontSize: 14,
-                        color: secondaryText,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: '128 ',
-                          style: GoogleFonts.outfit(
-                            fontWeight: FontWeight.w700,
-                            color: primaryText,
-                          ),
+                  Obx(() {
+                    final baseList = controller.lawyersList;
+                    final query = controller.searchQuery.value.trim().toLowerCase();
+                    final filteredCount = baseList.where((lawyer) {
+                      if (query.isEmpty) return true;
+                      final name = (lawyer.name ?? '').toLowerCase();
+                      final address = (lawyer.address ?? '').toLowerCase();
+                      final exp = (lawyer.numberOfExperience ?? '').toLowerCase();
+                      
+                      final categoryMatch = lawyer.categories?.any(
+                        (cat) => (cat.name ?? '').toLowerCase().contains(query)
+                      ) ?? false;
+                      
+                      return name.contains(query) ||
+                          address.contains(query) ||
+                          exp.contains(query) ||
+                          categoryMatch;
+                    }).length;
+
+                    return RichText(
+                      text: TextSpan(
+                        style: GoogleFonts.outfit(
+                          fontSize: 14,
+                          color: secondaryText,
                         ),
-                        TextSpan(text: 'lawyers_found'.tr),
-                      ],
-                    ),
-                  ),
+                        children: [
+                          TextSpan(
+                            text: '$filteredCount ',
+                            style: GoogleFonts.outfit(
+                              fontWeight: FontWeight.w700,
+                              color: primaryText,
+                            ),
+                          ),
+                          TextSpan(text: 'lawyers_found'.tr),
+                        ],
+                      ),
+                    );
+                  }),
                   Row(
                     children: [
                       Text(
@@ -246,59 +350,81 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
             ),
             // Lawyer List
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
-                children: [
-                  AppLawyerCard(
-                    name: 'Adv. Rahman Khan',
-                    title: 'corporate_law'.tr,
-                    tags: ['corporate_law'.tr, 'tax_law'.tr],
-                    rating: 4.9,
-                    reviewCount: 128,
-                    experience: 12,
-                    location: 'Dhaka',
-                    availability: 'available_today'.tr,
-                    rate: 2500,
-                    initials: 'RK',
-                  ),
-                  AppLawyerCard(
-                    name: 'Adv. Fatema Begum',
-                    title: 'family_law'.tr,
-                    tags: ['family_law'.tr, 'civil_law'.tr],
-                    rating: 4.7,
-                    reviewCount: 96,
-                    experience: 8,
-                    location: 'Chittagong',
-                    availability: 'available_tomorrow'.tr,
-                    rate: 2000,
-                    initials: 'FB',
-                  ),
-                  AppLawyerCard(
-                    name: 'Adv. Kamal Hossain',
-                    title: 'criminal_law'.tr,
-                    tags: ['criminal_law'.tr],
-                    rating: 4.8,
-                    reviewCount: 203,
-                    experience: 15,
-                    location: 'Dhaka',
-                    availability: 'available_today'.tr,
-                    rate: 3000,
-                    initials: 'KH',
-                  ),
-                  AppLawyerCard(
-                    name: 'Adv. Nadia Islam',
-                    title: 'property_law'.tr,
-                    tags: ['property_law'.tr, 'civil_law'.tr],
-                    rating: 4.6,
-                    reviewCount: 74,
-                    experience: 7,
-                    location: 'Sylhet',
-                    availability: 'available_today'.tr,
-                    rate: 1800,
-                    initials: 'NI',
-                  ),
-                ],
-              ),
+              child: Obx(() {
+                if (controller.isLawyersLoading.value) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                }
+                final baseList = controller.lawyersList;
+                final query = controller.searchQuery.value.trim().toLowerCase();
+                final filteredList = baseList.where((lawyer) {
+                  if (query.isEmpty) return true;
+                  final name = (lawyer.name ?? '').toLowerCase();
+                  final address = (lawyer.address ?? '').toLowerCase();
+                  final exp = (lawyer.numberOfExperience ?? '').toLowerCase();
+                  
+                  final categoryMatch = lawyer.categories?.any(
+                    (cat) => (cat.name ?? '').toLowerCase().contains(query)
+                  ) ?? false;
+                  
+                  return name.contains(query) ||
+                      address.contains(query) ||
+                      exp.contains(query) ||
+                      categoryMatch;
+                }).toList();
+
+                if (filteredList.isEmpty) {
+                  return Center(
+                    child: Text(
+                      'No lawyers found',
+                      style: GoogleFonts.outfit(color: secondaryText),
+                    ),
+                  );
+                }
+
+                return ListView.builder(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+                  itemCount: filteredList.length,
+                  itemBuilder: (context, index) {
+                    final lawyer = filteredList[index];
+                    final hasAvatar = lawyer.profilePic != null &&
+                        lawyer.profilePic != 'default.png';
+                    final avatar = hasAvatar
+                        ? '${ApiConstant.serverIpPort}/storage/${lawyer.profilePic}'
+                        : null;
+
+                    final initials = lawyer.name != null && lawyer.name!.isNotEmpty
+                        ? lawyer.name!
+                            .trim()
+                            .split(' ')
+                            .map((e) => e.isNotEmpty ? e.substring(0, 1) : '')
+                            .join()
+                            .toUpperCase()
+                        : 'L';
+
+                    final title = lawyer.categories != null && lawyer.categories!.isNotEmpty
+                        ? '${lawyer.categories!.first.name} • ${lawyer.numberOfExperience ?? '1'} yr exp'
+                        : 'Lawyer • ${lawyer.numberOfExperience ?? '1'} yr exp';
+
+                    final tags = lawyer.categories?.map((e) => e.name ?? '').toList() ?? [];
+
+                    return AppLawyerCard(
+                      name: lawyer.name ?? 'Jane Lawyer',
+                      title: title,
+                      tags: tags,
+                      rating: 4.8,
+                      reviewCount: 120,
+                      experience: int.tryParse(lawyer.numberOfExperience ?? '1') ?? 1,
+                      location: lawyer.address ?? 'Dhaka',
+                      availability: 'available_today'.tr,
+                      rate: 2000,
+                      avatarUrl: avatar,
+                      initials: initials,
+                    );
+                  },
+                );
+              }),
             ),
           ],
         ),
@@ -342,7 +468,10 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                      onTap: () => Navigator.pop(context),
+                      onTap: () {
+                        setState(() => _showFilter = false);
+                        Navigator.pop(context);
+                      },
                       child: Icon(
                         Icons.close,
                         color: primaryText,
@@ -367,6 +496,10 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
                           tempConsultation = null;
                           tempVerifiedOnly = false;
                         });
+                        _resetLocalFilters();
+                        controller.resetFilters();
+                        setState(() => _showFilter = false);
+                        Navigator.pop(context);
                       },
                       child: Text(
                         'reset'.tr,
@@ -402,10 +535,10 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
                       ),
                       const SizedBox(height: 24),
 
-                      // 2. Practice Area
+                      // 2. Practice Area (Dynamic)
                       _buildSectionTitle('practice_area'.tr, primaryText),
                       _buildChips(
-                        _practiceAreas,
+                        controller.categoriesList.map((c) => c.name ?? '').toList(),
                         tempPracticeArea,
                         (index) => setSheetState(() {
                           tempPracticeArea = (tempPracticeArea == index) ? null : index;
@@ -512,7 +645,21 @@ class _ClientSearchTabState extends State<ClientSearchTab> {
                         _selectedLanguage = tempLanguage;
                         _selectedConsultation = tempConsultation;
                         _verifiedOnly = tempVerifiedOnly;
+                        _showFilter = false;
                       });
+
+                      final address = tempLocation != null ? _locations[tempLocation!] : null;
+                      final categoryId = tempPracticeArea != null ? controller.categoriesList[tempPracticeArea!].id : null;
+                      final exp = tempExperience != null ? _mapExperienceToYears(tempExperience!) : null;
+                      final lang = tempLanguage != null ? _languages[tempLanguage!] : null;
+
+                      controller.selectedCategoryId.value = categoryId;
+                      controller.applyFilters(
+                        address: address,
+                        experience: exp,
+                        language: lang,
+                      );
+
                       Navigator.pop(context);
                     },
                     style: ElevatedButton.styleFrom(

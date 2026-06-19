@@ -17,6 +17,7 @@ class LawyerModel {
   String? createdAt;
   String? updatedAt;
   List<CategoryModel>? categories;
+  String? language;
 
   LawyerModel({
     this.id,
@@ -33,6 +34,7 @@ class LawyerModel {
     this.createdAt,
     this.updatedAt,
     this.categories,
+    this.language,
   });
 
   factory LawyerModel.fromMap(Map<String, dynamic> map) {
@@ -53,6 +55,7 @@ class LawyerModel {
       categories: (map['categories'] as List<dynamic>?)
           ?.map((e) => CategoryModel.fromMap(e as Map<String, dynamic>))
           .toList(),
+      language: map['language'] as String?,
     );
   }
 
@@ -72,6 +75,7 @@ class LawyerModel {
       'created_at': createdAt,
       'updated_at': updatedAt,
       'categories': categories?.map((e) => e.toMap()).toList(),
+      'language': language,
     };
   }
 
