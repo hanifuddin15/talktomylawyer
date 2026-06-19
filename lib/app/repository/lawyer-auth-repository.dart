@@ -3,6 +3,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart' as dio;
 import 'package:talktomylawyer/app/core/services/api_communication.dart';
 import 'package:talktomylawyer/app/core/services/caching_service.dart';
+import 'package:talktomylawyer/app/models/lawyers_models/lawyer_user_model.dart';
 
 import '../core/config/api_constant.dart';
 import '../core/config/data_key.dart';
@@ -57,6 +58,43 @@ class LawyerAuthRepository {
     } else {
       return null;
     }
+  }
+
+  Future<LawyerModel?> loginLawyer({
+    required String email,
+    required String password,
+  }) async {
+    final ApiResponse response = await _apiCommunication.doPostRequest(
+      apiEndPoint: 'lawyer-login',
+      requestData: {'email': email, 'password': password},
+      isFormData: false,
+      responseDataKey: ApiConstant.fullResponse,
+      showSuccessMessage: true,
+      addUserData: false,
+      successMessage: 'Lawyer logged in successfully',
+    );
+    if (response.isSuccessful && response.data != null) {
+      final Map<String, dynamic> fullResponse =
+          response.data as Map<String, dynamic>;
+      final lawyerData = fullResponse['lawyer'];
+      final token = fullResponse['token'] as String?;
+
+      if (lawyerData != null && token != null) {
+        final lawyer = LawyerModel.fromMap(lawyerData);
+
+        // Cache token & role & lawyer user model
+        await _cachingService.saveAuthToken(token);
+        await _cachingService.saveData(DataKey.accessToken, token); // For general app token check
+        await _cachingService.saveUserRole('lawyer');
+        await _cachingService.saveLawyerUser(lawyer.toJson());
+
+        // Update token in ApiCommunication
+        _apiCommunication.updateTokenAndHeader(token);
+
+        return lawyer;
+      }
+    }
+    return null;
   }
 
   Future<Either<Failure, ApiResponse>> changePassword({
@@ -150,6 +188,14 @@ class LawyerAuthRepository {
     }
   }
 
+  LawyerModel? getLawyerData() {
+    final String? lawyerJson = _cachingService.getLawyerUser();
+    if (lawyerJson != null && lawyerJson.isNotEmpty) {
+      return LawyerModel.fromJson(lawyerJson);
+    }
+    return null;
+  }
+
   /*
    * ┏==================================================================================================┓
    * ┃                                      Delete Data                                                 ┃
@@ -162,6 +208,7 @@ class LawyerAuthRepository {
     await _cachingService.removeData(DataKey.user);
     await _cachingService.removeData('user_role');
     await _cachingService.removeData('client_user');
+    await _cachingService.removeData('lawyer_user');
   }
   /*
    * ┏==================================================================================================┓

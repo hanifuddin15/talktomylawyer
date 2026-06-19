@@ -113,7 +113,15 @@ class LawyerRegisterController extends GetxController {
       );
 
       if (success) {
-        Get.offAllNamed(Routes.lawyerDashboard);
+        final lawyer = await LawyerAuthRepository.instance.loginLawyer(
+          email: email,
+          password: password,
+        );
+        if (lawyer != null) {
+          Get.offAllNamed(Routes.lawyerDashboard);
+        } else {
+          Get.offAllNamed(Routes.lawyerLogin);
+        }
       }
     } catch (e) {
       // Error handling is managed by ApiCommunication

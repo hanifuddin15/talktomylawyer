@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:talktomylawyer/app/models/lawyers_models/law_categories_model.dart';
+
 class LawyerModel {
   int? id;
   String? name;
@@ -14,6 +16,7 @@ class LawyerModel {
   String? nid;
   String? createdAt;
   String? updatedAt;
+  List<CategoryModel>? categories;
 
   LawyerModel({
     this.id,
@@ -29,6 +32,7 @@ class LawyerModel {
     this.nid,
     this.createdAt,
     this.updatedAt,
+    this.categories,
   });
 
   factory LawyerModel.fromMap(Map<String, dynamic> map) {
@@ -46,6 +50,9 @@ class LawyerModel {
       nid: map['nid'] as String?,
       createdAt: map['created_at'] as String?,
       updatedAt: map['updated_at'] as String?,
+      categories: (map['categories'] as List<dynamic>?)
+          ?.map((e) => CategoryModel.fromMap(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 
@@ -64,6 +71,7 @@ class LawyerModel {
       'nid': nid,
       'created_at': createdAt,
       'updated_at': updatedAt,
+      'categories': categories?.map((e) => e.toMap()).toList(),
     };
   }
 

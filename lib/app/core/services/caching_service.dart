@@ -48,6 +48,14 @@ class CachingService {
     return getData('client_user') as String?;
   }
 
+  Future<void> saveLawyerUser(String lawyerJson) async {
+    await saveData('lawyer_user', lawyerJson);
+  }
+
+  String? getLawyerUser() {
+    return getData('lawyer_user') as String?;
+  }
+
   Future<void> saveAuthToken(String token) async {
     await saveData('auth_token', token);
   }
