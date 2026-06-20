@@ -17,6 +17,7 @@ const Map<String, String> en = {
   'skip': 'Skip',
   'next': 'Next',
   'get_started': 'Get Started',
+  'appointments': 'Appoinments',
 
   // Role Selection
   'how_will_you_use': 'How will you use\nthe app?',
@@ -277,5 +278,6 @@ const Map<String, String> en = {
   'join_call': 'Join Call',
   'cancel_appointment': 'Cancel',
   'no_consultations': 'No consultations found',
-  'no_consultations_desc': 'You do not have any consultations in this category yet.',
+  'no_consultations_desc':
+      'You do not have any consultations in this category yet.',
 };

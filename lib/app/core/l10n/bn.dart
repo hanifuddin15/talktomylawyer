@@ -105,7 +105,9 @@ const Map<String, String> bn = {
   'camera': 'ক্যামেরা',
   'gallery': 'গ্যালারি',
   'document_pdf': 'পিডিএফ ডকুমেন্ট',
-  'choose_source_description': 'আপনার ফাইল/ফটো আপলোড করার জন্য একটি উৎস বেছে নিন।',
+  'choose_source_description':
+      'আপনার ফাইল/ফটো আপলোড করার জন্য একটি উৎস বেছে নিন।',
+  'appointments': 'অ্যাপয়েন্টমেন্ট',
 
   // Client Home
   'good_morning': 'শুভ সকাল',

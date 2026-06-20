@@ -60,14 +60,14 @@ class AppAnalyticsCard extends StatelessWidget {
             style: GoogleFonts.outfit(fontSize: 12, color: secondaryText),
           ),
           const SizedBox(height: 4),
-          Text(
-            growth,
-            style: GoogleFonts.outfit(
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
-              color: growthColor,
-            ),
-          ),
+          // Text(
+          //   growth,
+          //   style: GoogleFonts.outfit(
+          //     fontSize: 12,
+          //     fontWeight: FontWeight.w600,
+          //     color: growthColor,
+          //   ),
+          // ),
         ],
       ),
     );

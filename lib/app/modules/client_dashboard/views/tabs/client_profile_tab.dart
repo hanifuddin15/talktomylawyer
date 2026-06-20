@@ -215,7 +215,7 @@ class ClientProfileTab extends GetView<ClientProfileTabController> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: GestureDetector(
-                  onTap: () => Get.offAllNamed('/role_selection'),
+                  onTap: () => controller.signOut(),
                   child: Container(
                     width: double.infinity,
                     height: 56,

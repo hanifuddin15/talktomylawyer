@@ -61,7 +61,7 @@ class LawyerHomeTab extends GetView<LawyerHomeController> {
                       }),
                     ),
                     GestureDetector(
-                      onTap: () => Get.offAllNamed('/role_selection'),
+                      onTap: () => controller.signOut(),
                       child: Container(
                         padding: const EdgeInsets.symmetric(
                           horizontal: 12,

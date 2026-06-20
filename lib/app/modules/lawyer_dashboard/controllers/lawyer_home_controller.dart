@@ -5,6 +5,7 @@ import 'package:talktomylawyer/app/models/client_models/appointment_model.dart';
 import 'package:talktomylawyer/app/repository/lawyer-auth-repository.dart';
 import 'package:talktomylawyer/app/repository/lawyer_dashboard_repository.dart';
 import 'package:talktomylawyer/app/repository/appointment_repository.dart';
+import 'package:talktomylawyer/app/routes/app_pages.dart';
 
 class LawyerHomeController extends GetxController {
   Rxn<LawyerModel> get lawyerModel => LawyerAuthRepository.instance.lawyerData;
@@ -89,5 +90,10 @@ class LawyerHomeController extends GetxController {
     showSuccessSnackkbar(
       message: 'Connecting to Video Consultation room for Client ${appointment.client?.name ?? ''}...',
     );
+  }
+
+  void signOut() {
+    LawyerAuthRepository.instance.clearAuthCredential();
+    Get.offAllNamed(Routes.lawyerLogin);
   }
 }
