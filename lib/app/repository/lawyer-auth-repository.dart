@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart' as dio;
+import 'package:get/get.dart';
 import 'package:talktomylawyer/app/core/services/api_communication.dart';
 import 'package:talktomylawyer/app/core/services/caching_service.dart';
 import 'package:talktomylawyer/app/models/lawyers_models/lawyer_user_model.dart';
@@ -18,7 +19,14 @@ import '../core/models/user.dart';
 class LawyerAuthRepository {
   //* ============================= CHANGE PASSWORD ============================
 
-  LawyerAuthRepository._internal();
+  final Rxn<LawyerModel> lawyerData = Rxn<LawyerModel>();
+
+  LawyerAuthRepository._internal() {
+    final String? lawyerJson = _cachingService.getLawyerUser();
+    if (lawyerJson != null && lawyerJson.isNotEmpty) {
+      lawyerData.value = LawyerModel.fromJson(lawyerJson);
+    }
+  }
 
   static final LawyerAuthRepository instance = LawyerAuthRepository._internal();
 
@@ -93,6 +101,7 @@ class LawyerAuthRepository {
         ); // For general app token check
         await _cachingService.saveUserRole('lawyer');
         await _cachingService.saveLawyerUser(lawyer.toJson());
+        this.lawyerData.value = lawyer;
 
         // Update token in ApiCommunication
         _apiCommunication.updateTokenAndHeader(token);
@@ -215,6 +224,7 @@ class LawyerAuthRepository {
     await _cachingService.removeData('user_role');
     await _cachingService.removeData('client_user');
     await _cachingService.removeData('lawyer_user');
+    lawyerData.value = null;
   }
   /*
    * ┏==================================================================================================┓
@@ -325,6 +335,7 @@ class LawyerAuthRepository {
     if (response.isSuccessful && response.data != null) {
       final lawyer = LawyerModel.fromMap(response.data as Map<String, dynamic>);
       await _cachingService.saveLawyerUser(lawyer.toJson());
+      lawyerData.value = lawyer;
       return lawyer;
     }
     return null;

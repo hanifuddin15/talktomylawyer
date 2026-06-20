@@ -1,3 +1,4 @@
+import 'package:get/get.dart';
 import 'package:talktomylawyer/app/core/models/api_response.dart';
 import 'package:talktomylawyer/app/core/services/api_communication.dart';
 import 'package:talktomylawyer/app/core/services/caching_service.dart';
@@ -7,7 +8,14 @@ import 'package:talktomylawyer/app/models/lawyers_models/lawyer_user_model.dart'
 import '../core/config/api_constant.dart';
 
 class ClientAuthRepository {
-  ClientAuthRepository._internal();
+  final Rxn<ClientModel> clientData = Rxn<ClientModel>();
+
+  ClientAuthRepository._internal() {
+    final String? clientJson = _cachingService.getClientUser();
+    if (clientJson != null && clientJson.isNotEmpty) {
+      clientData.value = ClientModel.fromJson(clientJson);
+    }
+  }
 
   static final ClientAuthRepository instance = ClientAuthRepository._internal();
 
@@ -49,6 +57,7 @@ class ClientAuthRepository {
         ); // For general app service token check
         await _cachingService.saveUserRole('client');
         await _cachingService.saveClientUser(client.toJson());
+        this.clientData.value = client;
 
         // Update token in ApiCommunication
         _apiCommunication.updateTokenAndHeader(token);
@@ -106,6 +115,7 @@ class ClientAuthRepository {
     await _cachingService.removeData('accessToken');
     await _cachingService.removeData('user_role');
     await _cachingService.removeData('client_user');
+    clientData.value = null;
   }
 
   Future<ClientModel?> updateClientProfile({
@@ -132,6 +142,7 @@ class ClientAuthRepository {
     if (response.isSuccessful && response.data != null) {
       final client = ClientModel.fromMap(response.data as Map<String, dynamic>);
       await _cachingService.saveClientUser(client.toJson());
+      clientData.value = client;
       return client;
     }
     return null;

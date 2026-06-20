@@ -44,27 +44,31 @@ class ClientHomeTab extends GetView<ClientHomeController> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            '${_greeting()},',
-                            style: GoogleFonts.outfit(
-                              fontSize: 14,
-                              color: secondaryText,
+                      child: Obx(() {
+                        final client = controller.clientModel.value;
+                        final name = client?.name ?? 'User';
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${_greeting()},',
+                              style: GoogleFonts.outfit(
+                                fontSize: 14,
+                                color: secondaryText,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 4),
-                          Text(
-                            '${controller.clientModel.name} 👋'.tr,
-                            style: GoogleFonts.outfit(
-                              fontSize: 22,
-                              fontWeight: FontWeight.w800,
-                              color: primaryText,
+                            const SizedBox(height: 4),
+                            Text(
+                              '$name 👋'.tr,
+                              style: GoogleFonts.outfit(
+                                fontSize: 22,
+                                fontWeight: FontWeight.w800,
+                                color: primaryText,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        );
+                      }),
                     ),
                     AppBadge(
                       count: 3,

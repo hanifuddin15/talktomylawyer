@@ -20,21 +20,23 @@ class ClientProfileTab extends GetView<ClientProfileTabController> {
     final primaryText = isDark ? kDarkTextPrimary : kLightTextPrimary;
     final secondaryText = isDark ? kDarkTextSecondary : kLightTextSecondary;
 
-    final name = controller.clientModel.name ?? 'User Name';
-    final email = controller.clientModel.email ?? 'user@email.com';
-    final initials = name.isNotEmpty
-        ? name
-              .trim()
-              .split(' ')
-              .map((e) => e.isNotEmpty ? e.substring(0, 1) : '')
-              .join()
-              .toUpperCase()
-        : 'U';
-
     return Scaffold(
       backgroundColor: bg,
       body: SafeArea(
-        child: SingleChildScrollView(
+        child: Obx(() {
+          final client = controller.clientModel.value;
+          final name = client?.name ?? 'User Name';
+          final email = client?.email ?? 'user@email.com';
+          final initials = name.isNotEmpty
+              ? name
+                    .trim()
+                    .split(' ')
+                    .map((e) => e.isNotEmpty ? e.substring(0, 1) : '')
+                    .join()
+                    .toUpperCase()
+              : 'U';
+
+          return SingleChildScrollView(
           child: Column(
             children: [
               // Profile Header Card
@@ -247,7 +249,8 @@ class ClientProfileTab extends GetView<ClientProfileTabController> {
               const SizedBox(height: 24),
             ],
           ),
-        ),
+        );
+        }),
       ),
     );
   }

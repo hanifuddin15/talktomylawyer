@@ -7,7 +7,7 @@ import 'package:talktomylawyer/app/repository/lawyer-auth-repository.dart';
 import 'package:talktomylawyer/app/repository/lawyer_dashboard_repository.dart';
 
 class LawyerProfileController extends GetxController {
-  final Rxn<LawyerModel> lawyerData = Rxn<LawyerModel>();
+  Rxn<LawyerModel> get lawyerData => LawyerAuthRepository.instance.lawyerData;
   final RxBool isEditing = false.obs;
   final RxBool isLoading = false.obs;
 
@@ -49,8 +49,7 @@ class LawyerProfileController extends GetxController {
   }
 
   void loadLawyerData() {
-    final lawyer = LawyerAuthRepository.instance.getLawyerData();
-    lawyerData.value = lawyer;
+    final lawyer = lawyerData.value;
 
     nameController = TextEditingController(text: lawyer?.name ?? '');
     phoneController = TextEditingController(text: lawyer?.phone ?? '');

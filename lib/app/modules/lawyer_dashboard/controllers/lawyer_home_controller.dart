@@ -4,8 +4,7 @@ import 'package:talktomylawyer/app/repository/lawyer-auth-repository.dart';
 import 'package:talktomylawyer/app/repository/lawyer_dashboard_repository.dart';
 
 class LawyerHomeController extends GetxController {
-  final LawyerModel lawyerModel =
-      LawyerAuthRepository.instance.getLawyerData() ?? LawyerModel();
+  Rxn<LawyerModel> get lawyerModel => LawyerAuthRepository.instance.lawyerData;
 
   final RxBool isOverviewLoading = false.obs;
   final RxMap<String, dynamic> overviewData = <String, dynamic>{

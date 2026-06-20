@@ -4,7 +4,7 @@ import 'package:talktomylawyer/app/models/client_models/client_user_model.dart';
 import 'package:talktomylawyer/app/repository/client_auth_repository.dart';
 
 class ClientProfileController extends GetxController {
-  final Rxn<ClientModel> clientData = Rxn<ClientModel>();
+  Rxn<ClientModel> get clientData => ClientAuthRepository.instance.clientData;
   final RxBool isEditing = false.obs;
   final RxBool isLoading = false.obs;
 
@@ -17,8 +17,7 @@ class ClientProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    final client = ClientAuthRepository.instance.getClientData();
-    clientData.value = client;
+    final client = clientData.value;
 
     nameController = TextEditingController(text: client?.name ?? '');
     phoneController = TextEditingController(text: client?.phone ?? '');

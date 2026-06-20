@@ -30,26 +30,30 @@ class LawyerHomeTab extends GetView<LawyerHomeController> {
                 child: Row(
                   children: [
                     Expanded(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'dashboard'.tr,
-                            style: GoogleFonts.outfit(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w800,
-                              color: primaryText,
+                      child: Obx(() {
+                        final lawyer = controller.lawyerModel.value;
+                        final name = lawyer?.name ?? 'Adv. Rahman Khan';
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'dashboard'.tr,
+                              style: GoogleFonts.outfit(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w800,
+                                color: primaryText,
+                              ),
                             ),
-                          ),
-                          Text(
-                            controller.lawyerModel.name ?? 'Adv. Rahman Khan',
-                            style: GoogleFonts.outfit(
-                              fontSize: 14,
-                              color: secondaryText,
+                            Text(
+                              name,
+                              style: GoogleFonts.outfit(
+                                fontSize: 14,
+                                color: secondaryText,
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
+                          ],
+                        );
+                      }),
                     ),
                     GestureDetector(
                       onTap: () => Get.offAllNamed('/role_selection'),

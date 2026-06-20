@@ -6,8 +6,7 @@ import 'package:talktomylawyer/app/repository/client_auth_repository.dart';
 import 'package:talktomylawyer/app/repository/client_home_repository.dart';
 
 class ClientHomeController extends GetxController {
-  ClientModel clientModel =
-      ClientAuthRepository.instance.getClientData() ?? ClientModel();
+  Rxn<ClientModel> get clientModel => ClientAuthRepository.instance.clientData;
 
   // Categories
   final RxList<CategoryModel> categoriesList = <CategoryModel>[].obs;
