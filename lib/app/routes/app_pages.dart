@@ -1,4 +1,6 @@
 import 'package:get/get.dart';
+import 'package:talktomylawyer/app/modules/client_profile/bindings/client_profile_binding.dart';
+import 'package:talktomylawyer/app/modules/client_profile/views/client_profile_view.dart';
 
 // Shared auth
 import '../modules/authentication/splash/bindings/splash_binding.dart';
@@ -35,7 +37,6 @@ import '../modules/consultation_history/bindings/consultation_history_binding.da
 import '../modules/consultation_history/views/consultation_history_view.dart';
 import '../modules/consultation_details/bindings/consultation_details_binding.dart';
 import '../modules/consultation_details/views/consultation_details_view.dart';
-
 
 part 'app_routes.dart';
 
@@ -104,8 +105,12 @@ class AppPages {
       page: () => const ConsultationDetailsView(),
       binding: ConsultationDetailsBinding(),
     ),
-
-
+    // Client Profile Edit
+    GetPage(
+      name: _Paths.clientProfile,
+      page: () => const ClientProfileView(),
+      binding: ClientProfileBinding(),
+    ),
 
     // Lawyer Auth
     GetPage(

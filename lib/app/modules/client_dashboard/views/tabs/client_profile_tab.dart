@@ -9,7 +9,6 @@ import '../../../client_subscription/checkout/views/checkout_view.dart';
 import 'package:talktomylawyer/app/modules/client_dashboard/controllers/client_profile_controller.dart';
 import 'package:talktomylawyer/app/routes/app_pages.dart';
 
-
 class ClientProfileTab extends GetView<ClientProfileController> {
   const ClientProfileTab({super.key});
 
@@ -24,7 +23,12 @@ class ClientProfileTab extends GetView<ClientProfileController> {
     final name = controller.clientModel.name ?? 'User Name';
     final email = controller.clientModel.email ?? 'user@email.com';
     final initials = name.isNotEmpty
-        ? name.trim().split(' ').map((e) => e.isNotEmpty ? e.substring(0, 1) : '').join().toUpperCase()
+        ? name
+              .trim()
+              .split(' ')
+              .map((e) => e.isNotEmpty ? e.substring(0, 1) : '')
+              .join()
+              .toUpperCase()
         : 'U';
 
     return Scaffold(
@@ -48,7 +52,7 @@ class ClientProfileTab extends GetView<ClientProfileController> {
                       initials: initials,
                       radius: 40,
                       showEditButton: true,
-                      onEditTap: () {},
+                      onEditTap: () => Get.toNamed(Routes.clientProfile),
                     ),
                     const SizedBox(height: 12),
                     Text(
@@ -138,7 +142,9 @@ class ClientProfileTab extends GetView<ClientProfileController> {
                       icon: Icons.edit_outlined,
                       title: 'edit_profile'.tr,
                       subtitle: 'edit_profile_sub'.tr,
-                      onTap: () {},
+                      onTap: () {
+                        Get.toNamed(Routes.clientProfile);
+                      },
                     ),
                     AppSettingsTile(
                       icon: Icons.card_membership_rounded,

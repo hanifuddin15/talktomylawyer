@@ -346,6 +346,86 @@ class ApiCommunication {
     }
   }
 
+  Future<ApiResponse> doPutRequest({
+    required String apiEndPoint,
+    Map<String, dynamic>? requestData,
+    bool enableLoading = true,
+    String responseDataKey = ApiConstant.dataResponse,
+    String? successMessage,
+    bool showSuccessMessage = false,
+    bool showErrorMessage = true,
+    String? errorMessage,
+  }) async {
+    dio.Response? response;
+    String requestUrl = '$_baseUrl/$apiEndPoint';
+    debugPrint('Request Url: $requestUrl\n\n Request Data: $requestData\n');
+
+    if (await isConnectedToInternet()) {
+      try {
+        if (enableLoading) showLoader();
+        response = await _dio.put(
+          requestUrl,
+          data: requestData,
+          options: dio.Options(
+            validateStatus: (_) => true,
+            headers: header,
+          ),
+        );
+        debugPrint('Status: ${response.statusCode}');
+        if (enableLoading) dismissLoader();
+
+        if (response.statusCode != null &&
+            response.statusCode! >= 200 &&
+            response.statusCode! < 300) {
+          Map<String, dynamic> responseData = response.data;
+          if (showSuccessMessage) {
+            showSuccessSnackkbar(
+              message: successMessage ?? responseData['message'],
+            );
+          }
+          logFullResponse(responseData);
+          return ApiResponse(
+            isSuccessful: true,
+            statusCode:
+                responseData[ApiConstant.statusCodeKey] ?? response.statusCode,
+            data: responseDataKey != ApiConstant.fullResponse
+                ? responseData[responseDataKey]
+                : responseData,
+            totalCount: responseData[ApiConstant.totalCount],
+          );
+        } else {
+          final String errMsg = _getErrorMessage(response);
+          if (showErrorMessage) {
+            showErrorSnackkbar(message: errMsg);
+          }
+          debugPrint('Status Code: ${response.statusCode}');
+          logFullResponse(response.data);
+          return ApiResponse(
+            isSuccessful: false,
+            statusCode: response.statusCode,
+            errorMessage: errMsg,
+          );
+        }
+      } catch (error) {
+        if (enableLoading) dismissLoader();
+        final Failure failure = ErrorHandler.handleException(error);
+        if (showErrorMessage) {
+          showErrorSnackkbar(message: failure.message);
+        }
+        return ApiResponse(isSuccessful: false, errorMessage: failure.message);
+      }
+    } else {
+      errorMessage = 'You are not connected with mobile/wifi network';
+      showWarningSnackkbar(message: errorMessage);
+      return ApiResponse(
+        isSuccessful: false,
+        statusCode: 503,
+        errorMessage: errorMessage,
+      );
+    }
+  }
+
+
   void logFullResponse(dynamic data) {
     if (!kDebugMode) return;
 

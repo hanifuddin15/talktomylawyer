@@ -299,4 +299,34 @@ class LawyerAuthRepository {
     return response.isSuccessful;
   }
 
+  Future<LawyerModel?> updateLawyerProfile({
+    required String name,
+    required String phone,
+    required String address,
+    required String experience,
+    required String lastEducation,
+    required List<int> specializations,
+  }) async {
+    final ApiResponse response = await _apiCommunication.doPutRequest(
+      apiEndPoint: 'lawyer/profile',
+      requestData: {
+        'name': name,
+        'phone': phone,
+        'address': address,
+        'number_of_experience': experience,
+        'last_education': lastEducation,
+        'specializations': specializations,
+      },
+      responseDataKey: 'data',
+      showSuccessMessage: true,
+      successMessage: 'Lawyer profile updated successfully',
+    );
+
+    if (response.isSuccessful && response.data != null) {
+      final lawyer = LawyerModel.fromMap(response.data as Map<String, dynamic>);
+      await _cachingService.saveLawyerUser(lawyer.toJson());
+      return lawyer;
+    }
+    return null;
+  }
 }

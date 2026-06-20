@@ -20,6 +20,7 @@ abstract class Routes {
   static const bookConsultation = _Paths.bookConsultation;
   static const consultationHistory = _Paths.consultationHistory;
   static const consultationDetails = _Paths.consultationDetails;
+  static const clientProfile = _Paths.clientProfile;
 
   // Lawyer Auth
   static const lawyerLogin = _Paths.lawyerLogin;
@@ -45,9 +46,9 @@ abstract class _Paths {
   static const bookConsultation = '/book_consultation';
   static const consultationHistory = '/consultation_history';
   static const consultationDetails = '/consultation_details';
+  static const clientProfile = '/client_profile';
 
   static const lawyerLogin = '/lawyer_login';
   static const lawyerRegister = '/lawyer_register';
   static const lawyerDashboard = '/lawyer_dashboard';
 }
-

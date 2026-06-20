@@ -107,4 +107,33 @@ class ClientAuthRepository {
     await _cachingService.removeData('user_role');
     await _cachingService.removeData('client_user');
   }
+
+  Future<ClientModel?> updateClientProfile({
+    required String name,
+    required String phone,
+    required String address,
+    required String city,
+    required String country,
+  }) async {
+    final ApiResponse response = await _apiCommunication.doPutRequest(
+      apiEndPoint: 'client/profile',
+      requestData: {
+        'name': name,
+        'phone': phone,
+        'address': address,
+        'city': city,
+        'country': country,
+      },
+      responseDataKey: 'data',
+      showSuccessMessage: true,
+      successMessage: 'Client profile updated successfully',
+    );
+
+    if (response.isSuccessful && response.data != null) {
+      final client = ClientModel.fromMap(response.data as Map<String, dynamic>);
+      await _cachingService.saveClientUser(client.toJson());
+      return client;
+    }
+    return null;
+  }
 }

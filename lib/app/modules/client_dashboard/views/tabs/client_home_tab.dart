@@ -297,7 +297,7 @@ class ClientHomeTab extends GetView<ClientHomeController> {
                         padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
                         scrollDirection: Axis.horizontal,
                         itemCount: 5,
-                        separatorBuilder: (_, _) => const SizedBox(width: 16),
+                        separatorBuilder: (_, __) => const SizedBox(width: 16),
                         itemBuilder: (context, index) {
                           return SizedBox(
                             width: 320,
@@ -335,7 +335,7 @@ class ClientHomeTab extends GetView<ClientHomeController> {
                     padding: const EdgeInsets.fromLTRB(20, 12, 20, 24),
                     scrollDirection: Axis.horizontal,
                     itemCount: controller.featuredLawyersList.length,
-                    separatorBuilder: (_, _) => const SizedBox(width: 16),
+                    separatorBuilder: (_, __) => const SizedBox(width: 16),
                     itemBuilder: (context, index) {
                       final lawyer = controller.featuredLawyersList[index];
                       final hasAvatar =
