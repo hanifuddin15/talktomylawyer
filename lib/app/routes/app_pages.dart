@@ -31,6 +31,11 @@ import '../modules/lawyer_details/bindings/lawyer_details_binding.dart';
 import '../modules/lawyer_details/views/lawyer_details_view.dart';
 import '../modules/lawyer_details/bindings/book_consultation_binding.dart';
 import '../modules/lawyer_details/views/book_consultation_view.dart';
+import '../modules/consultation_history/bindings/consultation_history_binding.dart';
+import '../modules/consultation_history/views/consultation_history_view.dart';
+import '../modules/consultation_details/bindings/consultation_details_binding.dart';
+import '../modules/consultation_details/views/consultation_details_view.dart';
+
 
 part 'app_routes.dart';
 
@@ -87,6 +92,20 @@ class AppPages {
       page: () => const BookConsultationView(),
       binding: BookConsultationBinding(),
     ),
+    // Consultation History
+    GetPage(
+      name: _Paths.consultationHistory,
+      page: () => const ConsultationHistoryView(),
+      binding: ConsultationHistoryBinding(),
+    ),
+    // Consultation Details
+    GetPage(
+      name: _Paths.consultationDetails,
+      page: () => const ConsultationDetailsView(),
+      binding: ConsultationDetailsBinding(),
+    ),
+
+
 
     // Lawyer Auth
     GetPage(

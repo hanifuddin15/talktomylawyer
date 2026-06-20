@@ -267,4 +267,15 @@ const Map<String, String> en = {
   'profile': 'Profile',
   'schedule': 'Schedule',
   'status': 'Status',
+
+  // Consultation History
+  'upcoming': 'Upcoming',
+  'completed': 'Completed',
+  'cancelled': 'Cancelled',
+  'details': 'Details',
+  'support': 'Support',
+  'join_call': 'Join Call',
+  'cancel_appointment': 'Cancel',
+  'no_consultations': 'No consultations found',
+  'no_consultations_desc': 'You do not have any consultations in this category yet.',
 };

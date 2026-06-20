@@ -18,6 +18,8 @@ abstract class Routes {
   static const clientHome = _Paths.clientHome;
   static const lawyerDetails = _Paths.lawyerDetails;
   static const bookConsultation = _Paths.bookConsultation;
+  static const consultationHistory = _Paths.consultationHistory;
+  static const consultationDetails = _Paths.consultationDetails;
 
   // Lawyer Auth
   static const lawyerLogin = _Paths.lawyerLogin;
@@ -41,8 +43,11 @@ abstract class _Paths {
   static const clientHome = '/client_home';
   static const lawyerDetails = '/lawyer_details';
   static const bookConsultation = '/book_consultation';
+  static const consultationHistory = '/consultation_history';
+  static const consultationDetails = '/consultation_details';
 
   static const lawyerLogin = '/lawyer_login';
   static const lawyerRegister = '/lawyer_register';
   static const lawyerDashboard = '/lawyer_dashboard';
 }
+

@@ -268,4 +268,15 @@ const Map<String, String> bn = {
   'profile': 'প্রোফাইল',
   'schedule': 'সময়সূচি',
   'status': 'স্ট্যাটাস',
+
+  // Consultation History
+  'upcoming': 'আসন্ন',
+  'completed': 'সম্পন্ন',
+  'cancelled': 'বাতিল',
+  'details': 'বিস্তারিত',
+  'support': 'সহায়তা',
+  'join_call': 'কলে যোগ দিন',
+  'cancel_appointment': 'বাতিল করুন',
+  'no_consultations': 'কোনো পরামর্শ পাওয়া যায়নি',
+  'no_consultations_desc': 'এই বিভাগে আপনার এখনও কোনো পরামর্শ নেই।',
 };

@@ -20,6 +20,7 @@ class LawyerModel {
   String? language;
   String? languages;
   String? consultationFee;
+  String? biography;
 
   LawyerModel({
     this.id,
@@ -39,6 +40,7 @@ class LawyerModel {
     this.language,
     this.languages,
     this.consultationFee,
+    this.biography,
   });
 
   factory LawyerModel.fromMap(Map<String, dynamic> map) {
@@ -61,7 +63,10 @@ class LawyerModel {
           .toList(),
       language: map['language'] as String?,
       languages: map['languages'] as String?,
-      consultationFee: map['cosulation_fee']?.toString() ?? map['consultation_fee']?.toString(),
+      consultationFee:
+          map['cosulation_fee']?.toString() ??
+          map['consultation_fee']?.toString(),
+      biography: map['biography'] as String?,
     );
   }
 
@@ -84,6 +89,7 @@ class LawyerModel {
       'language': language,
       'languages': languages,
       'cosulation_fee': consultationFee,
+      'biography': biography,
     };
   }
 

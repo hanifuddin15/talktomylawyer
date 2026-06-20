@@ -7,6 +7,8 @@ import '../../../../core/widgets/app_settings_tile.dart';
 import '../../../client_subscription/checkout/views/checkout_view.dart';
 
 import 'package:talktomylawyer/app/modules/client_dashboard/controllers/client_profile_controller.dart';
+import 'package:talktomylawyer/app/routes/app_pages.dart';
+
 
 class ClientProfileTab extends GetView<ClientProfileController> {
   const ClientProfileTab({super.key});
@@ -154,7 +156,7 @@ class ClientProfileTab extends GetView<ClientProfileController> {
                       icon: Icons.history_rounded,
                       title: 'consultation_history'.tr,
                       subtitle: 'consultation_history_sub'.tr,
-                      onTap: () {},
+                      onTap: () => Get.toNamed(Routes.consultationHistory),
                     ),
                     AppSettingsTile(
                       icon: Icons.folder_outlined,
