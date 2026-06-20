@@ -4,7 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:talktomylawyer/app/core/constants/app_colors.dart';
 import '../../../../core/widgets/app_avatar.dart';
 import '../../../../core/widgets/app_settings_tile.dart';
-import '../../../client_subscription/checkout/views/checkout_view.dart';
+import 'package:talktomylawyer/app/modules/client_dashboard/controllers/client_dashboard_controller.dart';
 
 import 'package:talktomylawyer/app/modules/client_dashboard/controllers/client_profile_controller.dart';
 import 'package:talktomylawyer/app/routes/app_pages.dart';
@@ -73,60 +73,62 @@ class ClientProfileTab extends GetView<ClientProfileTabController> {
                         color: secondaryText,
                       ),
                     ),
-                    const SizedBox(height: 14),
-                    // Premium upgrade banner
-                    GestureDetector(
-                      onTap: () => Get.to(() => const CheckoutView()),
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 10,
-                          horizontal: 14,
-                        ),
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF1E3A8A), kPrimaryBlue],
+                    if (client == null || !client.hasActiveSubscription) ...[
+                      const SizedBox(height: 14),
+                      // Premium upgrade banner
+                      GestureDetector(
+                        onTap: () => Get.find<ClientDashboardController>().changeTab(3),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 14,
                           ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Row(
-                          children: [
-                            const Icon(
-                              Icons.star_rounded,
-                              color: kAccentGold,
-                              size: 20,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF1E3A8A), kPrimaryBlue],
                             ),
-                            const SizedBox(width: 10),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    'upgrade_to_premium'.tr,
-                                    style: GoogleFonts.outfit(
-                                      fontSize: 13,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.white,
-                                    ),
-                                  ),
-                                  Text(
-                                    'upgrade_premium_sub'.tr,
-                                    style: GoogleFonts.outfit(
-                                      fontSize: 11,
-                                      color: Colors.white70,
-                                    ),
-                                  ),
-                                ],
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.star_rounded,
+                                color: kAccentGold,
+                                size: 20,
                               ),
-                            ),
-                            const Icon(
-                              Icons.chevron_right,
-                              color: Colors.white,
-                              size: 18,
-                            ),
-                          ],
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'upgrade_to_premium'.tr,
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 13,
+                                        fontWeight: FontWeight.w700,
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                    Text(
+                                      'upgrade_premium_sub'.tr,
+                                      style: GoogleFonts.outfit(
+                                        fontSize: 11,
+                                        color: Colors.white70,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Icon(
+                                Icons.chevron_right,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
               ),

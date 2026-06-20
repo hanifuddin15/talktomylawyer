@@ -10,8 +10,8 @@ import '../../../../core/widgets/app_badge.dart';
 import '../../../../core/widgets/app_category_card.dart';
 import '../../../../core/widgets/app_lawyer_card.dart';
 import '../../../../core/widgets/app_section_header.dart';
-import '../../../client_subscription/checkout/views/checkout_view.dart';
 import 'package:talktomylawyer/app/routes/app_pages.dart';
+import '../../controllers/client_dashboard_controller.dart';
 import '../../controllers/client_home_controller.dart';
 
 class ClientHomeTab extends GetView<ClientHomeController> {
@@ -126,70 +126,76 @@ class ClientHomeTab extends GetView<ClientHomeController> {
             //   ),
             // ),
             // ── Premium Banner ──
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                child: Container(
-                  padding: const EdgeInsets.all(16),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF1E3A8A), kPrimaryBlue],
-                      begin: Alignment.centerLeft,
-                      end: Alignment.centerRight,
+            Obx(() {
+              final client = controller.clientModel.value;
+              if (client != null && client.hasActiveSubscription) {
+                return const SliverToBoxAdapter(child: SizedBox.shrink());
+              }
+              return SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF1E3A8A), kPrimaryBlue],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
                     ),
-                    borderRadius: BorderRadius.circular(16),
-                  ),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'get_premium'.tr,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'get_premium'.tr,
+                                style: GoogleFonts.outfit(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                'unlock_premium'.tr,
+                                style: GoogleFonts.outfit(
+                                  fontSize: 12,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () => Get.find<ClientDashboardController>().changeTab(3),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 9,
+                            ),
+                            decoration: BoxDecoration(
+                              color: kAccentGold,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text(
+                              'upgrade'.tr,
                               style: GoogleFonts.outfit(
-                                fontSize: 15,
+                                fontSize: 13,
                                 fontWeight: FontWeight.w700,
                                 color: Colors.white,
                               ),
                             ),
-                            const SizedBox(height: 2),
-                            Text(
-                              'unlock_premium'.tr,
-                              style: GoogleFonts.outfit(
-                                fontSize: 12,
-                                color: Colors.white70,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () => Get.to(() => const CheckoutView()),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 9,
-                          ),
-                          decoration: BoxDecoration(
-                            color: kAccentGold,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Text(
-                            'upgrade'.tr,
-                            style: GoogleFonts.outfit(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ),
+              );
+            }),
 
             // ── Legal Categories ──
             SliverToBoxAdapter(
@@ -198,7 +204,7 @@ class ClientHomeTab extends GetView<ClientHomeController> {
                 child: AppSectionHeader(
                   title: 'legal_categories'.tr,
                   actionLabel: 'see_all'.tr,
-                  onActionTap: () {},
+                  onActionTap: () => Get.find<ClientDashboardController>().changeTab(1),
                 ),
               ),
             ),
@@ -286,7 +292,7 @@ class ClientHomeTab extends GetView<ClientHomeController> {
                 child: AppSectionHeader(
                   title: 'featured_lawyers'.tr,
                   actionLabel: 'see_all'.tr,
-                  onActionTap: () {},
+                  onActionTap: () => Get.find<ClientDashboardController>().changeTab(1),
                 ),
               ),
             ),

@@ -17,6 +17,12 @@ class ClientModel {
   String? subscriptionId;
   DateTime? subscriptionExpiresAt;
   SubscriptionModel? subscription; //TODO: make subscription model later
+
+  bool get hasActiveSubscription {
+    if (subscriptionExpiresAt == null) return false;
+    return subscriptionExpiresAt!.isAfter(DateTime.now());
+  }
+
   ClientModel({
     this.id,
     this.name,
