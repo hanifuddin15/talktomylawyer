@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:talktomylawyer/app/models/lawyers_models/lawyer_user_model.dart';
+import 'package:talktomylawyer/app/models/client_models/client_user_model.dart';
 
 class AppointmentModel {
   int? id;
@@ -14,6 +15,7 @@ class AppointmentModel {
   String? createdAt;
   String? updatedAt;
   LawyerModel? lawyer;
+  ClientModel? client;
 
   AppointmentModel({
     this.id,
@@ -28,6 +30,7 @@ class AppointmentModel {
     this.createdAt,
     this.updatedAt,
     this.lawyer,
+    this.client,
   });
 
   factory AppointmentModel.fromMap(Map<String, dynamic> map) {
@@ -46,6 +49,9 @@ class AppointmentModel {
       lawyer: map['lawyer'] != null
           ? LawyerModel.fromMap(map['lawyer'] as Map<String, dynamic>)
           : null,
+      client: map['client'] != null
+          ? ClientModel.fromMap(map['client'] as Map<String, dynamic>)
+          : null,
     );
   }
 
@@ -63,6 +69,7 @@ class AppointmentModel {
       'created_at': createdAt,
       'updated_at': updatedAt,
       'lawyer': lawyer?.toMap(),
+      'client': client?.toMap(),
     };
   }
 

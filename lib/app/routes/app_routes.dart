@@ -28,6 +28,7 @@ abstract class Routes {
 
   // Lawyer App
   static const lawyerDashboard = _Paths.lawyerDashboard;
+  static const lawyerAppointmentsList = _Paths.lawyerAppointmentsList;
 }
 
 abstract class _Paths {
@@ -51,4 +52,5 @@ abstract class _Paths {
   static const lawyerLogin = '/lawyer_login';
   static const lawyerRegister = '/lawyer_register';
   static const lawyerDashboard = '/lawyer_dashboard';
+  static const lawyerAppointmentsList = '/lawyer_appointments_list';
 }

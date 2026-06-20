@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:talktomylawyer/app/core/constants/app_colors.dart';
 import 'package:talktomylawyer/app/core/widgets/app_analytics_card.dart';
 import 'package:talktomylawyer/app/core/widgets/app_section_header.dart';
+import 'package:talktomylawyer/app/models/client_models/appointment_model.dart';
+import 'package:talktomylawyer/app/models/client_models/client_user_model.dart';
+import 'package:talktomylawyer/app/modules/lawyer_appointments_list/views/widgets/lawyer_appointment_card.dart';
+import 'package:talktomylawyer/app/routes/app_pages.dart';
 
 import 'package:talktomylawyer/app/modules/lawyer_dashboard/controllers/lawyer_home_controller.dart';
 
@@ -220,54 +225,147 @@ class LawyerHomeTab extends GetView<LawyerHomeController> {
               );
             }),
 
-            // ── Recent Leads ──
+            // ── Pending Bookings ──
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
                 child: AppSectionHeader(
-                  title: 'recent_leads'.tr,
+                  title: 'Pending Bookings',
                   actionLabel: 'see_all'.tr,
+                  onActionTap: () => Get.toNamed(Routes.lawyerAppointmentsList, arguments: 'pending'),
                 ),
               ),
             ),
+            Obx(() {
+              if (controller.isPendingLoading.value) {
+                return SliverToBoxAdapter(
+                  child: Skeletonizer(
+                    enabled: true,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Column(
+                        children: List.generate(2, (index) => _buildSkeletonCard()),
+                      ),
+                    ),
+                  ),
+                );
+              }
+              if (controller.pendingBookings.isEmpty) {
+                return SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: cardColor,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'No pending bookings',
+                        style: GoogleFonts.outfit(
+                          fontSize: 14,
+                          color: secondaryText,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
+              final displayList = controller.pendingBookings.take(3).toList();
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final appointment = displayList[index];
+                    return LawyerAppointmentCard(
+                      appointment: appointment,
+                      onTap: () => Get.toNamed(
+                        Routes.consultationDetails,
+                        arguments: appointment.id,
+                      )?.then((_) {
+                        controller.fetchPendingBookings();
+                        controller.fetchUpcomingBookings();
+                        controller.fetchOverview();
+                      }),
+                      onAccept: () => controller.acceptAppointment(appointment.id!),
+                      onJoinCall: () => controller.joinCall(appointment),
+                    );
+                  },
+                  childCount: displayList.length,
+                ),
+              );
+            }),
+
+            // ── Upcoming Sessions ──
             SliverToBoxAdapter(
               child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
-                child: Column(
-                  children: [
-                    _LeadItem(
-                      name: 'Arif Hossain',
-                      category: 'criminal_law'.tr,
-                      time: '2 hrs ago',
-                      isDark: isDark,
-                      primaryText: primaryText,
-                      secondaryText: secondaryText,
-                      cardColor: cardColor,
-                    ),
-                    const SizedBox(height: 8),
-                    _LeadItem(
-                      name: 'Rohit Sharma',
-                      category: 'family_law'.tr,
-                      time: '5 hrs ago',
-                      isDark: isDark,
-                      primaryText: primaryText,
-                      secondaryText: secondaryText,
-                      cardColor: cardColor,
-                    ),
-                    const SizedBox(height: 8),
-                    _LeadItem(
-                      name: 'Selina Begum',
-                      category: 'property_law'.tr,
-                      time: 'Yesterday',
-                      isDark: isDark,
-                      primaryText: primaryText,
-                      secondaryText: secondaryText,
-                      cardColor: cardColor,
-                    ),
-                  ],
+                padding: const EdgeInsets.fromLTRB(20, 24, 20, 0),
+                child: AppSectionHeader(
+                  title: 'Upcoming Sessions',
+                  actionLabel: 'see_all'.tr,
+                  onActionTap: () => Get.toNamed(Routes.lawyerAppointmentsList, arguments: 'upcoming'),
                 ),
               ),
             ),
+            Obx(() {
+              if (controller.isUpcomingLoading.value) {
+                return SliverToBoxAdapter(
+                  child: Skeletonizer(
+                    enabled: true,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4.0),
+                      child: Column(
+                        children: List.generate(2, (index) => _buildSkeletonCard()),
+                      ),
+                    ),
+                  ),
+                );
+              }
+              if (controller.upcomingBookings.isEmpty) {
+                return SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 12.0),
+                    child: Container(
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        color: cardColor,
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        'No upcoming sessions',
+                        style: GoogleFonts.outfit(
+                          fontSize: 14,
+                          color: secondaryText,
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              }
+              final displayList = controller.upcomingBookings.take(3).toList();
+              return SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final appointment = displayList[index];
+                    return LawyerAppointmentCard(
+                      appointment: appointment,
+                      onTap: () => Get.toNamed(
+                        Routes.consultationDetails,
+                        arguments: appointment.id,
+                      )?.then((_) {
+                        controller.fetchPendingBookings();
+                        controller.fetchUpcomingBookings();
+                        controller.fetchOverview();
+                      }),
+                      onAccept: () => controller.acceptAppointment(appointment.id!),
+                      onJoinCall: () => controller.joinCall(appointment),
+                    );
+                  },
+                  childCount: displayList.length,
+                ),
+              );
+            }),
 
             // ── Quick Actions 2x2 ──
             SliverToBoxAdapter(
@@ -326,69 +424,24 @@ class LawyerHomeTab extends GetView<LawyerHomeController> {
   }
 }
 
-class _LeadItem extends StatelessWidget {
-  const _LeadItem({
-    required this.name,
-    required this.category,
-    required this.time,
-    required this.isDark,
-    required this.primaryText,
-    required this.secondaryText,
-    required this.cardColor,
-  });
-  final String name, category, time;
-  final bool isDark;
-  final Color primaryText, secondaryText, cardColor;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
-      decoration: BoxDecoration(
-        color: cardColor,
-        borderRadius: BorderRadius.circular(14),
+Widget _buildSkeletonCard() {
+  return LawyerAppointmentCard(
+    appointment: AppointmentModel(
+      id: 0,
+      scheduleDate: '2026-06-20',
+      scheduleTime: '10:30:00',
+      status: 'pending',
+      consultationMode: 'online',
+      consultationFee: '5000',
+      issue: 'Loading issue details description here...',
+      client: ClientModel(
+        id: 0,
+        name: 'Loading Client Name',
+        email: 'client@app.com',
+        phone: '01700000000',
       ),
-      child: Row(
-        children: [
-          CircleAvatar(
-            radius: 20,
-            backgroundColor: kPrimaryBlue.withValues(alpha: 0.15),
-            child: Text(
-              name[0],
-              style: GoogleFonts.outfit(
-                fontWeight: FontWeight.w700,
-                color: kPrimaryBlue,
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  name,
-                  style: GoogleFonts.outfit(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                    color: primaryText,
-                  ),
-                ),
-                Text(
-                  category,
-                  style: GoogleFonts.outfit(fontSize: 12, color: secondaryText),
-                ),
-              ],
-            ),
-          ),
-          Text(
-            time,
-            style: GoogleFonts.outfit(fontSize: 11, color: secondaryText),
-          ),
-        ],
-      ),
-    );
-  }
+    ),
+  );
 }
 
 class _QuickActionBtn extends StatelessWidget {

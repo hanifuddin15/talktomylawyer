@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:talktomylawyer/app/modules/client_profile/bindings/client_profile_binding.dart';
 import 'package:talktomylawyer/app/modules/client_profile/views/client_profile_view.dart';
+import 'package:talktomylawyer/app/modules/lawyer_appointments_list/bindings/lawyer_appointments_list_binding.dart';
+import 'package:talktomylawyer/app/modules/lawyer_appointments_list/views/lawyer_appointments_list_view.dart';
 
 // Shared auth
 import '../modules/authentication/splash/bindings/splash_binding.dart';
@@ -129,6 +131,11 @@ class AppPages {
       name: _Paths.lawyerDashboard,
       page: () => const LawyerDashboardView(),
       binding: LawyerDashboardBinding(),
+    ),
+    GetPage(
+      name: _Paths.lawyerAppointmentsList,
+      page: () => const LawyerAppointmentsListView(),
+      binding: LawyerAppointmentsListBinding(),
     ),
   ];
 }

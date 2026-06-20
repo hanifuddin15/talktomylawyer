@@ -1,7 +1,10 @@
 import 'package:get/get.dart';
+import 'package:talktomylawyer/app/core/utils/snackbar.dart';
 import 'package:talktomylawyer/app/models/lawyers_models/lawyer_user_model.dart';
+import 'package:talktomylawyer/app/models/client_models/appointment_model.dart';
 import 'package:talktomylawyer/app/repository/lawyer-auth-repository.dart';
 import 'package:talktomylawyer/app/repository/lawyer_dashboard_repository.dart';
+import 'package:talktomylawyer/app/repository/appointment_repository.dart';
 
 class LawyerHomeController extends GetxController {
   Rxn<LawyerModel> get lawyerModel => LawyerAuthRepository.instance.lawyerData;
@@ -14,10 +17,18 @@ class LawyerHomeController extends GetxController {
     'rating': 0,
   }.obs;
 
+  // Bookings list states
+  final RxList<AppointmentModel> pendingBookings = <AppointmentModel>[].obs;
+  final RxList<AppointmentModel> upcomingBookings = <AppointmentModel>[].obs;
+  final RxBool isPendingLoading = false.obs;
+  final RxBool isUpcomingLoading = false.obs;
+
   @override
   void onInit() {
     super.onInit();
     fetchOverview();
+    fetchPendingBookings();
+    fetchUpcomingBookings();
   }
 
   Future<void> fetchOverview() async {
@@ -32,5 +43,51 @@ class LawyerHomeController extends GetxController {
     } finally {
       isOverviewLoading.value = false;
     }
+  }
+
+  Future<void> fetchPendingBookings() async {
+    isPendingLoading.value = true;
+    try {
+      final list = await AppointmentRepository.instance.getLawyerAppointments(status: 'pending');
+      pendingBookings.assignAll(list);
+    } catch (e) {
+      // Handled
+    } finally {
+      isPendingLoading.value = false;
+    }
+  }
+
+  Future<void> fetchUpcomingBookings() async {
+    isUpcomingLoading.value = true;
+    try {
+      final list = await AppointmentRepository.instance.getLawyerAppointments(status: 'accepted');
+      upcomingBookings.assignAll(list);
+    } catch (e) {
+      // Handled
+    } finally {
+      isUpcomingLoading.value = false;
+    }
+  }
+
+  Future<void> acceptAppointment(int id) async {
+    isOverviewLoading.value = true;
+    try {
+      final updated = await AppointmentRepository.instance.updateAppointmentStatus(id, 'accepted');
+      if (updated != null) {
+        await fetchPendingBookings();
+        await fetchUpcomingBookings();
+        await fetchOverview();
+      }
+    } catch (e) {
+      // Handled
+    } finally {
+      isOverviewLoading.value = false;
+    }
+  }
+
+  void joinCall(AppointmentModel appointment) {
+    showSuccessSnackkbar(
+      message: 'Connecting to Video Consultation room for Client ${appointment.client?.name ?? ''}...',
+    );
   }
 }

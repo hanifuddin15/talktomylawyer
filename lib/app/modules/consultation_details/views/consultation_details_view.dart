@@ -247,60 +247,116 @@ class ConsultationDetailsView extends GetView<ConsultationDetailsController> {
                         ],
                       ),
 
-                      // 3. Lawyer Information Card
-                      _buildSectionCard(
-                        context: context,
-                        title: 'Lawyer Information',
-                        cardColor: cardColor,
-                        primaryText: primaryText,
-                        dividerColor: dividerColor,
-                        children: [
-                          Row(
-                            children: [
-                              _buildAvatar(app.lawyer?.profilePic, lawyerName),
-                              const SizedBox(width: 12),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                      // 3. Client/Lawyer Information Card
+                      controller.isLawyerUser
+                          ? _buildSectionCard(
+                              context: context,
+                              title: 'Client Information',
+                              cardColor: cardColor,
+                              primaryText: primaryText,
+                              dividerColor: dividerColor,
+                              children: [
+                                Row(
                                   children: [
-                                    Text(
-                                      lawyerName.startsWith('Adv.') ? lawyerName : 'Adv. $lawyerName',
-                                      style: GoogleFonts.outfit(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w700,
-                                        color: primaryText,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      specialtyStr,
-                                      style: GoogleFonts.outfit(
-                                        fontSize: 13,
-                                        color: secondaryText,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 4),
-                                    Row(
-                                      children: [
-                                        const Icon(Icons.star_rounded, color: kAccentGold, size: 16),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          '4.9 • $experienceLabel',
-                                          style: GoogleFonts.outfit(
-                                            fontSize: 12,
-                                            color: secondaryText,
-                                            fontWeight: FontWeight.w500,
+                                    _buildAvatar(null, app.client?.name ?? 'Client'),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            app.client?.name ?? 'Unknown Client',
+                                            style: GoogleFonts.outfit(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700,
+                                              color: primaryText,
+                                            ),
                                           ),
-                                        ),
-                                      ],
+                                          const SizedBox(height: 2),
+                                          Text(
+                                            'Client',
+                                            style: GoogleFonts.outfit(
+                                              fontSize: 13,
+                                              color: secondaryText,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                                const SizedBox(height: 16),
+                                Divider(color: dividerColor, height: 1),
+                                DetailRowItem(
+                                  icon: Icons.email_outlined,
+                                  label: 'Email',
+                                  value: app.client?.email ?? 'N/A',
+                                  primaryTextColor: primaryText,
+                                  secondaryTextColor: secondaryText,
+                                ),
+                                Divider(color: dividerColor, height: 1),
+                                DetailRowItem(
+                                  icon: Icons.phone_outlined,
+                                  label: 'Phone',
+                                  value: app.client?.phone ?? 'N/A',
+                                  primaryTextColor: primaryText,
+                                  secondaryTextColor: secondaryText,
+                                ),
+                              ],
+                            )
+                          : _buildSectionCard(
+                              context: context,
+                              title: 'Lawyer Information',
+                              cardColor: cardColor,
+                              primaryText: primaryText,
+                              dividerColor: dividerColor,
+                              children: [
+                                Row(
+                                  children: [
+                                    _buildAvatar(app.lawyer?.profilePic, lawyerName),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            lawyerName.startsWith('Adv.') ? lawyerName : 'Adv. $lawyerName',
+                                            style: GoogleFonts.outfit(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w700,
+                                              color: primaryText,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 2),
+                                          Text(
+                                            specialtyStr,
+                                            style: GoogleFonts.outfit(
+                                              fontSize: 13,
+                                              color: secondaryText,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 4),
+                                          Row(
+                                            children: [
+                                              const Icon(Icons.star_rounded, color: kAccentGold, size: 16),
+                                              const SizedBox(width: 4),
+                                              Text(
+                                                '4.9 • $experienceLabel',
+                                                style: GoogleFonts.outfit(
+                                                  fontSize: 12,
+                                                  color: secondaryText,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
 
                       // 4. Case Notes Card
                       _buildSectionCard(
@@ -337,7 +393,31 @@ class ConsultationDetailsView extends GetView<ConsultationDetailsController> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (isUpcomingOrPending) ...[
+                    if (controller.isLawyerUser && status == 'pending') ...[
+                      SizedBox(
+                        width: double.infinity,
+                        height: 52,
+                        child: ElevatedButton(
+                          onPressed: () => controller.acceptAppointment(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: kPrimaryBlue,
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            elevation: 0,
+                          ),
+                          child: Text(
+                            'Accept Appointment',
+                            style: GoogleFonts.outfit(
+                              fontSize: 15,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 12),
+                    ] else if (isUpcomingOrPending) ...[
                       Row(
                         children: [
                           Expanded(
