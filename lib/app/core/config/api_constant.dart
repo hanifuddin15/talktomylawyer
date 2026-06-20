@@ -4,6 +4,7 @@ class ApiConstant {
   // static const String BASE_URL = '$SERVER_IP_PORT/api/v1/';
 
   static const String serverIpPort = 'http://talk-to-lawyer.otosportsbd.com';
+  // static const String serverIpPort = 'http://127.0.0.1:8000'; // anik local
   static const String baseUrl = '$serverIpPort/api/v1/';
   //Request
   static const int listViewPageSize = 10;

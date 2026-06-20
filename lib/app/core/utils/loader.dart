@@ -22,18 +22,18 @@ void configLoader() {
           height: 100,
           fit: BoxFit.fill,
         ),
-        SizedBox(
-          width: 100,
-          height: 100,
-          child: Center(
-            child: Image.asset(
-              AppAssets.loaderIcon,
-              height: 40,
-              width: 40,
-              fit: BoxFit.fill,
-            ),
-          ),
-        ),
+        // SizedBox(
+        //   width: 100,
+        //   height: 100,
+        //   child: Center(
+        //     child: Image.asset(
+        //       AppAssets.loaderIcon,
+        //       height: 40,
+        //       width: 40,
+        //       fit: BoxFit.fill,
+        //     ),
+        //   ),
+        // ),
       ],
     );
 }
