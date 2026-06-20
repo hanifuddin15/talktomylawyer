@@ -213,12 +213,12 @@ class LawyerProfileTab extends GetView<LawyerProfileController> {
                       Wrap(
                         spacing: 8,
                         runSpacing: 8,
-                        children: controller.allAreas
+                        children: controller.categories
                             .map(
-                              (a) => AppTagChip(
-                                label: a.tr,
-                                isSelected: controller.selectedAreas.contains(a),
-                                onTap: () => controller.toggleArea(a),
+                              (cat) => AppTagChip(
+                                label: cat.name ?? '',
+                                isSelected: controller.selectedCategoryIds.contains(cat.id),
+                                onTap: () => controller.toggleCategory(cat.id),
                               ),
                             )
                             .toList(),

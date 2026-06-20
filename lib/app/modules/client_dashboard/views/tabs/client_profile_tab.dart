@@ -9,7 +9,7 @@ import '../../../client_subscription/checkout/views/checkout_view.dart';
 import 'package:talktomylawyer/app/modules/client_dashboard/controllers/client_profile_controller.dart';
 import 'package:talktomylawyer/app/routes/app_pages.dart';
 
-class ClientProfileTab extends GetView<ClientProfileController> {
+class ClientProfileTab extends GetView<ClientProfileTabController> {
   const ClientProfileTab({super.key});
 
   @override

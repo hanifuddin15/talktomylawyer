@@ -14,6 +14,6 @@ class ClientDashboardBinding extends Bindings {
     Get.lazyPut<ClientSearchController>(() => ClientSearchController());
     Get.lazyPut<ClientSavedController>(() => ClientSavedController());
     Get.lazyPut<ClientPremiumController>(() => ClientPremiumController());
-    Get.lazyPut<ClientProfileController>(() => ClientProfileController());
+    Get.lazyPut<ClientProfileTabController>(() => ClientProfileTabController());
   }
 }
