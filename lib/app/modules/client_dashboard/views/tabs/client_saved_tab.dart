@@ -154,7 +154,10 @@ class ClientSavedTab extends GetView<ClientSavedController> {
                           onSave: () => controller.removeSavedLawyer(lawyer.id),
                           onTap: () => Get.toNamed(
                             Routes.lawyerDetails,
-                            arguments: lawyer.id,
+                            arguments: {
+                              'id': lawyer.id,
+                              'isSaved': true,
+                            },
                           ),
                         );
                       },

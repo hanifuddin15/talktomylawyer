@@ -399,7 +399,10 @@ class ClientHomeTab extends GetView<ClientHomeController> {
                           onSave: () => controller.toggleSaveLawyer(lawyer),
                           onTap: () => Get.toNamed(
                             Routes.lawyerDetails,
-                            arguments: lawyer.id,
+                            arguments: {
+                              'id': lawyer.id,
+                              'isSaved': lawyer.isSaved ?? false,
+                            },
                           ),
                         ),
                       );
