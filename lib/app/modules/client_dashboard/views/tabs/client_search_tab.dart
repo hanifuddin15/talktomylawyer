@@ -368,6 +368,8 @@ class ClientSearchTab extends GetView<ClientSearchController> {
                         rate: 2000,
                         avatarUrl: avatar,
                         initials: initials,
+                        isSaved: lawyer.isSaved ?? false,
+                        onSave: () => controller.toggleSaveLawyer(lawyer),
                         onTap: () => Get.toNamed(
                           Routes.lawyerDetails,
                           arguments: lawyer.id,

@@ -21,6 +21,7 @@ class LawyerModel {
   String? languages;
   String? consultationFee;
   String? biography;
+  bool? isSaved;
 
   LawyerModel({
     this.id,
@@ -41,6 +42,7 @@ class LawyerModel {
     this.languages,
     this.consultationFee,
     this.biography,
+    this.isSaved,
   });
 
   factory LawyerModel.fromMap(Map<String, dynamic> map) {
@@ -67,6 +69,7 @@ class LawyerModel {
           map['cosulation_fee']?.toString() ??
           map['consultation_fee']?.toString(),
       biography: map['biography'] as String?,
+      isSaved: map['is_saved'] == true || map['is_saved'] == 1,
     );
   }
 
@@ -90,6 +93,7 @@ class LawyerModel {
       'languages': languages,
       'cosulation_fee': consultationFee,
       'biography': biography,
+      'is_saved': isSaved,
     };
   }
 

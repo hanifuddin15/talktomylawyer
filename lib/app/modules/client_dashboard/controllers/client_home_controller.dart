@@ -46,4 +46,18 @@ class ClientHomeController extends GetxController {
       isFeaturedLawyersLoading.value = false;
     }
   }
+
+  Future<void> toggleSaveLawyer(LawyerModel lawyer) async {
+    final int? id = lawyer.id;
+    if (id == null) return;
+    try {
+      final isSavedResult = await ClientHomeRepository.instance.toggleSaveLawyer(id);
+      if (isSavedResult != null) {
+        lawyer.isSaved = isSavedResult;
+        featuredLawyersList.refresh();
+      }
+    } catch (e) {
+      // Handled
+    }
+  }
 }

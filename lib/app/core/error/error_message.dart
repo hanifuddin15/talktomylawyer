@@ -14,6 +14,7 @@ class ErrorMessage {
   static const String cancelMsg = 'Request was cancelled';
   static const String connectionErrorMsg = 'Cannot reach to the server';
   static const String unknownMsg = 'Something went wrong';
+  static const String transformTimeoutMsg = 'Server is taking too long time';
 
   static String dioExceptionMessage({required DioExceptionType exceptionType}) {
     switch (exceptionType) {
@@ -33,6 +34,8 @@ class ErrorMessage {
         return connectionErrorMsg;
       case DioExceptionType.unknown:
         return unknownMsg;
+      case DioExceptionType.transformTimeout:
+        return transformTimeoutMsg;
     }
   }
 }

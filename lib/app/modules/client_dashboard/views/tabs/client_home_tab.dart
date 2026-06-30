@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:skeletonizer/skeletonizer.dart';
-import 'package:talktomylawyer/app/core/widgets/input_fields/app_search_field.dart';
 import 'package:talktomylawyer/app/core/config/api_constant.dart';
 import 'package:talktomylawyer/app/core/widgets/no_data_widget.dart';
 import '../../../../core/constants/app_colors.dart';
@@ -170,7 +169,8 @@ class ClientHomeTab extends GetView<ClientHomeController> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () => Get.find<ClientDashboardController>().changeTab(3),
+                          onTap: () => Get.find<ClientDashboardController>()
+                              .changeTab(3),
                           child: Container(
                             padding: const EdgeInsets.symmetric(
                               horizontal: 16,
@@ -204,7 +204,8 @@ class ClientHomeTab extends GetView<ClientHomeController> {
                 child: AppSectionHeader(
                   title: 'legal_categories'.tr,
                   actionLabel: 'see_all'.tr,
-                  onActionTap: () => Get.find<ClientDashboardController>().changeTab(1),
+                  onActionTap: () =>
+                      Get.find<ClientDashboardController>().changeTab(1),
                 ),
               ),
             ),
@@ -215,24 +216,22 @@ class ClientHomeTab extends GetView<ClientHomeController> {
                   child: SliverPadding(
                     padding: const EdgeInsets.fromLTRB(20, 12, 20, 0),
                     sliver: SliverGrid(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) {
-                          return const AppCategoryCard(
-                            title: 'Loading Category',
-                            lawyerCount: 0,
-                            icon: Icons.gavel_rounded,
-                            iconBg: Colors.grey,
-                            iconColor: Colors.grey,
-                          );
-                        },
-                        childCount: 4,
-                      ),
-                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 2,
-                        mainAxisSpacing: 12,
-                        crossAxisSpacing: 12,
-                        childAspectRatio: 1.4,
-                      ),
+                      delegate: SliverChildBuilderDelegate((context, index) {
+                        return const AppCategoryCard(
+                          title: 'Loading Category',
+                          lawyerCount: 0,
+                          icon: Icons.gavel_rounded,
+                          iconBg: Colors.grey,
+                          iconColor: Colors.grey,
+                        );
+                      }, childCount: 4),
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2,
+                            mainAxisSpacing: 12,
+                            crossAxisSpacing: 12,
+                            childAspectRatio: 1.4,
+                          ),
                     ),
                   ),
                 );
@@ -292,7 +291,8 @@ class ClientHomeTab extends GetView<ClientHomeController> {
                 child: AppSectionHeader(
                   title: 'featured_lawyers'.tr,
                   actionLabel: 'see_all'.tr,
-                  onActionTap: () => Get.find<ClientDashboardController>().changeTab(1),
+                  onActionTap: () =>
+                      Get.find<ClientDashboardController>().changeTab(1),
                 ),
               ),
             ),
@@ -395,6 +395,8 @@ class ClientHomeTab extends GetView<ClientHomeController> {
                           rate: 2000,
                           avatarUrl: avatar,
                           initials: initials,
+                          isSaved: lawyer.isSaved ?? false,
+                          onSave: () => controller.toggleSaveLawyer(lawyer),
                           onTap: () => Get.toNamed(
                             Routes.lawyerDetails,
                             arguments: lawyer.id,

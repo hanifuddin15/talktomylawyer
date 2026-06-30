@@ -104,4 +104,19 @@ class ClientDashboardController extends GetxController {
     selectedCategoryId.value = null;
     fetchLawyers();
   }
+
+  Future<void> toggleSaveLawyer(LawyerModel lawyer) async {
+    final int? id = lawyer.id;
+    if (id == null) return;
+    try {
+      final isSavedResult = await ClientHomeRepository.instance.toggleSaveLawyer(id);
+      if (isSavedResult != null) {
+        lawyer.isSaved = isSavedResult;
+        featuredLawyersList.refresh();
+        lawyersList.refresh();
+      }
+    } catch (e) {
+      // Handled
+    }
+  }
 }
