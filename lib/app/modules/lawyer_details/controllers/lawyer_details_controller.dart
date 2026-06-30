@@ -61,6 +61,7 @@ class LawyerDetailsController extends GetxController {
       final details = await ClientHomeRepository.instance.getLawyerDetails(id);
       if (details != null) {
         lawyer.value = details;
+        isSaved.value = details.isSaved ?? false;
       }
     } catch (e) {
       // Handled
@@ -69,7 +70,16 @@ class LawyerDetailsController extends GetxController {
     }
   }
 
-  void toggleSave() {
-    isSaved.value = !isSaved.value;
+  Future<void> toggleSave() async {
+    final int? id = lawyer.value?.id;
+    if (id == null) return;
+    try {
+      final isSavedResult = await ClientHomeRepository.instance.toggleSaveLawyer(id);
+      if (isSavedResult != null) {
+        ClientHomeRepository.syncLawyerSavedStatus(id, isSavedResult);
+      }
+    } catch (e) {
+      // Handled
+    }
   }
 }

@@ -28,9 +28,8 @@ class ClientSavedController extends GetxController {
     if (lawyerId == null) return;
     try {
       final isSavedResult = await ClientHomeRepository.instance.toggleSaveLawyer(lawyerId);
-      if (isSavedResult == false) {
-        // Remove from local list
-        savedLawyersList.removeWhere((l) => l.id == lawyerId);
+      if (isSavedResult != null) {
+        ClientHomeRepository.syncLawyerSavedStatus(lawyerId, isSavedResult);
       }
     } catch (e) {
       // Handled

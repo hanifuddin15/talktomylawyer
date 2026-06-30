@@ -43,7 +43,8 @@ class LawyerDetailsView extends GetView<LawyerDetailsController> {
             );
           }
 
-          final hasAvatar = lawyer.profilePic != null && lawyer.profilePic != 'default.png';
+          final hasAvatar =
+              lawyer.profilePic != null && lawyer.profilePic != 'default.png';
           final avatarUrl = hasAvatar
               ? '${ApiConstant.serverIpPort}/storage/${lawyer.profilePic}'
               : null;
@@ -57,11 +58,13 @@ class LawyerDetailsView extends GetView<LawyerDetailsController> {
                     .toUpperCase()
               : 'L';
 
-          final primaryCategory = (lawyer.categories != null && lawyer.categories!.isNotEmpty)
+          final primaryCategory =
+              (lawyer.categories != null && lawyer.categories!.isNotEmpty)
               ? lawyer.categories!.first.name ?? 'Lawyer'
               : 'Lawyer';
 
-          final biography = 'Experienced $primaryCategory attorney with over ${lawyer.numberOfExperience ?? '5'} years of practice in ${lawyer.address ?? 'Dhaka'} courts. Specializes in providing expert legal representation and strategic counsel to clients.';
+          final biography =
+              'Experienced $primaryCategory attorney with over ${lawyer.numberOfExperience ?? '5'} years of practice in ${lawyer.address ?? 'Dhaka'} courts. Specializes in providing expert legal representation and strategic counsel to clients.';
 
           final hasSub = controller.hasSubscription.value;
 
@@ -247,11 +250,14 @@ class LawyerDetailsView extends GetView<LawyerDetailsController> {
                       const SizedBox(height: 24),
 
                       // ── Tabs ──
-                      Obx(() => LawyerTabs(
-                        activeIndex: controller.activeTab.value,
-                        onTabChanged: (val) => controller.activeTab.value = val,
-                        dividerColor: dividerColor,
-                      )),
+                      Obx(
+                        () => LawyerTabs(
+                          activeIndex: controller.activeTab.value,
+                          onTabChanged: (val) =>
+                              controller.activeTab.value = val,
+                          dividerColor: dividerColor,
+                        ),
+                      ),
                       const SizedBox(height: 20),
 
                       // ── Tab Content ──

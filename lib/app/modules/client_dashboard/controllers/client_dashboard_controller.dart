@@ -111,9 +111,7 @@ class ClientDashboardController extends GetxController {
     try {
       final isSavedResult = await ClientHomeRepository.instance.toggleSaveLawyer(id);
       if (isSavedResult != null) {
-        lawyer.isSaved = isSavedResult;
-        featuredLawyersList.refresh();
-        lawyersList.refresh();
+        ClientHomeRepository.syncLawyerSavedStatus(id, isSavedResult);
       }
     } catch (e) {
       // Handled

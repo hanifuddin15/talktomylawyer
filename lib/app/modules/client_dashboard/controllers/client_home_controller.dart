@@ -53,8 +53,7 @@ class ClientHomeController extends GetxController {
     try {
       final isSavedResult = await ClientHomeRepository.instance.toggleSaveLawyer(id);
       if (isSavedResult != null) {
-        lawyer.isSaved = isSavedResult;
-        featuredLawyersList.refresh();
+        ClientHomeRepository.syncLawyerSavedStatus(id, isSavedResult);
       }
     } catch (e) {
       // Handled
